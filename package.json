@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "./script/dev.sh",
+    "test": "./script/test.sh",
+    "build": "./script/build.sh"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "esbuild": "^0.11.2"
+  }
+}
