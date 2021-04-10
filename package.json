@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "dev": "./script/dev.sh",
+    "start": "./script/start.sh",
     "test": "./script/test.sh",
     "build": "./script/build.sh"
   },
