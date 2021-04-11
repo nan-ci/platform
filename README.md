@@ -18,3 +18,56 @@ npm install
 # run dev server
 npm start
 ```
+
+## Contribute
+
+### Find or Create an issue
+
+### Create your branch
+
+```bash
+git checkout -b feature-name
+```
+
+### Rebase before mergeing
+
+```bash
+# make sure you are on your branche
+git checkout feature-name
+
+# make sure we are up to date
+git fetch
+
+# rebase from master
+git rebase origin/master
+
+# force update your branch
+git push orgin +HEAD
+```
+
+## Linter
+
+### Dependencies
+
+- [`prettier`](https://github.com/prettier/prettier)
+
+### Usage
+
+```bash
+# run prettier
+prettier -w **.jsx **.mjs **.md
+```
+
+## Test
+
+### Dependencies
+
+- [`fd`](https://github.com/sharkdp/fd) _(find files)_
+- [`entr`](https://github.com/eradman/entr) _(watch files)_
+
+### Usage
+
+```bash
+# run test in watch mode
+npm run dev
+```
