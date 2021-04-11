@@ -1,6 +1,5 @@
 import { GET, next } from './mock/cf-worker.mjs'
 import { test } from './runner.mjs'
-import API from '../api/server.mjs'
 
 const _404 = new Response(null, { status: 404, statusText: 'Not Found' })
 const _401 = new Response(null, { status: 401, statusText: 'Unauthorized' })

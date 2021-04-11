@@ -27,7 +27,6 @@ export const next = async () => (await once(events, 'request'))[0]
 
 globalThis.atob = (s) => new Buffer.from(s, 'base64').toString('binary')
 globalThis.btoa = (s) => new Buffer.from(s).toString('base64')
-globalThis.addEventListener = (key, fn) => events.on(key, fn)
 globalThis.Response = class Response {
   constructor(body, options) {
     this.body = body
