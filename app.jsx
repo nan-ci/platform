@@ -1,4 +1,4 @@
-import { render } from 'react-dom'
+import { render } from 'preact'
 
 render(
   <div>Akwaba</div>,

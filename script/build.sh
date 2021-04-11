@@ -4,5 +4,7 @@ node_modules/.bin/esbuild app.jsx \
   --format=esm \
   --minify \
   --splitting \
-  --inject:lib/react-shim.js \
+  --jsx-factory=h \
+  --jsx-fragment=Fragment \
+  --inject:lib/preact-shim.js \
   --outdir=public/js
