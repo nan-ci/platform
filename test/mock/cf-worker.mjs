@@ -28,10 +28,20 @@ NAN.list = async ({ prefix, limit = 1000 }) =>
 globalThis.fetch = (url, request) =>
   new Promise((resolve, reject) => {
     events.once('error', reject)
-    events.emit('request', { url, request, reject, resolve })
-  })
+    const respond = (body) => {
+      const ok = !(body instanceof Error)
+      const text =
+        !ok
+          ? reject(body)
+          : typeof body === 'string'
+          ? body
+          : JSON.stringify(body)
 
-export const next = async () => (await once(events, 'request'))[0]
+      resolve({ ok, text: async () => text, json: async () => JSON.parse(text) })
+    }
+
+    events.emit('request', { url, request, respond })
+  })
 
 globalThis.atob = (s) => new Buffer.from(s, 'base64').toString('binary')
 globalThis.btoa = (s) => new Buffer.from(s).toString('base64')
