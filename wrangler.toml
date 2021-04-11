@@ -1,0 +1,21 @@
+name = "nan"
+type = "javascript"
+workers_dev = true
+account_id = "da648930d3f75dbd7d922088dab5ac0b"
+zone_id = "70b7ee0d173c8d8e6a30da8da98469be"
+route = "nan.oct.ovh/api/*"
+kv_namespaces = [
+  { binding = "NAN", id = "511a4886ceb74abc988f679f03934948", preview_id = "0e8e36922e74427aa2223287db457bd1" }
+]
+
+[build]
+upload_dir = "api"
+upload_format = "modules"
+
+## ENV
+### GITHUB_SECRET
+### DISCORD_SECRET
+### BOT_TOKEN
+
+[durable_objects]
+bindings = [{name = "ROOM", class_name = "Room"}]
