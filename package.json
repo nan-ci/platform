@@ -2,8 +2,9 @@
   "private": true,
   "module": "api/server.mjs",
   "scripts": {
+    "dev": "./script/dev.sh",
+    "test": "node test/tests.mjs",
     "start": "./script/start.sh",
-    "test": "./script/test.sh",
     "build": "./script/build.sh"
   },
   "devDependencies": {
