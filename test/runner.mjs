@@ -4,6 +4,7 @@ import { basename } from 'path'
 const pathLength = import.meta.url.length - basename(import.meta.url).length
 
 const record = {}
+export { eq }
 export const test = (description, fn, expect) => {
   const fail = new Error(description)
   const [, file, l, c] = fail.stack
@@ -14,23 +15,55 @@ export const test = (description, fn, expect) => {
 
   const tests = record[file] || (record[file] = [])
   const on = (fn) => ((t.fn = fn), t)
-  const t = { description, fn, on, expect, l: Number(l), c: Number(c) }
+  const t = { description, fn, on, expect, l: Number(l), c: Number(c), file }
   tests.push(t)
   return t
 }
 
+const put = (i, str) => {
+  process.stdout.cursorTo(0, i)
+  process.stdout.clearLine()
+  process.stdout.write(str)
+}
+
+const runOne = async ({ description, fn, expect, l, c, file }, i) => {
+  put(i, `  ⌛ ${description}`)
+  const result = await Promise.race([
+    Promise.resolve(fn({ eq }))
+      .catch((_) => _)
+      .then((r) => {
+        expect == null || eq(r, expect)
+        return r
+      }),
+    new Promise((_, f) => setTimeout(f, 500, Error('Timeout'))),
+  ]).catch((_) => _)
+  const fail = expect == null && result instanceof Error
+  put(i, `  ${fail ? '❌' : '✅'} ${description}\n`)
+  return { fail, description, l, c, result, i, file }
+}
+
+const logs = []
+const { log } = console
+console.log = console.error = console.info = console.debug = (...args) =>
+  logs.push(args)
+
 export const run = async () => {
-  for (const [file, tests] of Object.entries(record)) {
-    console.log('testing', file)
-    for (const { description, fn, expect, l, c } of tests) {
-      try {
-        const result = await fn({ eq })
-        expect == null || eq(result, expect)
-        console.log(`✅ ${description}`)
-      } catch (err) {
-        console.log(`❌ ${description}`)
-        console.error(err)
-      }
-    }
+  const w = Object.entries(record).flatMap(([file, tests]) => [
+    (i) => put(i, file),
+    ...tests.map((test) => (i) => runOne(test, i)),
+  ])
+
+  const results = await Promise.all(w.map((x, i) => x(i)))
+  const [failed, ...rest] = results.filter((r) => r?.fail)
+  failed && put(failed.i, `💀❌ ${failed.description}`)
+  process.stdout.cursorTo(0, w.length)
+  for (const l of logs) log(...l)
+  if (!failed) {
+    log('\n🥳 All passed ! ✅✅✅')
+    return 0
   }
+  log(`\n😵 ${failed.description} (...and ${rest.length} more)`)
+  log(`-> ${failed.file}:${failed.l}\n`)
+  log(failed.result)
+  return 1
 }

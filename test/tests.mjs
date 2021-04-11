@@ -9,4 +9,4 @@ const tests = await Promise.all(
   files.map((f) => import(join(dirname(import.meta.url), f))),
 )
 
-await run()
+process.exit(await run())
