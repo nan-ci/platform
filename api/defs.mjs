@@ -5,4 +5,5 @@ export const BAD_REQUEST = { status: 400, statusText: 'Bad Request' }
 export const UNAUTHORIZED = { status: 401, statusText: 'Unauthorized' }
 export const TYPE_JSON = { 'content-type': 'application/json' }
 
-export const rand = () => Math.random().toString(36).slice(2, 12).padEnd(10, '0')
+export const rand = () =>
+  Math.random().toString(36).slice(2, 12).padEnd(10, '0')

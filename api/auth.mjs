@@ -1,4 +1,10 @@
-import { BAD_REQUEST, UNAUTHORIZED, TYPE_JSON, INTERNAL, rand } from './defs.mjs'
+import {
+  BAD_REQUEST,
+  UNAUTHORIZED,
+  TYPE_JSON,
+  INTERNAL,
+  rand,
+} from './defs.mjs'
 import { GET, withUser } from './router.mjs'
 import * as db from './db.mjs'
 
