@@ -18,23 +18,21 @@ const gql = async (query) => {
   }
 }
 
-const GUILD = '821033851153285170'
 const DISCORD = 'https://discordapp.com/api'
 GET.auth.discord = async ({ url }) => {
   const code = url.searchParams.get('code')
   const state = url.searchParams.get('state')
   if (!code || !state) return new Response('Missing Params', BAD_REQUEST)
   const session = await db.get(`discord:${state}`)
-  if (!session?.user) return new Response('Bad State', BAD_REQUEST)
+  if (!session?.user) return new Response('Bad State', UNAUTHORIZED)
   const authResponse = await fetch(`${DISCORD}/oauth2/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       scope: 'identify gdm.join guilds.join',
-      client_id: '826974634069983282',
+      client_id: DISCORD_CLIENT,
       client_secret: DISCORD_SECRET,
       grant_type: 'authorization_code',
-      // redirect_uri: redirectUri, do i need dis ?
       code,
     }),
   })
@@ -54,7 +52,7 @@ GET.auth.discord = async ({ url }) => {
     body: JSON.stringify({
       nick: user.name ? `${user.login} (${user.name})` : user.login,
       access_token: auth.access_token,
-      roles: ['826978112054100008'],
+      roles: [ROLE],
     }),
   })
 
@@ -81,7 +79,7 @@ GET.auth.github = async ({ url: { searchParams } }) => {
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: String(
       new URLSearchParams({
-        client_id: '07957ad810a70e99d67c',
+        client_id: GITHUB_CLIENT,
         client_secret: GITHUB_SECRET,
         state, // is the state needed here ?
         code,
@@ -140,7 +138,7 @@ GET.link.discord = withUser(async ({ user, session }) => {
   const metadata = { user, name: session }
   await db.put(`discord:${state}`, '', { expirationTtl: 3600, metadata })
   const Location = oauth2Url('discordapp.com/api/oauth2/authorize', {
-    client_id: '826974634069983282',
+    client_id: DISCORD_CLIENT,
     response_type: 'code',
     scope: 'identify gdm.join guilds.join',
     state,
@@ -152,7 +150,7 @@ GET.link.github = async () => {
   const state = `${rand()}-${rand()}`
   await db.put(`github:${state}`, '', { expirationTtl: 3600, metadata: {} })
   const Location = oauth2Url('github.com/login/oauth/authorize', {
-    client_id: `07957ad810a70e99d67c`,
+    client_id: GITHUB_CLIENT,
     scope: 'user',
     state,
   })
