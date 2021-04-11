@@ -4,6 +4,7 @@ workers_dev = true
 account_id = "da648930d3f75dbd7d922088dab5ac0b"
 zone_id = "70b7ee0d173c8d8e6a30da8da98469be"
 route = "nan.oct.ovh/api/*"
+vars = { ROLE = '826978112054100008', GUILD = '821033851153285170', GITHUB_CLIENT = '07957ad810a70e99d67c', DISCORD_CLIENT = '826974634069983282' }
 kv_namespaces = [
   { binding = "NAN", id = "511a4886ceb74abc988f679f03934948", preview_id = "0e8e36922e74427aa2223287db457bd1" }
 ]

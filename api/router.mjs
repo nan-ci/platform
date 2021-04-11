@@ -1,4 +1,4 @@
-import { NOT_FOUND } from './defs.mjs'
+import { NOT_FOUND, UNAUTHORIZED } from './defs.mjs'
 import * as db from './db.mjs'
 
 const handlers = {}

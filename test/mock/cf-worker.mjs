@@ -1,11 +1,19 @@
 // mock cloudflare worker API:
 import { EventEmitter, once } from 'events'
+import { readFileSync } from 'fs'
+import TOML from 'fast-toml'
 import API from '../../api/server.mjs'
 
-const events = new EventEmitter()
+export const events = new EventEmitter()
+
+export const config = TOML.parse(readFileSync('wrangler.toml'))
+
+Object.assign(globalThis, config.vars)
 
 // ENV
-globalThis.GITHUB_SECRET = 'fake-test-secret'
+globalThis.BOT_TOKEN = 'fake-bot-token'
+globalThis.GITHUB_SECRET = 'fake-github-secret'
+globalThis.DISCORD_SECRET = 'fake-discord-secret'
 
 // KV
 const NAN = (globalThis.NAN = { entries: {} })
@@ -37,7 +45,7 @@ globalThis.Response = class Response {
 const env = {}
 export const GET = (pathname, request = {}) => {
   const headers = new Map(Object.entries(request.headers || {}))
-  const url = `https://localhost/api${pathname}`
+  const url = `https://${config.route.slice(0, -2)}${pathname}`
   return API.fetch({ url, method: 'GET', ...request, headers }, env)
 }
 
