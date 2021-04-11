@@ -1,4 +1,4 @@
-esbuild app.jsx \
+node_modules/.bin/esbuild app.jsx \
   --bundle \
   --define:process.env.NODE_ENV='"developement"' \
   --format=esm \
