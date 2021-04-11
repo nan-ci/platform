@@ -40,6 +40,47 @@ events.on('request', ({ url, request, respond }) => {
     return respond({ data: { viewer } })
   }
 
+  // DISCORD token grant
+  if (url === 'https://discordapp.com/api/oauth2/token') {
+    eq(request, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        scope: 'identify gdm.join guilds.join',
+        client_id: '826974634069983282',
+        client_secret: 'fake-discord-secret',
+        grant_type: 'authorization_code',
+        code: 'wesh',
+      }),
+    })
+
+    return respond({ access_token: 'discord-user-token' })
+  }
+
+  // DISCORD user data
+  if (url === 'https://discordapp.com/api/users/@me') {
+    const Authorization = 'Bearer discord-user-token'
+    eq(request, { headers: { Authorization } })
+    return respond({ id: '13371337' })
+  }
+
+  // DISCORD join a guild
+  if (url === `https://discordapp.com/api/guilds/${GUILD}/members/13371337`) {
+    eq(request, {
+      method: 'PUT',
+      headers: {
+        Authorization: 'Bot fake-bot-token',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        nick: 'tester (Jean Patrick)',
+        access_token: 'discord-user-token',
+        roles: [ROLE],
+      }),
+    })
+    return respond('OK')
+  }
+
   // Unexpected request
   console.log({ url, request })
   respond(Error('Unexpected Request'))
@@ -84,4 +125,92 @@ test('GET /auth/github with a proper state').on(async ({ eq }) => {
   eq(NAN.entries[session.slice(12)]?.metadata, user)
 })
 
+test('GET /link/github generate a github link').on(async ({ eq }) => {
+  // generate initial oauth query state
+  const { body, options } = await GET('/link/github')
+
+  // we should get a redirection
+  eq({ body, status }, { body: null, status: 301 })
+  const { searchParams, origin, pathname } = new URL(options.headers.Location)
+  const { client_id, scope, state } = Object.fromEntries(searchParams)
+
+  // validate that a session is creacted for the random given state
+  eq(NAN.entries[`github:${state}`]?.expirationTtl, 3600)
+
+  // confirm the rest of the params
+  return { client_id, scope, origin, pathname }
+}).expect = {
+  client_id: GITHUB_CLIENT,
+  origin: 'https://github.com',
+  pathname: '/login/oauth/authorize',
+  scope: 'user',
+}
+
 // DISCORD OAUTH
+test('GET /auth/discord without params').on(() =>
+  GET('/auth/discord'),
+).expect = new Response('Missing Params', BAD_REQUEST)
+
+test('GET /auth/discord without bad state').on(() => {
+  // if we don't have the state in the db return Unauthorized
+  return GET('/auth/discord?code=wesh&state=bad-state')
+}).expect = new Response('Bad State', UNAUTHORIZED)
+
+test('GET /auth/discord with a proper state').on(async ({ eq }) => {
+  // set state in KV
+  const name = 'user:4ytg:tester:knddr12r:test-disc'
+  await NAN.put('discord:proper-state', '', { metadata: { user, name } })
+
+  // init query
+  const res = await GET('/auth/discord?code=wesh&state=proper-state')
+  const { status, headers } = res.options
+
+  // expect a redirect
+  eq({ body: res.body, status }, { body: null, status: 301 })
+
+  // location should include user own discordId
+  const discordUser = { ...user, discordId: '13371337' }
+  eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
+
+  // the user session is set in the database
+  eq(NAN.entries[name]?.metadata, discordUser)
+})
+
+test('GET /link/discord without a session is Unauthorized').on(() =>
+  GET('/link/discord'),
+).expect = new Response('No Session', {
+  status: 401,
+  statusText: 'Unauthorized',
+})
+
+test('GET /link/discord with a session generate a state').on(async ({ eq }) => {
+  // This time, the user is connected, we can proceede
+  const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
+  await db.set(session, user)
+  const { body, options } = await GET('/link/discord', {
+    headers: { Cookie: `nan-session=${session}` },
+  })
+
+  // we should get a redirection
+  eq(options.status, 301)
+  const { searchParams, origin, pathname } = new URL(options.headers.Location)
+  const { client_id, scope, state } = Object.fromEntries(searchParams)
+
+  // validate that a session is creacted for the random given state
+  // we store the users credentials here to avoid doing 2 queries afterward.
+  // It both check that the state is valid and return relevant user info.
+  eq(NAN.entries[`discord:${state}`], {
+    expirationTtl: 3600,
+    value: '',
+    key: `discord:${state}`,
+    metadata: { name: session, user },
+  })
+
+  // confirm the rest of the params
+  return { client_id, scope, origin, pathname }
+}).expect = {
+  client_id: DISCORD_CLIENT,
+  origin: 'https://discordapp.com',
+  pathname: '/api/oauth2/authorize',
+  scope: 'identify gdm.join guilds.join',
+}
