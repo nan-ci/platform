@@ -1,6 +1,6 @@
 name = "dev"
 type = "javascript"
-workers_dev = true
+workers_dev = false
 account_id = "94917a33bd06f373d7688a39912e51c8"
 zone_id = "31e9526e534b476a45d9004c8eef7336"
 route = "dev.nan.ci/api/*"

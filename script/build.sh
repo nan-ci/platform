@@ -1,10 +1,13 @@
+export NODE_ENV="${NODE_ENV:-production}"
+
+node script/generate-templates.mjs
 node_modules/.bin/esbuild app.jsx \
   --bundle \
-  --define:process.env.NODE_ENV='"production"' \
+  --define:process.env.NODE_ENV='"'"$NODE_ENV"'"' \
   --format=esm \
-  --minify \
-  --splitting \
   --jsx-factory=h \
   --jsx-fragment=Fragment \
   --inject:lib/preact-shim.js \
-  --outdir=public/js
+  --outdir=public/js \
+  --splitting \
+  --minify

@@ -107,4 +107,5 @@ dist
 .idea/
 
 # build
-public/js/
+public/
+api/index.js
