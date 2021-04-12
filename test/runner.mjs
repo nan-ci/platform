@@ -20,14 +20,22 @@ export const test = (description, fn, expect) => {
   return t
 }
 
+let end
 const put = (i, str) => {
   process.stdout.cursorTo(0, i)
   process.stdout.clearLine()
   process.stdout.write(str)
+  process.stdout.cursorTo(0, end)
 }
 
+const clock = [...'🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚🕛']
 const runOne = async ({ description, fn, expect, l, c, file }, i) => {
-  put(i, `  ⌛ ${description}`)
+  put(i, `  🕛 ${description}`)
+  let iter = 0
+  const interval = setInterval(
+    () => put(i, `  ${clock[++iter % clock.length]} ${description}`),
+    150,
+  )
   const result = await Promise.race([
     Promise.resolve(fn({ eq }))
       .catch((_) => _)
@@ -35,8 +43,9 @@ const runOne = async ({ description, fn, expect, l, c, file }, i) => {
         expect == null || eq(r, expect)
         return r
       }),
-    new Promise((_, f) => setTimeout(f, 500, Error('Timeout'))),
+    new Promise((_, f) => setTimeout(f, 1000, Error('Timeout'))),
   ]).catch((_) => _)
+  clearInterval(interval)
   const fail = expect == null && result instanceof Error
   put(i, `  ${fail ? '❌' : '✅'} ${description}\n`)
   return { fail, description, l, c, result, i, file }
@@ -53,6 +62,7 @@ export const run = async () => {
     ...tests.map((test) => (i) => runOne(test, i)),
   ])
 
+  end = w.length
   const results = await Promise.all(w.map((x, i) => x(i)))
   const [failed, ...rest] = results.filter((r) => r?.fail)
   failed && put(failed.i, `💀❌ ${failed.description}`)
