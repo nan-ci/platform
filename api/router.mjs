@@ -17,13 +17,6 @@ export const withUser = (fn) => async (params) => {
   return fn(params)
 }
 
-export const withRoom = (fn) => async (params) => {
-  const { ROOM } = params.env
-  ROOM.idFromName('nan')
-  params.room = await ROOM.get(id)
-  return fn(params)
-}
-
 export const getCookie = (request, key) => {
   const cookieStr = request.headers.get('Cookie')
   if (!cookieStr) return undefined
@@ -33,10 +26,10 @@ export const getCookie = (request, key) => {
   return cookieStr.slice(x + key.length + 1, y < x ? cookieStr.length : y)
 }
 
-export const handleRequest = async (request, env) => {
+export const handleRequest = async (request) => {
   const url = new URL(request.url)
   const handler = handlers[`${request.method}${url.pathname}`]
   if (!handler) return new Response(null, NOT_FOUND)
   const session = getCookie(request, 'nan-session')
-  return handler({ request, url, session, env })
+  return handler({ request, url, session })
 }

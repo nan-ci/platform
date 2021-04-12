@@ -1,5 +1,6 @@
 {
   "private": true,
+  "main": "api/index.js",
   "module": "api/server.mjs",
   "scripts": {
     "dev": "./script/dev.sh",

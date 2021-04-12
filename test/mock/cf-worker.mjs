@@ -2,8 +2,9 @@
 import { EventEmitter, once } from 'events'
 import { readFileSync } from 'fs'
 import TOML from 'fast-toml'
-import API from '../../api/server.mjs'
 
+import '../../api/auth.mjs'
+import { handleRequest } from '../../api/router.mjs'
 export const events = new EventEmitter()
 
 export const config = TOML.parse(readFileSync('wrangler.toml'))
@@ -56,7 +57,7 @@ const env = {}
 export const GET = (pathname, request = {}) => {
   const headers = new Map(Object.entries(request.headers || {}))
   const url = `https://${config.route.slice(0, -2)}${pathname}`
-  return API.fetch({ url, method: 'GET', ...request, headers }, env)
+  return handleRequest({ url, method: 'GET', ...request, headers }, env)
 }
 
 export const POST = (pathname, p) => GET(pathname, { method: 'POST', ...p })

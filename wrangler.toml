@@ -1,22 +1,15 @@
-name = "nan"
+name = "dev"
 type = "javascript"
 workers_dev = true
 account_id = "94917a33bd06f373d7688a39912e51c8"
 zone_id = "31e9526e534b476a45d9004c8eef7336"
-route = "platform.nan.ci/api/*"
+route = "dev.nan.ci/api/*"
 vars = { ROLE = '826978112054100008', GUILD = '821033851153285170', GITHUB_CLIENT = 'e57476aac91fc32d161f', DISCORD_CLIENT = '826974634069983282' }
 kv_namespaces = [
   { binding = "NAN", id = "a835efada9c74830884310cec84a0bee", preview_id = "db9d798994cd4f1e88591e35d748b02f" }
 ]
 
-[build]
-upload_dir = "api"
-upload_format = "modules"
-
 ## ENV
 ### GITHUB_SECRET
 ### DISCORD_SECRET
 ### BOT_TOKEN
-
-[durable_objects]
-bindings = [{name = "ROOM", class_name = "Room"}]
