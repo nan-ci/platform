@@ -47,20 +47,30 @@ GET.auth.discord = async ({ url }) => {
   const pendingUpdate = db.set(session.name, user)
 
   // join discord server
-  const join = await fetch(`${DISCORD}/guilds/${GUILD}/members/${discordId}`, {
-    method: 'PUT',
+  const join =  await fetch(`${DISCORD}/guilds/${GUILD}/members/${discordId}`, {
+    method: "PUT",
     headers: { Authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
     body: JSON.stringify({
       nick: user.name ? `${user.login} (${user.name})` : user.login,
       access_token: auth.access_token,
       roles: [ROLE],
-    }),
+    })
   })
 
   if (!join.ok) {
     console.error('Unable to join discord:', join.statusText)
   } else if (join.status === 204) {
-    //
+    // code here
+    await fetch(`${DISCORD}/guilds/${GUILD}/members/${discordId}`, {
+      method: "PUT",
+      headers: { Authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+      body: JSON.stringify({
+        nick: user.name ? `${user.login} (${user.name})` : user.login,
+        access_token: auth.access_token,
+        roles: [ROLE],
+      })
+    })
+
   }
 
   await pendingUpdate
