@@ -13,6 +13,10 @@ const user = { sid: '4ytg', login, name }
 // MOCKS
 events.on('request', ({ url, request, respond }) => {
   // GITHUB token grant
+  const method = request.method || 'GET'
+  const history = events[method] || (events[method] = [])
+  history.push({ url, request })
+
   if (url === 'https://github.com/login/oauth/access_token') {
     eq(request, {
       method: 'POST',
@@ -44,30 +48,39 @@ events.on('request', ({ url, request, respond }) => {
 
   // DISCORD token grant
   if (url === 'https://discordapp.com/api/oauth2/token') {
+    const body = new URLSearchParams(request.body)
+
     eq(request, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
         scope: 'identify gdm.join guilds.join',
-        client_id: '826974634069983282',
-        client_secret: 'fake-discord-secret',
+        client_id: DISCORD_CLIENT,
+        client_secret: DISCORD_SECRET,
         grant_type: 'authorization_code',
-        code: 'wesh',
+        code: body.get('code'),
       }),
     })
 
-    return respond({ access_token: 'discord-user-token' })
+    return respond({ access_token: `discord-user-token-${body.get('code')}` })
   }
 
   // DISCORD user data
   if (url === 'https://discordapp.com/api/users/@me') {
-    const Authorization = 'Bearer discord-user-token'
-    eq(request, { headers: { Authorization } })
-    return respond({ id: '13371337' })
+    const { Authorization } = request.headers || {}
+
+    if (Authorization === 'Bearer discord-user-token-wesh') {
+      return respond({ id: '13371337' })
+    }
+
+    if (Authorization === 'Bearer discord-user-token-already') {
+      return respond({ id: '13381338' })
+    }
   }
 
-  // DISCORD join a guild
-  if (url === `https://discordapp.com/api/guilds/${GUILD}/members/13371337`) {
+  // DISCORD join the guild
+  if (url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)) {
+    const discordId = url.slice(43 + GUILD.length)
     eq(request, {
       method: 'PUT',
       headers: {
@@ -76,11 +89,30 @@ events.on('request', ({ url, request, respond }) => {
       },
       body: JSON.stringify({
         nick: 'tester (Jean Patrick)',
-        access_token: 'discord-user-token',
+        access_token: `discord-user-token-${
+          discordId === '13381338' ? 'already' : 'wesh'
+        }`,
         roles: [ROLE],
       }),
     })
-    return respond('OK')
+    return respond('OK', discordId === '13381338' ? 204 : 201)
+  }
+
+  // DISCORD update user in the guild
+  if (url === `https://discordapp.com/api/guilds/${GUILD}/members/13381338`) {
+    eq(request, {
+      method: 'PATCH',
+      headers: {
+        Authorization: 'Bot fake-bot-token',
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        nick: 'tester (Jean Patrick)',
+        access_token: `discord-user-token-already`,
+        roles: [ROLE],
+      }),
+    })
+    return respond({ nick: 'tester (Jean Patrick)' })
   }
 
   // Unexpected request
@@ -216,3 +248,29 @@ test('GET /link/discord with a session generate a state').on(async ({ eq }) => {
   pathname: '/api/oauth2/authorize',
   scope: 'identify gdm.join guilds.join',
 }
+
+test('GET /auth/discord with a proper state').on(async ({ eq }) => {
+  // set state in KV
+  const name = 'user:4ytg:tester:knddr12r:test-exist'
+  await NAN.put('discord:exists-state', '', { metadata: { user, name } })
+
+  // init query
+  const res = await GET('/auth/discord?code=already&state=exists-state')
+  const { status, headers } = res.options
+
+  // expect a redirect
+  eq({ body: res.body, status }, { body: null, status: 301 })
+
+  // location should include user own discordId
+  const discordUser = { ...user, discordId: '13381338' }
+  eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
+
+  // if user already exists in discord we expect to have
+  // another PATCH request made to discord servers
+  const expectedUrl = `https://discordapp.com/api/guilds/${GUILD}/members/13381338`
+  const guildUpdate = events.PATCH?.find(({ url }) => url.endsWith(expectedUrl))
+  eq(guildUpdate?.url, expectedUrl, 'patch request missing')
+
+  // the user session is set in the database
+  eq(NAN.entries[name]?.metadata, discordUser)
+})
