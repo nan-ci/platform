@@ -66,7 +66,7 @@ GET.auth.discord = async ({ url }) => {
   return new Response(null, { headers: { Location }, status: 301 })
 }
 
-GET.auth.github = async ({ url: { searchParams } }) => {
+GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   const state = searchParams.get('state')
   const code = searchParams.get('code')
   if (!state || !code) return new Response(null, BAD_REQUEST)
@@ -123,7 +123,7 @@ GET.auth.github = async ({ url: { searchParams } }) => {
       'Set-Cookie': [
         `nan-session=${session}`,
         'path=/',
-        'domain=nan.oct.ovh',
+        `domain=${hostname}`,
         'HttpOnly',
         'SameSite=Strict',
         'Secure',

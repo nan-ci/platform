@@ -1,7 +1,9 @@
-import { GET, events } from './mock/cf-worker.mjs'
+import { GET, events, config } from './mock/cf-worker.mjs'
 import { test, eq } from './runner.mjs'
 import { rand, BAD_REQUEST, UNAUTHORIZED } from '../api/defs.mjs'
 import * as db from '../api/db.mjs'
+
+const DOMAIN = new URL(`https://${config.route}`).hostname
 
 const _404 = new Response(null, { status: 404, statusText: 'Not Found' })
 const login = 'tester'
@@ -117,7 +119,7 @@ test('GET /auth/github with a proper state').on(async ({ eq }) => {
     'HttpOnly',
     'SameSite=Strict',
     'Secure',
-    'domain=nan.oct.ovh',
+    `domain=${DOMAIN}`,
     'path=/',
   ])
 
