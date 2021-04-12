@@ -6,4 +6,5 @@ import { handleRequest } from './router.mjs'
 const toResponse = (e) => new Response(e.message, INTERNAL)
 const fetch = (request, env) => handleRequest(request, env).catch(toResponse)
 
-export default { fetch, Room }
+export { Room }
+export default { fetch }
