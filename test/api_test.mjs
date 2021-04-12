@@ -79,7 +79,10 @@ events.on('request', ({ url, request, respond }) => {
   }
 
   // DISCORD join the guild
-  if (url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)) {
+  if (
+    method === 'PUT' &&
+    url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
+  ) {
     const discordId = url.slice(43 + GUILD.length)
     eq(request, {
       method: 'PUT',
