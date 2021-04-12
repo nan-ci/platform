@@ -73,8 +73,17 @@ GET.auth.discord = async ({ url }) => {
 
   }
 
-  await pendingUpdate
+  if(join.status === 204){
+    const update = await  fetch(`${DISCORD}/guilds/${GUILD}/members/${discordId}`, {
+      method: "PATCH",
+      headers: { Authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+      body: JSON.stringify({
+        nick: user.name ? `${user.login} (${user.name})` : user.login,
+      })
+    });
+  }
 
+  await pendingUpdate
   const Location = `/?${new URLSearchParams(user)}`
   return new Response(null, { headers: { Location }, status: 301 })
 }
