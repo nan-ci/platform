@@ -45,6 +45,7 @@ GET.auth.discord = async ({ url }) => {
   const { id: discordId } = await userResponse.json()
   const user = { ...session.user, discordId }
   const pendingUpdate = db.set(session.name, user)
+
   // join discord server
   const join = await fetch(`${DISCORD}/guilds/${GUILD}/members/${discordId}`, {
     method: 'PUT',
@@ -58,6 +59,8 @@ GET.auth.discord = async ({ url }) => {
 
   if (!join.ok) {
     console.error('Unable to join discord:', join.statusText)
+  } else if (join.status === 204) {
+    //
   }
 
   await pendingUpdate
