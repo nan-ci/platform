@@ -1,6 +1,8 @@
 // mock cloudflare worker API:
 import { EventEmitter, once } from 'events'
 import { readFileSync } from 'fs'
+import { STATUS_CODES } from 'http'
+
 import TOML from 'fast-toml'
 
 import '../../api/auth.mjs'
@@ -29,16 +31,21 @@ NAN.list = async ({ prefix, limit = 1000 }) =>
 globalThis.fetch = (url, request) =>
   new Promise((resolve, reject) => {
     events.once('error', reject)
-    const respond = (body) => {
+    const respond = (body, status = 200) => {
       const ok = !(body instanceof Error)
-      const text =
-        !ok
-          ? reject(body)
-          : typeof body === 'string'
-          ? body
-          : JSON.stringify(body)
+      const text = !ok
+        ? reject(body)
+        : typeof body === 'string'
+        ? body
+        : JSON.stringify(body)
 
-      resolve({ ok, text: async () => text, json: async () => JSON.parse(text) })
+      resolve({
+        ok,
+        text: async () => text,
+        json: async () => JSON.parse(text),
+        status,
+        statusText: STATUS_CODES[status],
+      })
     }
 
     events.emit('request', { url, request, respond })
