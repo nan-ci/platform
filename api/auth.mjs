@@ -35,7 +35,7 @@ GET.auth.discord = async ({ url }) => {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      scope: 'identify gdm.join guilds.join',
+      scope: 'identify email guilds.join',
       client_id: DISCORD_CLIENT,
       client_secret: DISCORD_SECRET,
       grant_type: 'authorization_code',
@@ -48,8 +48,8 @@ GET.auth.discord = async ({ url }) => {
   const userResponse = await fetch(`${DISCORD}/users/@me`, {
     headers: { Authorization: `Bearer ${auth.access_token}` },
   })
-  const { id: discordId } = await userResponse.json()
-  const user = { ...session.user, discordId }
+  const { id: discordId, email, avatar } = await userResponse.json()
+  const user = { ...session.user, discordId, email, avatar }
   const pendingUpdate = db.set(session.name, user)
 
   // join discord server
@@ -143,7 +143,7 @@ GET.link.discord = withUser(async ({ user, session }) => {
   const Location = oauth2Url('discordapp.com/api/oauth2/authorize', {
     client_id: DISCORD_CLIENT,
     response_type: 'code',
-    scope: 'identify gdm.join guilds.join',
+    scope: 'identify email guilds.join',
     state,
   })
   return new Response(null, { headers: { Location }, status: 301 })

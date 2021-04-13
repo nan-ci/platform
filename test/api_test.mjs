@@ -8,6 +8,8 @@ const DOMAIN = new URL(`https://${config.route}`).hostname
 const _404 = new Response(null, { status: 404, statusText: 'Not Found' })
 const login = 'tester'
 const name = 'Jean Patrick'
+const avatar = 'a'
+const email = 'dev@nan.ci'
 const user = { sid: '4ytg', login, name }
 
 // MOCKS
@@ -54,7 +56,7 @@ events.on('request', ({ url, request, respond }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
-        scope: 'identify gdm.join guilds.join',
+        scope: 'identify email guilds.join',
         client_id: DISCORD_CLIENT,
         client_secret: DISCORD_SECRET,
         grant_type: 'authorization_code',
@@ -70,11 +72,11 @@ events.on('request', ({ url, request, respond }) => {
     const { Authorization } = request.headers || {}
 
     if (Authorization === 'Bearer discord-user-token-wesh') {
-      return respond({ id: '13371337' })
+      return respond({ id: '13371337', avatar, email })
     }
 
     if (Authorization === 'Bearer discord-user-token-already') {
-      return respond({ id: '13381338' })
+      return respond({ id: '13381338', avatar, email })
     }
   }
 
@@ -137,7 +139,7 @@ test('GET /auth/github without bad state').on(() => {
   return GET('/auth/github?code=wesh&state=bad-state')
 }).expect = new Response(null, UNAUTHORIZED)
 
-test('GET /auth/github with a proper state').on(async ({ eq }) => {
+test('GET /auth/github with a proper state').on(async () => {
   // set state in KV
   await NAN.put('github:proper-state', '', { metadata: {} })
 
@@ -162,12 +164,12 @@ test('GET /auth/github with a proper state').on(async ({ eq }) => {
   eq(NAN.entries[session.slice(12)]?.metadata, user)
 })
 
-test('GET /link/github generate a github link').on(async ({ eq }) => {
+test('GET /link/github generate a github link').on(async () => {
   // generate initial oauth query state
   const { body, options } = await GET('/link/github')
 
   // we should get a redirection
-  eq({ body, status }, { body: null, status: 301 })
+  eq({ body, status: options.status }, { body: null, status: 301 })
   const { searchParams, origin, pathname } = new URL(options.headers.Location)
   const { client_id, scope, state } = Object.fromEntries(searchParams)
 
@@ -193,7 +195,7 @@ test('GET /auth/discord without bad state').on(() => {
   return GET('/auth/discord?code=wesh&state=bad-state')
 }).expect = new Response('Bad State', UNAUTHORIZED)
 
-test('GET /auth/discord with a proper state').on(async ({ eq }) => {
+test('GET /auth/discord with a proper state').on(async () => {
   // set state in KV
   const name = 'user:4ytg:tester:knddr12r:test-disc'
   await NAN.put('discord:proper-state', '', { metadata: { user, name } })
@@ -206,7 +208,7 @@ test('GET /auth/discord with a proper state').on(async ({ eq }) => {
   eq({ body: res.body, status }, { body: null, status: 301 })
 
   // location should include user own discordId
-  const discordUser = { ...user, discordId: '13371337' }
+  const discordUser = { ...user, discordId: '13371337', email, avatar }
   eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
 
   // the user session is set in the database
@@ -229,7 +231,7 @@ test('GET /link/discord with a session generate a state').on(async ({ eq }) => {
   })
 
   // we should get a redirection
-  eq(options.status, 301)
+  eq({ body, status: options.status }, { body: null, status: 301 })
   const { searchParams, origin, pathname } = new URL(options.headers.Location)
   const { client_id, scope, state } = Object.fromEntries(searchParams)
 
@@ -249,10 +251,10 @@ test('GET /link/discord with a session generate a state').on(async ({ eq }) => {
   client_id: DISCORD_CLIENT,
   origin: 'https://discordapp.com',
   pathname: '/api/oauth2/authorize',
-  scope: 'identify gdm.join guilds.join',
+  scope: 'identify email guilds.join',
 }
 
-test('GET /auth/discord with a proper state').on(async ({ eq }) => {
+test('GET /auth/discord with a proper state').on(async () => {
   // set state in KV
   const name = 'user:4ytg:tester:knddr12r:test-exist'
   await NAN.put('discord:exists-state', '', { metadata: { user, name } })
@@ -265,7 +267,7 @@ test('GET /auth/discord with a proper state').on(async ({ eq }) => {
   eq({ body: res.body, status }, { body: null, status: 301 })
 
   // location should include user own discordId
-  const discordUser = { ...user, discordId: '13381338' }
+  const discordUser = { ...user, discordId: '13381338', email, avatar }
   eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
 
   // if user already exists in discord we expect to have

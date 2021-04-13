@@ -37,16 +37,14 @@ const runOne = async ({ description, fn, expect, l, c, file }, i) => {
     150,
   )
   const result = await Promise.race([
-    Promise.resolve(fn({ eq }))
-      .catch((_) => _)
-      .then((r) => {
-        expect == null || eq(r, expect)
-        return r
-      }),
+    Promise.resolve()
+      .then(fn)
+      .then(actual => eq(actual, expect))
+      .catch((err) => (expect instanceof Error ? eq(err, expect) : err)),
     new Promise((_, f) => setTimeout(f, 1000, Error('Timeout'))),
   ]).catch((_) => _)
   clearInterval(interval)
-  const fail = expect == null && result instanceof Error
+  const fail = result instanceof Error
   put(i, `  ${fail ? '❌' : '✅'} ${description}\n`)
   return { fail, description, l, c, result, i, file }
 }
