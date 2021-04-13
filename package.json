@@ -5,9 +5,9 @@
   "module": "api/server.js",
   "scripts": {
     "dev": "./script/dev.sh",
-    "test": "node test/tests.js",
+    "test": "node dev/tests.js",
     "start": "./script/start.sh",
-    "build": "./script/build.sh"
+    "build": "node dev/server.js"
   },
   "devDependencies": {
     "@cloudflare/wrangler": "^1.15.0-custom-builds-rc.2",

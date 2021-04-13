@@ -4,6 +4,7 @@ import { test, eq } from './runner.js'
 import { rand, BAD_REQUEST, UNAUTHORIZED } from '../api/defs.js'
 import * as db from '../api/db.js'
 
+const speciality = 'javascript'
 const _404 = new Response(null, { status: 404, statusText: 'Not Found' })
 
 /*
@@ -141,7 +142,7 @@ test('GET /auth/discord without bad state').on(() => {
 test('GET /auth/discord with a proper state').on(async () => {
   // set state in KV
   const name = 'user:4ytg:tester:knddr12r:test-disc'
-  const metadata = { user, name, speciality: 'javascript' }
+  const metadata = { user, name, speciality }
   await NAN.put('discord:proper-state', '', { metadata })
 
   // init query
@@ -152,7 +153,8 @@ test('GET /auth/discord with a proper state').on(async () => {
   eq({ body: res.body, status }, { body: null, status: 301 })
 
   // location should include user own discordId
-  const discordUser = { ...user, discordId: '13371337', email, avatar }
+  const discordId = '13371337'
+  const discordUser = { ...user, discordId, email, avatar, speciality }
   eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
 
   // the user session is set in the database
@@ -195,7 +197,7 @@ test('GET /link/discord with a session generate a state').on(async () => {
     expirationTtl: 3600,
     value: '',
     key: `discord:${state}`,
-    metadata: { name: session, user, speciality: 'javascript' },
+    metadata: { name: session, user, speciality },
   })
 
   // confirm the rest of the params
@@ -210,7 +212,7 @@ test('GET /link/discord with a session generate a state').on(async () => {
 test('GET /auth/discord with a proper state').on(async () => {
   // set state in KV
   const name = 'user:4ytg:tester:knddr12r:test-exist'
-  const metadata = { user, name, speciality: 'javascript' }
+  const metadata = { user, name, speciality }
   await NAN.put('discord:exists-state', '', { metadata })
 
   // init query
@@ -221,7 +223,8 @@ test('GET /auth/discord with a proper state').on(async () => {
   eq({ body: res.body, status }, { body: null, status: 301 })
 
   // location should include user own discordId
-  const discordUser = { ...user, discordId: '13381338', email, avatar }
+  const discordId = '13381338'
+  const discordUser = { ...user, discordId, email, avatar, speciality }
   eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
 
   // if user already exists in discord we expect to have

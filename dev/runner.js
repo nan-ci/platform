@@ -1,6 +1,6 @@
 import { readdirSync } from 'fs'
 import { deepStrictEqual as eq } from 'assert'
-import { basename, dirname, join} from 'path'
+import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
 const pathLength = import.meta.url.length - basename(import.meta.url).length
@@ -41,7 +41,7 @@ const runOne = async ({ description, fn, expect, l, c, file }, i) => {
   const result = await Promise.race([
     Promise.resolve()
       .then(fn)
-      .then(actual => eq(actual, expect))
+      .then((actual) => eq(actual, expect))
       .catch((err) => (expect instanceof Error ? eq(err, expect) : err)),
     new Promise((_, f) => setTimeout(f, 1000, Error('Timeout'))),
   ]).catch((_) => _)
@@ -59,9 +59,7 @@ console.log = console.error = console.info = console.debug = (...args) =>
 export const run = async () => {
   const __dirname = fileURLToPath(dirname(import.meta.url))
   const files = readdirSync(__dirname).filter((f) => f.endsWith('_test.js'))
-  await Promise.all(
-    files.map((f) => import(join(dirname(import.meta.url), f))),
-  )
+  await Promise.all(files.map((f) => import(join(dirname(import.meta.url), f))))
 
   const w = Object.entries(record).flatMap(([file, tests]) => [
     (i) => put(i, file),

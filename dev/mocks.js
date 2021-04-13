@@ -39,13 +39,10 @@ globalThis.fetch = (url, request) =>
   new Promise((resolve, reject) => {
     events.once('error', reject)
     const respond = (body, status = 200) => {
+      events.removeListener('error', reject)
       const ok = !(body instanceof Error)
-      const text = !ok
-        ? reject(body)
-        : typeof body === 'string'
-        ? body
-        : JSON.stringify(body)
-
+      if (!ok) return reject(body)
+      const text = typeof body === 'string' ? body : JSON.stringify(body)
       resolve({
         ok,
         text: async () => text,

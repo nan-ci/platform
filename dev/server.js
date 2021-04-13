@@ -94,4 +94,6 @@ createServer(async (req, res) => {
   const state = location.searchParams.get('state')
   res.setHeader('Location', `/api/auth/${provider}?code=wesh&state=${state}`)
   res.end(body)
-}).listen(port + 1, () => console.log(`Dev server ready on ${process.env.DOMAIN}`))
+}).listen(port + 1, () =>
+  console.log(`Dev server ready on ${process.env.DOMAIN}`),
+)

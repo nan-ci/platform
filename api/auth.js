@@ -1,10 +1,4 @@
-import {
-  BAD_REQUEST,
-  UNAUTHORIZED,
-  TYPE_JSON,
-  INTERNAL,
-  rand,
-} from './defs.js'
+import { BAD_REQUEST, UNAUTHORIZED, TYPE_JSON, INTERNAL, rand } from './defs.js'
 import { roles } from '../data/discord.js'
 import { GET, withUser } from './router.js'
 import * as db from './db.js'
@@ -23,7 +17,9 @@ const DISCORD = 'https://discordapp.com/api'
 const joinGuild = async (id, request) => {
   const url = `${DISCORD}/guilds/${GUILD}/members/${id}`
   const join = await fetch(url, request)
-  return join.status === 204 ? joinGuild(id, { ...request, method: 'PATCH' }) : join
+  return join.status === 204
+    ? joinGuild(id, { ...request, method: 'PATCH' })
+    : join
 }
 
 GET.auth.discord = async ({ url }) => {
@@ -49,12 +45,12 @@ GET.auth.discord = async ({ url }) => {
   const userResponse = await fetch(`${DISCORD}/users/@me`, {
     headers: { Authorization: `Bearer ${auth.access_token}` },
   })
+  const { speciality } = session
   const { id: discordId, email, avatar } = await userResponse.json()
-  const user = { ...session.user, discordId, email, avatar }
+  const user = { ...session.user, discordId, email, avatar, speciality }
   const pendingUpdate = db.set(session.name, user)
 
   // join discord server
-  const { speciality } = session
   const join = await joinGuild(discordId, {
     method: 'PUT',
     headers: { Authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },

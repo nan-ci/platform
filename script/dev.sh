@@ -1,1 +1,1 @@
-fd --full-path '(/api|/test)' | entr -cdr node test/server.js
+fd --full-path '(/api|/dev)' | entr -cdr node dev/server.js

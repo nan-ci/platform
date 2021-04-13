@@ -5,9 +5,9 @@ import * as Icons from './icons.jsx'
 */
 
 const iconStyle = { style: { marignLeft: '2em' } }
-export const FatLink = ({ icon, children, ...props }) => (
+export const FatLink = ({ icon, children, color, ...props }) => (
   <a {...props}>
-    <b>
+    <b {...(color && { style: { background: color } })}>
       {Icons[icon] ? h(Icons[icon], iconStyle) : null}
       {children}
     </b>

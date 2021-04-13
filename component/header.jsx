@@ -42,7 +42,10 @@ export const Header = ({ user, page }) => (
         <>
           {user.discordId ? (
             <b>
-              Welcome <span style={{ color: 'red' }}>{user.name}</span>
+              Welcome{' '}
+              <span style={{ color: parseColor(roles[user.speciality].color) }}>
+                {user.name}
+              </span>
             </b>
           ) : (
             <>
