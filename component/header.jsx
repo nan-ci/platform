@@ -1,4 +1,8 @@
 import { FatLink } from './elements.jsx'
+import { roles } from '../data/discord.js'
+
+const parseColor = (c) =>
+  `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
 const LinkMatch = ({ match, children, ...props }) => (
   <li>{match ? children : <a {...props}>{children}</a>}</li>
@@ -9,10 +13,10 @@ export const Header = ({ user, page }) => (
     <nav>
       <ul>
         <li>Logo</li>
-        <LinkMatch href='/' match={page === 'home'}>
+        <LinkMatch href="/" match={page === 'home'}>
           Home
         </LinkMatch>
-        <LinkMatch href='/doc' match={page === 'doc'}>
+        <LinkMatch href="/doc" match={page === 'doc'}>
           Documentation
         </LinkMatch>
       </ul>
@@ -36,11 +40,24 @@ export const Header = ({ user, page }) => (
         </FatLink>
       ) : (
         <>
-          <b>Welcome {user.name}</b>
-          {user.discordId ? null : (
-            <FatLink href="/api/link/discord" icon="Discord">
-              link your Discord account
-            </FatLink>
+          {user.discordId ? (
+            <b>
+              Welcome <span style={{ color: 'red' }}>{user.name}</span>
+            </b>
+          ) : (
+            <>
+              <b>Welcome {user.name}</b>
+              {Object.entries(roles).map(([key, { id, name, color }]) => (
+                <FatLink
+                  key={key}
+                  href={`/api/link/discord?speciality=${key}`}
+                  icon="Discord"
+                  color={parseColor(color)}
+                >
+                  {name}
+                </FatLink>
+              ))}
+            </>
           )}
         </>
       )}
