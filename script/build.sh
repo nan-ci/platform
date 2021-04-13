@@ -1,5 +1,8 @@
 export NODE_ENV="${NODE_ENV:-production}"
 
+cd $(dirname "$0")
+cd ..
+
 node script/generate-templates.js
 node_modules/.bin/esbuild app.jsx \
   --bundle \

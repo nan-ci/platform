@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "./script/dev.sh",
     "test": "node dev/tests.js",
-    "start": "./script/start.sh",
-    "build": "node dev/server.js"
+    "start": "node dev/server.js",
+    "build": "./script/build.sh"
   },
   "devDependencies": {
     "@cloudflare/wrangler": "^1.15.0-custom-builds-rc.2",
