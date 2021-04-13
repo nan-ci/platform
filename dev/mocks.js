@@ -23,6 +23,7 @@ globalThis.DISCORD_SECRET = 'fake-discord-secret'
 // KV
 const NAN = (globalThis.NAN = { entries: {} })
 NAN.getWithMetadata = async (key) => NAN.entries[key]
+NAN.delete = (key) => NAN.entries[key] = undefined
 NAN.put = async (key, value, op) => (NAN.entries[key] = { ...op, value, key })
 NAN.list = async ({ prefix, limit = 1000 }) =>
   Object.entries(NAN.entries)
