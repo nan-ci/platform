@@ -1,4 +1,4 @@
-import { GET, events, DOMAIN, login, avatar, email, user } from './mocks.js'
+import { GET, requests, DOMAIN, login, avatar, email, user } from './mocks.js'
 import { roles } from '../data/discord.js'
 import { test, eq } from './runner.js'
 import { rand, BAD_REQUEST, UNAUTHORIZED } from '../api/defs.js'
@@ -230,7 +230,7 @@ test('GET /auth/discord with a proper state').on(async () => {
   // if user already exists in discord we expect to have
   // another PATCH request made to discord servers
   const expectedUrl = `https://discordapp.com/api/guilds/${GUILD}/members/13381338`
-  const guildUpdate = events.PATCH?.find(({ url }) => url.endsWith(expectedUrl))
+  const guildUpdate = requests.PATCH?.find(({ url }) => url.endsWith(expectedUrl))
   eq(guildUpdate?.url, expectedUrl, 'patch request missing')
 
   // the user session is set in the database
