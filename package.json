@@ -1,10 +1,11 @@
 {
   "private": true,
+  "type": "module",
   "main": "api/index.js",
-  "module": "api/server.mjs",
+  "module": "api/server.js",
   "scripts": {
     "dev": "./script/dev.sh",
-    "test": "node test/tests.mjs",
+    "test": "node test/tests.js",
     "start": "./script/start.sh",
     "build": "./script/build.sh"
   },

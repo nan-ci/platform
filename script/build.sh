@@ -1,6 +1,6 @@
 export NODE_ENV="${NODE_ENV:-production}"
 
-node script/generate-templates.mjs
+node script/generate-templates.js
 node_modules/.bin/esbuild app.jsx \
   --bundle \
   --define:process.env.NODE_ENV='"'"$NODE_ENV"'"' \

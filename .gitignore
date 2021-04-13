@@ -109,3 +109,6 @@ dist
 # build
 public/
 api/index.js
+
+# test data
+.nan.kv.json

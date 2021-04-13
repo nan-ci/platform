@@ -1,1 +1,1 @@
-fd '\.(mjs|jsx)$' | entr -c node test/tests.mjs
+fd --full-path '(/api|/test)' | entr -cdr node test/server.js

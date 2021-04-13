@@ -1,26 +1,12 @@
-import { GET, events, config } from './mock/cf-worker.mjs'
-import { roles } from '../data/discord.mjs'
-import { test, eq } from './runner.mjs'
-import { rand, BAD_REQUEST, UNAUTHORIZED } from '../api/defs.mjs'
-import * as db from '../api/db.mjs'
-
-const DOMAIN = new URL(`https://${config.route}`).hostname
+import { GET, events, DOMAIN, login, avatar, email, user } from './mocks.js'
+import { roles } from '../data/discord.js'
+import { test, eq } from './runner.js'
+import { rand, BAD_REQUEST, UNAUTHORIZED } from '../api/defs.js'
+import * as db from '../api/db.js'
 
 const _404 = new Response(null, { status: 404, statusText: 'Not Found' })
-const login = 'tester'
-const name = 'Jean Patrick'
-const avatar = 'a'
-const email = 'dev@nan.ci'
-const user = { sid: '4ytg', login, name }
 
-// MOCKS
-events.on('request', ({ url, request, respond }) => {
-  // GITHUB token grant
-  const method = request.method || 'GET'
-  const history = events[method] || (events[method] = [])
-  history.push({ url, request })
-
-  if (url === 'https://github.com/login/oauth/access_token') {
+/*
     eq(request, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -31,11 +17,7 @@ events.on('request', ({ url, request, respond }) => {
         code: 'wesh',
       }).toString(),
     })
-    return respond('access_token=github-user-token')
-  }
 
-  // GITHUB user data
-  if (url === 'https://api.github.com/graphql') {
     eq(request, {
       method: 'POST',
       headers: {
@@ -45,13 +27,6 @@ events.on('request', ({ url, request, respond }) => {
       },
       body: '{"query":"{ viewer { login id name }}"}',
     })
-    const viewer = { id: 'MDQ6VXNlcjIzMTc0OA==', login, name }
-    return respond({ data: { viewer } })
-  }
-
-  // DISCORD token grant
-  if (url === 'https://discordapp.com/api/oauth2/token') {
-    const body = new URLSearchParams(request.body)
 
     eq(request, {
       method: 'POST',
@@ -65,28 +40,6 @@ events.on('request', ({ url, request, respond }) => {
       }),
     })
 
-    return respond({ access_token: `discord-user-token-${body.get('code')}` })
-  }
-
-  // DISCORD user data
-  if (url === 'https://discordapp.com/api/users/@me') {
-    const { Authorization } = request.headers || {}
-
-    if (Authorization === 'Bearer discord-user-token-wesh') {
-      return respond({ id: '13371337', avatar, email })
-    }
-
-    if (Authorization === 'Bearer discord-user-token-already') {
-      return respond({ id: '13381338', avatar, email })
-    }
-  }
-
-  // DISCORD join the guild
-  if (
-    method === 'PUT' &&
-    url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
-  ) {
-    const discordId = url.slice(43 + GUILD.length)
     eq(request, {
       method: 'PUT',
       headers: {
@@ -101,11 +54,6 @@ events.on('request', ({ url, request, respond }) => {
         roles: [ROLE, roles.javascript.id],
       }),
     })
-    return respond('OK', discordId === '13381338' ? 204 : 201)
-  }
-
-  // DISCORD update user in the guild
-  if (url === `https://discordapp.com/api/guilds/${GUILD}/members/13381338`) {
     eq(request, {
       method: 'PATCH',
       headers: {
@@ -118,13 +66,7 @@ events.on('request', ({ url, request, respond }) => {
         roles: [ROLE, roles.javascript.id],
       }),
     })
-    return respond({ nick: 'tester (Jean Patrick)' })
-  }
-
-  // Unexpected request
-  console.log({ url, request })
-  respond(Error('Unexpected Request'))
-})
+    */
 
 // ROUTER
 test('GET / -> 404', () => GET('/'), _404)
@@ -157,7 +99,7 @@ test('GET /auth/github with a proper state').on(async () => {
     'HttpOnly',
     'SameSite=Strict',
     'Secure',
-    `domain=${DOMAIN}`,
+    `domain=${new URL(DOMAIN).hostname}`,
     'path=/',
   ])
 
@@ -224,7 +166,9 @@ test('GET /link/discord without a session is Unauthorized').on(() =>
   statusText: 'Unauthorized',
 })
 
-test('GET /link/discord with a session generate a state without a speciality').on(async () => {
+test(
+  'GET /link/discord with a session generate a state without a speciality',
+).on(async () => {
   // This time, the user is connected, we can proceede
   const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
   await db.set(session, user)

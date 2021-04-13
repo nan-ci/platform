@@ -4,10 +4,10 @@ import {
   TYPE_JSON,
   INTERNAL,
   rand,
-} from './defs.mjs'
-import { roles } from '../data/discord.mjs'
-import { GET, withUser } from './router.mjs'
-import * as db from './db.mjs'
+} from './defs.js'
+import { roles } from '../data/discord.js'
+import { GET, withUser } from './router.js'
+import * as db from './db.js'
 
 const gql = async (query) => {
   const text = await query.text()

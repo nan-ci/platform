@@ -1,6 +1,6 @@
-import './auth.mjs'
-import { INTERNAL } from './defs.mjs'
-import { handleRequest } from './router.mjs'
+import './auth.js'
+import { INTERNAL } from './defs.js'
+import { handleRequest } from './router.js'
 
 const toResponse = (e) => new Response(e.message, INTERNAL)
 const fetch = (request) => handleRequest(request).catch(toResponse)

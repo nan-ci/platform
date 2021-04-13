@@ -55,7 +55,7 @@ git push orgin +HEAD
 
 ```bash
 # run prettier
-prettier -w **.jsx **.mjs **.md
+prettier -w **.jsx **.js **.md
 ```
 
 ## Test

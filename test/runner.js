@@ -1,5 +1,7 @@
+import { readdirSync } from 'fs'
 import { deepStrictEqual as eq } from 'assert'
-import { basename } from 'path'
+import { basename, dirname, join} from 'path'
+import { fileURLToPath } from 'url'
 
 const pathLength = import.meta.url.length - basename(import.meta.url).length
 
@@ -55,6 +57,12 @@ console.log = console.error = console.info = console.debug = (...args) =>
   logs.push(args)
 
 export const run = async () => {
+  const __dirname = fileURLToPath(dirname(import.meta.url))
+  const files = readdirSync(__dirname).filter((f) => f.endsWith('_test.js'))
+  await Promise.all(
+    files.map((f) => import(join(dirname(import.meta.url), f))),
+  )
+
   const w = Object.entries(record).flatMap(([file, tests]) => [
     (i) => put(i, file),
     ...tests.map((test) => (i) => runOne(test, i)),
@@ -68,10 +76,11 @@ export const run = async () => {
   for (const l of logs) log(...l)
   if (!failed) {
     log('\n🥳 All passed ! ✅✅✅')
-    return 0
+    console.log = console.error = console.info = console.debug = log
+    return
   }
   log(`\n😵 ${failed.description} (...and ${rest.length} more)`)
   log(`-> ${failed.file}:${failed.l}\n`)
   log(failed.result)
-  return 1
+  process.exit(1)
 }

@@ -1,5 +1,5 @@
-import { NOT_FOUND, UNAUTHORIZED } from './defs.mjs'
-import * as db from './db.mjs'
+import { NOT_FOUND, UNAUTHORIZED } from './defs.js'
+import * as db from './db.js'
 
 const handlers = {}
 const setter = (p) => (_, k, v) => (handlers[`${p}/${k}`] = v)
