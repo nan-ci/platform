@@ -4,13 +4,12 @@
   "main": "api/index.js",
   "module": "api/server.js",
   "scripts": {
-    "dev": "./script/dev.sh",
     "test": "node dev/tests.js",
-    "start": "node dev/server.js",
-    "build": "./script/build.sh"
+    "start": "./script/start.sh",
+    "build": "./script/build.sh",
+    "deploy": "./script/deploy.sh"
   },
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.15.0-custom-builds-rc.2",
     "esbuild": "^0.11.2",
     "fast-toml": "^0.5.4"
   },

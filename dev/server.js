@@ -1,31 +1,14 @@
 import { createServer, request } from 'http'
 import { readFile, writeFile } from 'fs/promises'
-import { dirname, join } from 'path'
-import { fileURLToPath } from 'url'
-import esbuild from 'esbuild'
-
-process.env.NODE_ENV = process.env.NODE_ENV || 'developement'
-
-// build templates
-const { generate } = await import('../script/generate-templates.js')
-
-const root = join(fileURLToPath(dirname(import.meta.url)), '..')
+import { join } from 'path'
 
 // Start esbuild's server on a random local port
-const conf = { servedir: join(root, 'public') }
-const { host: hostname, port } = await esbuild.serve(conf, {
-  entryPoints: [join(root, 'app.jsx')],
-  bundle: true,
-  sourcemap: 'inline',
-  outdir: join(root, 'public/js'),
-  inject: ['lib/preact-shim-dev.js'],
-  jsxFragment: 'Fragment',
-  jsxFactory: 'h',
-  format: 'esm',
-  define: { 'process.env.NODE_ENV': `"${process.env.NODE_ENV}"` },
-})
+const { generate, serve, rootDir } = await import('./build.js')
+const { host: hostname, port } = await serve()
 
-process.env.DOMAIN = `http://localhost:${port + 1}`
+// Set domain before we run the tests
+const PORT = process.env.PORT || port + 1
+process.env.DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`
 
 // run tests
 await (await import('./runner.js')).run()
@@ -34,19 +17,17 @@ await (await import('./runner.js')).run()
 const { API } = await import('./mocks.js')
 
 // load KV data
-const db = join(root, '.nan.kv.json')
-try {
-  NAN.entries = JSON.parse(await readFile(db, 'utf8'))
-} catch {
-  NAN.entries = {}
-}
+const db = join(rootDir, '.nan.kv.json')
+NAN.entries = await readFile(db, 'utf8')
+  .then(JSON.parse)
+  .catch(() => ({}))
 
 // Then start a proxy server on port 3000
 const chunk = (_, i, h) => (i % 2 ? [] : [[h[i], h[i + 1]]])
 createServer(async (req, res) => {
-  console.log(req.method, req.url)
   const { url: path, method } = req
   const url = new URL(`${process.env.DOMAIN}${path}`)
+  console.log(req.method, url.pathname, Object.fromEntries(url.searchParams))
 
   if (path.startsWith('/js/')) {
     // Forward each incoming request to esbuild
@@ -94,6 +75,4 @@ createServer(async (req, res) => {
   const state = location.searchParams.get('state')
   res.setHeader('Location', `/api/auth/${provider}?code=wesh&state=${state}`)
   res.end(body)
-}).listen(port + 1, () =>
-  console.log(`Dev server ready on ${process.env.DOMAIN}`),
-)
+}).listen(PORT, () => console.log(`Dev server ready on ${process.env.DOMAIN}`))

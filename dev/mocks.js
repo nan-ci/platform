@@ -8,10 +8,10 @@ import TOML from 'fast-toml'
 import '../api/auth.js'
 import { handleRequest } from '../api/router.js'
 
-export const name = 'Jean Patrick'
+export const avatar = 'a'
 export const login = 'tester'
 export const email = 'dev@nan.ci'
-export const avatar = 'a'
+export const name = 'Jean Patrick'
 export const user = { sid: '4ytg', login, name }
 export const events = new EventEmitter()
 export const config = TOML.parse(readFileSync('wrangler.toml'))

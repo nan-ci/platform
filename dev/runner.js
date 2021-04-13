@@ -3,8 +3,7 @@ import { deepStrictEqual as eq } from 'assert'
 import { basename, dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 
-const pathLength = import.meta.url.length - basename(import.meta.url).length
-
+const length = import.meta.url.length - basename(import.meta.url).length
 const record = {}
 export { eq }
 export const test = (description, fn, expect) => {
@@ -12,7 +11,7 @@ export const test = (description, fn, expect) => {
   const [, file, l, c] = fail.stack
     .split('\n')[2]
     .trim()
-    .slice(pathLength + 3)
+    .slice(length + 3)
     .split(/(^[^:]+)\:(\d+)\:(\d+)$/)
 
   const tests = record[file] || (record[file] = [])
@@ -67,6 +66,7 @@ export const run = async () => {
   ])
 
   end = w.length
+  console.clear()
   const results = await Promise.all(w.map((x, i) => x(i)))
   const [failed, ...rest] = results.filter((r) => r?.fail)
   failed && put(failed.i, `💀❌ ${failed.description}`)
