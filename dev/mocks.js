@@ -14,7 +14,7 @@ export const name = 'Jean Patrick'
 export const user = { sid: '4ytg', login, name }
 export const config = TOML.parse(readFileSync('wrangler.toml'))
 export const DOMAIN =
-  process.env.DOMAIN || new URL(`https://${config.route.slice(0, -1)}`).href
+  process.env.DOMAIN || new URL(`https://${config.route}`).origin
 
 Object.assign(globalThis, config.vars)
 
