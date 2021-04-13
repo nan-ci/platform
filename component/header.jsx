@@ -8,6 +8,11 @@ const LinkMatch = ({ match, children, ...props }) => (
   <li>{match ? children : <a {...props}>{children}</a>}</li>
 )
 
+const LogOut = () => {
+  const onclick = () => localStorage.clear()
+  return <a href="/api/logout" onclick={onclick}>Logout</a>
+}
+
 export const Header = ({ user, page }) => (
   <header>
     <nav>
@@ -22,7 +27,7 @@ export const Header = ({ user, page }) => (
       </ul>
       <ul>
         <li>
-          <a href="#">Github</a>
+          {user && <LogOut />}
         </li>
       </ul>
     </nav>
