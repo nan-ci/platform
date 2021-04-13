@@ -5,6 +5,7 @@ import {
   INTERNAL,
   rand,
 } from './defs.mjs'
+import { roles } from '../data/discord.mjs'
 import { GET, withUser } from './router.mjs'
 import * as db from './db.mjs'
 
@@ -53,13 +54,14 @@ GET.auth.discord = async ({ url }) => {
   const pendingUpdate = db.set(session.name, user)
 
   // join discord server
+  const { speciality } = session
   const join = await joinGuild(discordId, {
     method: 'PUT',
     headers: { Authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
     body: JSON.stringify({
       nick: user.name ? `${user.login} (${user.name})` : user.login,
       access_token: auth.access_token,
-      roles: [ROLE],
+      roles: [ROLE, roles[speciality].id],
     }),
   })
 
@@ -136,9 +138,11 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
 }
 
 const oauth2Url = (url, args) => `https://${url}?${new URLSearchParams(args)}`
-GET.link.discord = withUser(async ({ user, session }) => {
+GET.link.discord = withUser(async ({ user, session, url }) => {
+  const speciality = url.searchParams.get('speciality')
+  if (!roles[speciality]) return new Response('Missing Speciality', BAD_REQUEST)
   const state = `${rand()}-${rand()}`
-  const metadata = { user, name: session }
+  const metadata = { user, name: session, speciality }
   await db.put(`discord:${state}`, '', { expirationTtl: 3600, metadata })
   const Location = oauth2Url('discordapp.com/api/oauth2/authorize', {
     client_id: DISCORD_CLIENT,

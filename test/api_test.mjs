@@ -1,4 +1,5 @@
 import { GET, events, config } from './mock/cf-worker.mjs'
+import { roles } from '../data/discord.mjs'
 import { test, eq } from './runner.mjs'
 import { rand, BAD_REQUEST, UNAUTHORIZED } from '../api/defs.mjs'
 import * as db from '../api/db.mjs'
@@ -97,7 +98,7 @@ events.on('request', ({ url, request, respond }) => {
         access_token: `discord-user-token-${
           discordId === '13381338' ? 'already' : 'wesh'
         }`,
-        roles: [ROLE],
+        roles: [ROLE, roles.javascript.id],
       }),
     })
     return respond('OK', discordId === '13381338' ? 204 : 201)
@@ -114,7 +115,7 @@ events.on('request', ({ url, request, respond }) => {
       body: JSON.stringify({
         nick: 'tester (Jean Patrick)',
         access_token: `discord-user-token-already`,
-        roles: [ROLE],
+        roles: [ROLE, roles.javascript.id],
       }),
     })
     return respond({ nick: 'tester (Jean Patrick)' })
@@ -198,7 +199,8 @@ test('GET /auth/discord without bad state').on(() => {
 test('GET /auth/discord with a proper state').on(async () => {
   // set state in KV
   const name = 'user:4ytg:tester:knddr12r:test-disc'
-  await NAN.put('discord:proper-state', '', { metadata: { user, name } })
+  const metadata = { user, name, speciality: 'javascript' }
+  await NAN.put('discord:proper-state', '', { metadata })
 
   // init query
   const res = await GET('/auth/discord?code=wesh&state=proper-state')
@@ -222,11 +224,18 @@ test('GET /link/discord without a session is Unauthorized').on(() =>
   statusText: 'Unauthorized',
 })
 
-test('GET /link/discord with a session generate a state').on(async ({ eq }) => {
+test('GET /link/discord with a session generate a state without a speciality').on(async () => {
   // This time, the user is connected, we can proceede
   const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
   await db.set(session, user)
-  const { body, options } = await GET('/link/discord', {
+  return GET('/link/discord', { headers: { Cookie: `nan-session=${session}` } })
+}).expect = new Response('Missing Speciality', BAD_REQUEST)
+
+test('GET /link/discord with a session generate a state').on(async () => {
+  // This time, the user is connected, we can proceede
+  const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
+  await db.set(session, user)
+  const { body, options } = await GET('/link/discord?speciality=javascript', {
     headers: { Cookie: `nan-session=${session}` },
   })
 
@@ -242,7 +251,7 @@ test('GET /link/discord with a session generate a state').on(async ({ eq }) => {
     expirationTtl: 3600,
     value: '',
     key: `discord:${state}`,
-    metadata: { name: session, user },
+    metadata: { name: session, user, speciality: 'javascript' },
   })
 
   // confirm the rest of the params
@@ -257,7 +266,8 @@ test('GET /link/discord with a session generate a state').on(async ({ eq }) => {
 test('GET /auth/discord with a proper state').on(async () => {
   // set state in KV
   const name = 'user:4ytg:tester:knddr12r:test-exist'
-  await NAN.put('discord:exists-state', '', { metadata: { user, name } })
+  const metadata = { user, name, speciality: 'javascript' }
+  await NAN.put('discord:exists-state', '', { metadata })
 
   // init query
   const res = await GET('/auth/discord?code=already&state=exists-state')
