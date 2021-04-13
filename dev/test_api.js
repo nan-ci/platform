@@ -8,7 +8,7 @@ export const o = {}
 
 const speciality = 'javascript'
 const _404 = new Response(null, { status: 404, statusText: 'Not Found' })
-
+const { hostname } = new URL(DOMAIN)
 /*
     eq(request, {
       method: 'POST',
@@ -107,7 +107,7 @@ o['GET /auth/github with a proper state'] = {
       'HttpOnly',
       'SameSite=Strict',
       'Secure',
-      `domain=${new URL(DOMAIN).hostname}`,
+      `domain=${hostname}`,
       'path=/',
     ])
 
@@ -262,5 +262,26 @@ o['GET /auth/discord with a proper state'] = {
 
     // the user session is set in the database
     eq(NAN.entries[name]?.metadata, discordUser)
+  },
+}
+
+o['GET /logout'] = {
+  it: () => GET('/logout'),
+  expect: new Response(null, {
+    status: 301,
+    headers: {
+      'Set-Cookie': `nan-session=; path=/; domain=${hostname}; Max-Age=-1`,
+      Location: '/',
+    },
+  }),
+}
+
+o['GET /logout with stored session'] = {
+  it: async () => {
+    const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
+    await db.set(session, {})
+    const headers = { Cookie: `nan-session=${session}` }
+    const res = await GET('/logout', { headers })
+    return NAN.entries[session]
   },
 }
