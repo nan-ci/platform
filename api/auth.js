@@ -159,3 +159,15 @@ GET.link.github = async () => {
   })
   return new Response(null, { headers: { Location }, status: 301 })
 }
+
+GET.logout = async ({ session, url: { hostname } }) => {
+  // Clear Session
+  session && (await db.del(session))
+
+  // Clear cookie
+  const cookie = `nan-session=; path=/; domain=${hostname}; Max-Age=-1`
+  return new Response(null, {
+    status: 301,
+    headers: { Location: '/', 'Set-Cookie': cookie },
+  })
+}
