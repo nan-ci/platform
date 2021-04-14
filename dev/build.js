@@ -1,12 +1,10 @@
-import { fileURLToPath } from 'url'
-import { dirname, parse, join } from 'path'
 import { readFile, readdir, writeFile, mkdir } from 'fs/promises'
+import { parse, join } from 'path'
 
 import * as esbuild from 'esbuild'
 
-process.env.NODE_ENV = process.env.NODE_ENV || 'developement'
-const DEV = process.env.NODE_ENV === 'developement'
-const rootDir = join(fileURLToPath(dirname(import.meta.url)), '../')
+import { rootDir, DEV } from './utils.js'
+
 const templateDir = join(rootDir, 'template')
 const readEntry = async ({ name, ext, base }) => [
   name,
@@ -29,13 +27,6 @@ const config = {
 }
 
 const serve = () => esbuild.serve({ servedir }, config)
-const build = async () => {
-  await mkdir(join(rootDir, 'public'), { recursive: true })
-  const output = esbuild.build(config)
-  await writeFile(join(rootDir, 'public/index.html'), await generate(), 'utf8')
-  return output
-}
-
 const generate = async (file = 'index') => {
   const content = await readdir(templateDir)
   const entries = await Promise.all(content.map(parse).map(readEntry))
@@ -51,4 +42,13 @@ const generate = async (file = 'index') => {
   return readTemplate(file)
 }
 
-export { generate, serve, rootDir, build }
+export { generate, serve, rootDir }
+
+if (import.meta.url.endsWith(process.argv[1])) {
+  const outdir = join(rootDir, 'public')
+  await mkdir(outdir, { recursive: true })
+  await time({
+    bundle: esbuild.build(config),
+    template: writeFile(join(outdir, 'index.html'), await generate(), 'utf8'),
+  })
+}

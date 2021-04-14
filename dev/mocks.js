@@ -1,18 +1,15 @@
-// mock cloudflare worker API:
-import { readFileSync } from 'fs'
 import { STATUS_CODES } from 'http'
-
-import TOML from 'fast-toml'
 
 import '../api/auth.js'
 import { handleRequest } from '../api/router.js'
+import { getWranglerConfig } from './utils.js'
 
 export const avatar = 'a'
 export const login = 'tester'
 export const email = 'dev@nan.ci'
 export const name = 'Jean Patrick'
 export const user = { sid: '4ytg', login, name }
-export const config = TOML.parse(readFileSync('wrangler.toml'))
+export const config = await getWranglerConfig()
 export const DOMAIN =
   process.env.DOMAIN || new URL(`https://${config.route}`).origin
 

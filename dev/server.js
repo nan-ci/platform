@@ -2,8 +2,10 @@ import { createServer, request } from 'http'
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 
+import { rootDir } from './utils.js'
+
 // Start esbuild's server on a random local port
-const { generate, serve, rootDir } = await import('./build.js')
+const { generate, serve } = await import('./build.js')
 const { host: hostname, port } = await serve()
 
 // Set domain before we run the tests

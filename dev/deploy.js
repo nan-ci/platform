@@ -3,11 +3,10 @@ import { request } from 'https'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
-import TOML from 'fast-toml'
 import { buildSync } from 'esbuild'
+import { getWranglerConfig, rootDir } from './utils.js'
 
-const rootDir = join(fileURLToPath(dirname(import.meta.url)), '../')
-const config = TOML.parse(readFileSync('wrangler.toml'))
+const config = await getWranglerConfig()
 const { account_id: account, name: script } = config
 const CF_API = 'https://api.cloudflare.com/client/v4'
 const url = `${CF_API}/accounts/${account}/workers/scripts/${script}`

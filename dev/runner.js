@@ -1,7 +1,9 @@
 import { readdirSync } from 'fs'
 import { deepStrictEqual as eq } from 'assert'
 import { basename, dirname, join } from 'path'
-import { fileURLToPath } from 'url'
+import { performance } from 'perf_hooks'
+
+import { rootDir } from './utils.js'
 
 const length = import.meta.url.length - basename(import.meta.url).length
 const record = {}
@@ -32,11 +34,13 @@ const put = (i, str) => {
 const clock = [...'🕐🕑🕒🕓🕔🕕🕖🕗🕘🕙🕚🕛']
 const runOne = async ({ description, fn, expect, l, c, file }, i) => {
   put(i, `  🕛 ${description}`)
-  let iter = 0
-  const interval = setInterval(
-    () => put(i, `  ${clock[++iter % clock.length]} ${description}`),
-    150,
-  )
+  let x = 0
+  const start = performance.now()
+  const tick = (icon = clock[++x % clock.length]) => {
+    const elapsed = performance.now() - start
+    put(i, `  ${icon} ${description} ${elapsed.toFixed(1)}ms`)
+  }
+  const interval = setInterval(tick, 150)
   const result = await Promise.race([
     Promise.resolve()
       .then(fn)
@@ -46,7 +50,7 @@ const runOne = async ({ description, fn, expect, l, c, file }, i) => {
   ]).catch((_) => _)
   clearInterval(interval)
   const fail = result instanceof Error
-  put(i, `  ${fail ? '❌' : '✅'} ${description}\n`)
+  tick(fail ? '❌' : '✅')
   return { fail, description, l, c, result, i, file }
 }
 
@@ -56,8 +60,8 @@ console.log = console.error = console.info = console.debug = (...args) =>
   logs.push(args)
 
 export const run = async () => {
-  const __dirname = fileURLToPath(dirname(import.meta.url))
-  const files = readdirSync(__dirname).filter((f) => f.endsWith('_test.js'))
+  const testDir = join(rootDir, 'dev')
+  const files = readdirSync(testDir).filter((f) => f.endsWith('_test.js'))
   await Promise.all(files.map((f) => import(join(dirname(import.meta.url), f))))
 
   const w = Object.entries(record).flatMap(([file, tests]) => [
@@ -82,3 +86,5 @@ export const run = async () => {
   log(failed.result)
   process.exit(1)
 }
+
+import.meta.url.endsWith(process.argv[1]) && (await run())
