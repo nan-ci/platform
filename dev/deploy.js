@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 
 import { buildSync } from 'esbuild'
+
 import { getWranglerConfig, rootDir } from './utils.js'
 
 const config = await getWranglerConfig()

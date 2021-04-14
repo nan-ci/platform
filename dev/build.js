@@ -3,7 +3,7 @@ import { parse, join } from 'path'
 
 import * as esbuild from 'esbuild'
 
-import { rootDir, DEV } from './utils.js'
+import { rootDir, DEV, time } from './utils.js'
 
 const templateDir = join(rootDir, 'template')
 const readEntry = async ({ name, ext, base }) => [
