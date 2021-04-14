@@ -267,7 +267,7 @@ o['GET /auth/discord with a proper state'] = {
 
 o['GET /logout'] = {
   it: () => GET('/logout'),
-  expect: new Response(null, {
+  is: new Response(null, {
     status: 301,
     headers: {
       'Set-Cookie': `nan-session=; path=/; domain=${hostname}; Max-Age=-1`,
