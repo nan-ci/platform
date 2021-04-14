@@ -42,36 +42,41 @@ const parallel = async ({ description, it, is }, put) => {
 
 const getFiles = () => {
   const testDir = join(rootDir, 'dev')
-  const files = readdirSync(testDir).filter((f) => f.endsWith('_test.js'))
+  const files = readdirSync(testDir).filter((f) => f.startsWith('test_'))
   const importTests = async (f) => [
     basename(f),
     Object.entries(
-      (await import(join(testDir, f))).o,
+      (await import(join(testDir, f))).o || {},
     ).map(([description, t]) => ({ description, ...t })),
   ]
   return Promise.all(files.map(importTests))
 }
 
-const run = async () => {
+export const run = async () => {
   const files = await getFiles()
+  const headers = []
   for (const [n, [file, tests]] of files.entries()) {
     const put = (i, str) => {
-      process.stdout.cursorTo(0, i)
+      process.stdout.cursorTo(0, i + n)
       process.stdout.clearLine()
       process.stdout.write(str)
-      process.stdout.cursorTo(0, tests.length)
+      process.stdout.cursorTo(0, tests.length + n)
     }
     const start = performance.now()
-    put(0, `${n + 1}/${files.length} - ${file}`)
-    const runs = tests.map((t, i) => parallel(t, (str) => put(i, str)))
+    const count = String(tests.length).padStart(3)
+    headers[n] = `${count} - ${file.slice(5, -3)}`
     console.clear()
+    put(-n, headers.join('\n'))
+    const runs = tests.map((t, i) => parallel(t, (str) => put(i+1, str)))
     const results = await Promise.all(runs)
     const elapsed = (performance.now() - start).toFixed(1)
-    put(0, `${n + 1}/${files.length} - ${file} TOTAL: ${elapsed}ms`)
     const [failed, ...rest] = results.filter((r) => r?.fail)
+    headers[n] = `${count} - ${file.slice(5, -3)} (${elapsed}ms)`
     if (failed) {
       failed.put(`💀❌ ${failed.description}`)
       log(`\n😵 ${failed.description} (...and ${rest.length} more)`)
+      log(failed.result)
+      restoreLogs()
       process.exit(1)
     }
   }
