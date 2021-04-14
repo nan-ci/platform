@@ -15,7 +15,7 @@ const Authorization = `Bearer ${process.env.CF_DEPLOY_TOKEN}`
 const headers = { Authorization, 'Content-Type': 'application/javascript' }
 
 console.time('build')
-const { outputFiles: [out], warnings } = buildSync({
+const { outputFiles, warnings } = buildSync({
   entryPoints: [join(rootDir, 'api/server.js')],
   write: false,
   bundle: true,
@@ -24,11 +24,13 @@ const { outputFiles: [out], warnings } = buildSync({
 console.timeEnd('build')
 
 console.time('upload')
+const buf = Buffer.from(outputFiles[0].contents)
 const res = await new Promise((s) =>
-  request(url, { method: 'PUT', headers }, s).end(out.contents),
+  request(url, { method: 'PUT', headers }, s).end(buf),
 )
 let body = ''
 for await (const chunk of res.setEncoding('utf8')) body += chunk
-const { success, errors: [error] } = JSON.parse(body)
+const { success, errors } = JSON.parse(body)
+const error = errors[0] || { message: 'Unknown error', code: 0 }
 if (!success) throw Error(`${error.message} [${error.code}]`)
 console.timeEnd('upload')
