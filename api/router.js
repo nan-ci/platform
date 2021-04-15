@@ -17,6 +17,10 @@ export const withUser = (fn) => async (params) => {
   return fn(params)
 }
 
+// withBody functions
+
+export const withBody = (fn, validation) => async (params) => {}
+
 export const getCookie = (request, key) => {
   const cookieStr = request.headers.get('Cookie')
   if (!cookieStr) return undefined

@@ -1,4 +1,4 @@
-import { TYPE_JSON } from '../api/defs'
+import { TYPE_JSON } from '../api/defs.js'
 
 export const registrationForm = () => {
   const onSubmit = async (e) => {

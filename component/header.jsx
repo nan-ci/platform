@@ -1,5 +1,6 @@
 import { FatLink } from './elements.jsx'
 import { roles } from '../data/discord.js'
+import Registration_form from './registration_form'
 
 const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
@@ -10,7 +11,11 @@ const LinkMatch = ({ match, children, ...props }) => (
 
 const LogOut = () => {
   const onclick = () => localStorage.clear()
-  return <a href="/api/logout" onclick={onclick}>Logout</a>
+  return (
+    <a href="/api/logout" onclick={onclick}>
+      Logout
+    </a>
+  )
 }
 
 export const Header = ({ user, page }) => (
@@ -26,9 +31,7 @@ export const Header = ({ user, page }) => (
         </LinkMatch>
       </ul>
       <ul>
-        <li>
-          {user && <LogOut />}
-        </li>
+        <li>{user && <LogOut />}</li>
       </ul>
     </nav>
     <h1>
@@ -51,6 +54,7 @@ export const Header = ({ user, page }) => (
               <span style={{ color: parseColor(roles[user.speciality].color) }}>
                 {user.name}
               </span>
+              <Registration_form />
             </b>
           ) : (
             <>
