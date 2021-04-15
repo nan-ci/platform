@@ -17,3 +17,10 @@ export const getWranglerConfig = async () => {
   const TOML = (await import('fast-toml')).default
   return TOML.parse(await readFile(join(rootDir, 'wrangler.toml')))
 }
+
+export const mapV = (obj, fn) =>
+  Object.fromEntries(Object.entries(obj).map(([k, v]) => [k, fn(v, k)]))
+
+export const times = (n, fn, i = -1) => {
+  while (++i < n) fn(i)
+}
