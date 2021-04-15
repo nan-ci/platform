@@ -11,7 +11,8 @@
   },
   "devDependencies": {
     "esbuild": "^0.11.2",
-    "fast-toml": "^0.5.4"
+    "fast-toml": "^0.5.4",
+    "prettier": "^2.2.1"
   },
   "dependencies": {
     "preact": "^10.5.13"
