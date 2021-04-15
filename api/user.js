@@ -23,7 +23,7 @@ const verifyInformations = (body) => {
   return checks
 }
 
-POST.user.register_form = async ({ session, request }) => {
+POST.user.registerForm = async ({ session, request }) => {
   const contentType = request.headers.get('content-type') || ''
   if (!contentType.includes('form')) {
     return new Response('Bad request', BAD_REQUEST)
@@ -33,10 +33,7 @@ POST.user.register_form = async ({ session, request }) => {
     if (errors.length > 0) {
       return new Response(
         { status: false, errors },
-        {
-          status: 203,
-          headers: { ...TYPE_JSON },
-        },
+        { status: 203, headers: { ...TYPE_JSON } },
       )
     }
     // get previous state
@@ -48,7 +45,7 @@ POST.user.register_form = async ({ session, request }) => {
       { status: true, message: 'all right' },
       {
         status: 200,
-        headers: { location: '/', ...TYPE_JSON },
+        headers: { ...TYPE_JSON },
       },
     )
   }
