@@ -1,22 +1,22 @@
 import { render } from 'preact'
 
-import { logo } from './data/ascii.js'
+import { logo, center } from './data/ascii.js'
 import { user } from './lib/auth.js'
 import { RegistrationForm } from './component/registration_form.jsx'
 import { Header } from './component/header.jsx'
-import { Main, Footer, P } from './component/elements.jsx'
+import { Main, Footer, P, divider } from './component/elements.jsx'
 
 render(
   <>
     <Header user={user} title="Akwaba NaN" />
     <Main>
-     <P fg="comment">{logo}</P>
+      <P fg="comment">{logo}</P>
       <RegistrationForm />
     </Main>
     <Footer>
-      <P fg="comment">
-# Work in progress - NaN - Abidjan
-      </P>
+      {divider}
+      <P fg="comment">{center('Work in progress - NaN - Abidjan')}</P>
+      {divider}
     </Footer>
   </>,
   document.getElementById('root'),

@@ -35,11 +35,14 @@ export const RegistrationForm = () => {
           name="ownContact"
           comment="please enter your phone number"
           errors={errors}
-        />{'\n'}
+          value={'+225'}
+        />
+        {'\n'}
         <Text
           name="emergencyContact"
           comment="please enter a phone number to join in case of emergency"
           errors={errors}
+          value={'+225'}
         />{' '}
       </Form>
     </>

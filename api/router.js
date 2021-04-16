@@ -1,4 +1,4 @@
-import { NOT_FOUND, UNAUTHORIZED, BAD_REQUEST, TYPE_JSON } from './defs.js'
+import { NOT_FOUND, UNAUTHORIZED } from './defs.js'
 import * as db from './db.js'
 
 const handlers = {}

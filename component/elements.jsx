@@ -1,5 +1,6 @@
 import { toChildArray } from 'preact'
 
+import { css } from '../lib/dom.js'
 import * as Icons from './icons.jsx'
 
 /*
@@ -23,13 +24,13 @@ export const Div = colorize('div')
 export const Span = colorize('span')
 export const Color = Object.fromEntries(
   Object.entries(colors).map(([name, value]) => [
-    name.replace(/-([a-z])/g, replaceToCamel),
+    name.replace(/-([a-z])/g, replaceToCamel).replace(/^(.)/, replaceToCamel),
     (props) => ((getStyle(props).color = value), Span(props)),
   ]),
 )
 
-export const divider = <Color.comment># {'+-'.repeat(38)} #</Color.comment>
-export const equal = <Color.pink> = </Color.pink>
+export const divider = <Color.Comment># {'··'.repeat(38)} #</Color.Comment>
+export const equal = <Color.Pink> = </Color.Pink>
 
 export const Main = ({ children }) => (
   <main>
@@ -40,12 +41,20 @@ export const Main = ({ children }) => (
   </main>
 )
 
-export const Footer = ({ children }) => (
-  <footer>
-    <hr />
+css(`
+footer {
+  margin-bottom: 1ch;
+}
+`)
+
+export const Title = ({ children, ...props }) => (
+  <Color.Purple {...props}>
     {children}
-  </footer>
+    {':\n'}
+  </Color.Purple>
 )
+
+export const Footer = ({ children }) => <footer>{children}</footer>
 
 const iconStyle = { style: { marignLeft: '2em' } }
 export const Link = colorize(({ icon, children, ...props }) => (

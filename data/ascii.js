@@ -1,8 +1,8 @@
-const center = text => {
+export const center = (text) => {
   const lines = text.split('\n')
   const longest = lines.reduce((max, line) => Math.max(max, line.length), 0)
   const pad = ' '.repeat(38 - Math.floor(longest / 2))
-  return lines.map(line => `#${pad}${line}`.padEnd(79, ' ')+'#').join('\n')
+  return lines.map((line) => `#${pad}${line}`.padEnd(79, ' ') + '#').join('\n')
 }
 
 export const logo = center(`
