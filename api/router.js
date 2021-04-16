@@ -28,7 +28,11 @@ export const withBody = (fn, validation) => async (params) => {
   }
 
   if (Object.keys(errors).length > 0) {
-    return new Response(errors.toString(), { status: 203, statusText: 'error' })
+    return new Response(JSON.stringify({ errors }), {
+      status: 200,
+      statusText: 'error',
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+    })
   }
   return fn({ session: params.session, body })
 }

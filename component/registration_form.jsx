@@ -1,6 +1,8 @@
-import { TYPE_JSON } from '../api/defs.js'
+import { useState } from 'preact/hooks'
 
 export const RegistrationForm = () => {
+  let [errors, setErrors] = useState({})
+
   const onSubmit = async (e) => {
     e.preventDefault()
     // form data
@@ -13,29 +15,31 @@ export const RegistrationForm = () => {
       headers: { 'Content-Type': 'application/json; charset=utf-8' },
       body: json,
     })
-    console.log('response', fetching, fetching.body)
     const response = await fetching.json()
-    if (response.status) {
-      // redirect some where
+    if (response?.errors) {
+      setErrors(() => response.errors)
+      document.querySelector('span.error').textContent = Object.values(
+        response.errors,
+      ).join(',')
     } else {
-      // show Errors
-      document.querySelector('span').innerText = response.errors.join(',')
+      // redirect here
     }
   }
 
   return (
     <>
-      <span style={{ color: 'red', fontSize: '20px' }}></span>
+      <br />
+      <span className="error" style={{ color: 'red', fontSize: '15px' }}></span>
       <form onSubmit={(e) => onSubmit(e)}>
         <input
-          type="text"
           name="ownContact"
           placeholder="please enter your phone number"
+          style={{ border: errors.ownContact && '1px solid red' }}
         />
         <input
-          type="text"
           name="emergencyContact"
           placeholder="please enter a phone number to join in case of emergency"
+          style={{ border: errors.emergencyContact && '1px solid red' }}
         />
         <button type="submit"> submit </button>
       </form>
