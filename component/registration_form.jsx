@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks'
+import { Form, Text } from './form.jsx'
 
 export const RegistrationForm = () => {
   let [errors, setErrors] = useState({})
@@ -17,32 +18,30 @@ export const RegistrationForm = () => {
     })
     const response = await fetching.json()
     if (response?.errors) {
-      setErrors(() => response.errors)
-      document.querySelector('span.error').textContent = Object.values(
-        response.errors,
-      ).join(',')
+      setErrors(response.errors)
     } else {
+      console.log(response)
       // redirect here
     }
   }
 
+  console.log(errors)
+
   return (
     <>
-      <br />
-      <span className="error" style={{ color: 'red', fontSize: '15px' }}></span>
-      <form onSubmit={(e) => onSubmit(e)}>
-        <input
+      <span style={{ color: 'red', fontSize: '20px' }}></span>
+      <Form onSubmit={(e) => onSubmit(e)} title="Profile-Info" submit="save">
+        <Text
           name="ownContact"
-          placeholder="please enter your phone number"
-          style={{ border: errors.ownContact && '1px solid red' }}
-        />
-        <input
+          comment="please enter your phone number"
+          errors={errors}
+        />{'\n'}
+        <Text
           name="emergencyContact"
-          placeholder="please enter a phone number to join in case of emergency"
-          style={{ border: errors.emergencyContact && '1px solid red' }}
-        />
-        <button type="submit"> submit </button>
-      </form>
+          comment="please enter a phone number to join in case of emergency"
+          errors={errors}
+        />{' '}
+      </Form>
     </>
   )
 }

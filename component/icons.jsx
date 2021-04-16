@@ -1,5 +1,19 @@
+import { css } from '../lib/dom.js'
+
+css(`
+svg.icon {
+  height: 2ch;
+  margin: -0.5ch 0;
+}
+`)
+
 const Icon = (d, props) => (rest) => (
-  <svg viewBox="0 0 24 24" height="2em" width="2em" {...props} {...rest}>
+  <svg
+    class="icon"
+    viewBox="0 0 24 24"
+    {...props}
+    {...rest}
+  >
     <path d={d} />
   </svg>
 )
