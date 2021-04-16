@@ -5,6 +5,18 @@ import * as esbuild from 'esbuild'
 
 import { rootDir, DEV, time } from './utils.js'
 
+try {
+  const head = await readFile(join(rootDir, '.git/HEAD'), 'utf8')
+  const parts = head.split(' ')[1].trim().split('/')
+  console.log({parts, head})
+  const last = parts[parts.length - 1]
+  const hash = await readFile(join(rootDir, '.git', ...parts), 'utf8')
+  process.env.HASH = `${last}@${hash.trim()}`
+} catch (err) {
+  console.warn('Unable to load git commit version, fallback to random hash')
+  process.env.HASH = `unk@${Math.floor((Date.now() - 16e11) / 1000).toString(36)}`
+}
+
 const templateDir = join(rootDir, 'template')
 const readEntry = async ({ name, ext, base }) => [
   name,
@@ -12,6 +24,9 @@ const readEntry = async ({ name, ext, base }) => [
     ? (await import(join(templateDir, base))).default()
     : await readFile(join(templateDir, base), 'utf8'),
 ]
+
+const envEntries = ['NODE_ENV', 'HASH']
+    .map(name => [ `process.env.${name}`, `"${process.env[name]}"`])
 
 const servedir = join(rootDir, 'public')
 const config = {
@@ -21,7 +36,7 @@ const config = {
   jsxFragment: 'Fragment',
   jsxFactory: 'h',
   format: 'esm',
-  define: { 'process.env.NODE_ENV': `"${process.env.NODE_ENV}"` },
+  define: Object.fromEntries(envEntries),
   inject: [DEV ? 'lib/preact-shim-dev.js' : 'lib/preact-shim.js'],
   ...(DEV ? { sourcemap: 'inline' } : { splitting: true, minify: true }),
 }
