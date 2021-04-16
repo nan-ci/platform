@@ -1,8 +1,11 @@
 import { STATUS_CODES } from 'http'
 
-import '../api/auth.js'
 import { handleRequest } from '../api/router.js'
 import { getWranglerConfig } from './utils.js'
+
+globalThis.addEventListener = () => {}
+
+await import('../api/server.js')
 
 export const avatar = 'a'
 export const login = 'tester'
@@ -23,7 +26,7 @@ globalThis.DISCORD_SECRET = 'fake-discord-secret'
 // KV
 const NAN = (globalThis.NAN = { entries: {} })
 NAN.getWithMetadata = async (key) => NAN.entries[key]
-NAN.delete = (key) => NAN.entries[key] = undefined
+NAN.delete = (key) => (NAN.entries[key] = undefined)
 NAN.put = async (key, value, op) => (NAN.entries[key] = { ...op, value, key })
 NAN.list = async ({ prefix, limit = 1000 }) =>
   Object.entries(NAN.entries)
@@ -32,15 +35,28 @@ NAN.list = async ({ prefix, limit = 1000 }) =>
     .map(([, v]) => v)
 
 export const requests = {}
+const getText = async (text) => {
+  if (typeof text === 'string') return text
+  let chunks = []
+  text.setEncoding('utf8')
+  for await (const data of text) chunks.push(data)
+  return chunks.join('')
+}
+
+// MISSING: arrayBuffer, blob
+const makeBody = (text) => ({
+  text: async () => getText(text),
+  json: async () => JSON.parse(await getText(text)),
+})
+
 globalThis.fetch = async (url, request) => {
   const { body, status = 200 } = passToProvider(url, request)
   const text = typeof body === 'string' ? body : JSON.stringify(body)
   return {
     ok: true,
-    text: async () => text,
-    json: async () => JSON.parse(text),
     status,
     statusText: STATUS_CODES[status],
+    ...makeBody(text),
   }
 }
 globalThis.atob = (s) => new Buffer.from(s, 'base64').toString('binary')
@@ -52,7 +68,20 @@ globalThis.Response = class Response {
   }
 }
 
+const chunk = (_, i, h) => (i % 2 ? [] : [[h[i], h[i + 1]]])
+globalThis.Request = class Request {
+  constructor(req) {
+    this.headers = new Map(req.rawHeaders.flatMap(chunk))
+    this.url = `${DOMAIN}${req.url}`
+    this.method = req.method
+    Object.assign(this, makeBody(req))
+  }
+}
+
 export const API = (pathname, request = {}) => {
+  if (typeof pathname === 'object') {
+    return handleRequest(new Request(pathname))
+  }
   const headers = new Map(Object.entries(request.headers || {}))
   const url = `${DOMAIN}${pathname}`
   return handleRequest({ url, method: 'GET', ...request, headers })
