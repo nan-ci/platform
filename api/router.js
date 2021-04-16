@@ -1,4 +1,4 @@
-import { NOT_FOUND, UNAUTHORIZED } from './defs.js'
+import { NOT_FOUND, UNAUTHORIZED, BAD_REQUEST, TYPE_JSON } from './defs.js'
 import * as db from './db.js'
 
 const handlers = {}
@@ -19,7 +19,19 @@ export const withUser = (fn) => async (params) => {
 
 // withBody functions
 
-export const withBody = (fn, validation) => async (params) => {}
+export const withBody = (fn, validation) => async (params) => {
+  let errors = {}
+  const body = await params.request.json()
+  for (const [name, item] of Object.entries(validation)) {
+    const validError = item(body[name])
+    if (validError !== true) errors[name] = validError
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return new Response(errors.toString(), { status: 203, statusText: 'error' })
+  }
+  return fn({ session: params.session, body })
+}
 
 export const getCookie = (request, key) => {
   const cookieStr = request.headers.get('Cookie')

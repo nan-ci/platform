@@ -1,6 +1,6 @@
 import { FatLink } from './elements.jsx'
 import { roles } from '../data/discord.js'
-import Registration_form from './registration_form'
+import { RegistrationForm } from './registration_form'
 
 const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
@@ -54,7 +54,7 @@ export const Header = ({ user, page }) => (
               <span style={{ color: parseColor(roles[user.speciality].color) }}>
                 {user.name}
               </span>
-              <Registration_form />
+              <RegistrationForm />
             </b>
           ) : (
             <>

@@ -1,17 +1,19 @@
 import { TYPE_JSON } from '../api/defs.js'
 
-export const registrationForm = () => {
+export const RegistrationForm = () => {
   const onSubmit = async (e) => {
     e.preventDefault()
     // form data
     const form = new FormData(e.target)
     const data = Object.fromEntries(form)
     const json = JSON.stringify(data)
+    console.log('json', json)
     const fetching = await fetch('/api/user/registerForm', {
       method: 'POST',
-      headers: { ...TYPE_JSON },
-      body: { ...json },
+      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      body: json,
     })
+    console.log('response', fetching, fetching.body)
     const response = await fetching.json()
     if (response.status) {
       // redirect some where
@@ -27,12 +29,12 @@ export const registrationForm = () => {
       <form onSubmit={(e) => onSubmit(e)}>
         <input
           type="text"
-          name="own_contact"
+          name="ownContact"
           placeholder="please enter your phone number"
         />
         <input
           type="text"
-          name="emergency_contact"
+          name="emergencyContact"
           placeholder="please enter a phone number to join in case of emergency"
         />
         <button type="submit"> submit </button>
@@ -40,5 +42,3 @@ export const registrationForm = () => {
     </>
   )
 }
-
-export default registrationForm
