@@ -7,16 +7,27 @@ import * as db from './db.js'
 POST.user.registerForm = withBody(
   async ({ session, body }) => {
     const oldData = await db.get(session)
+    let updateValue = { ...oldData, profilData: body }
+    console.log('oldData', session, oldData, body, updateValue)
+
     // update
-    await db.put(session, { ...oldData, body })
-    console.log('up to date')
-    return new Response('all right', SUCCESS)
+    await db.put(session, updateValue)
+    const get = await db.get(session)
+    console.log('up to date', get)
+    return new Response(JSON.stringify({ message: 'ok all right' }), SUCCESS)
   },
   {
     ownContact: (value) =>
-      /\+[0-9]+/.test(value) || 'please enter a valid phone number please',
+      (/^\+225((01[0456789][1-3])|(05[0456789][4-6])|(07[0456789][7-9]))([0-9]{2}){3}$/.test(
+        value,
+      ) &&
+        value.length === 14) ||
+      'please enter a valid phone number please',
     emergencyContact: (value) =>
-      /\+[0-9]+/.test(value) ||
+      (/^\+225((01[0456789][1-3])|(05[0456789][4-6])|(07[0456789][7-9]))([0-9]{2}){3}$/.test(
+        value,
+      ) &&
+        value.length === 14) ||
       'please enter a valid phone number to join in case of emergency',
   },
 )

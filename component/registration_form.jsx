@@ -13,7 +13,7 @@ export const RegistrationForm = () => {
     console.log('json', json)
     const fetching = await fetch('/api/user/registerForm', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      headers: { 'Content-Type': 'application/json' },
       body: json,
     })
     const response = await fetching.json()
@@ -29,7 +29,6 @@ export const RegistrationForm = () => {
 
   return (
     <>
-      <span style={{ color: 'red', fontSize: '20px' }}></span>
       <Form onSubmit={(e) => onSubmit(e)} title="Profile-Info" submit="save">
         <Text
           name="ownContact"

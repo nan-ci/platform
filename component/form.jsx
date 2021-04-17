@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks'
 import { equal, Color, Title } from './elements.jsx'
 import { css } from '../lib/dom.js'
+import { user } from '../lib/auth.js'
 
 css(`
 input { outline: none }
@@ -42,6 +43,7 @@ const Comment = ({ children }) => (
     {children}
   </Color.Comment>
 )
+
 export const Text = ({ name, value, comment, errors, children, ...props }) => {
   const [val, setVal] = useState(value || '')
   const size = Math.max(val.length || 0, 1)
@@ -53,7 +55,6 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
         target.selectionStart === target.selectionEnd ||
         target.setSelectionRange(val.length, val.length),
     )
-
   style.width = `${size}ch`
 
   const description = errors[name] ? (
@@ -80,6 +81,9 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
             onInput={onInput}
             onFocus={onFocus}
             value={val}
+            minLength="14"
+            maxLength="14"
+            pattern="^\+225((01[0456789][1-3])|(05[0456789][4-6])|(07[0456789][7-9]))([0-9]{2}){3}$"
             {...props}
           />
         </span>
@@ -91,7 +95,6 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
 export const Form = ({ title, children, submit, ...props }) => (
   <form {...props}>
     {'\n'}
-    <Title>{title}</Title>
     {'\n'}
     {children}
     {submit && (
