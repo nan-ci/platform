@@ -1,5 +1,5 @@
 import { eq } from './utils.js'
-import { match } from '../lib/router.js'
+import { match, rank } from '../lib/router.js'
 
 export const o = {}
 
@@ -80,3 +80,11 @@ o['partial * should match anything after the match also handle params'] = {
   it: () => match('/user/:user/*', '/user/marie/evant/chrismas'),
   is: { user: 'marie', '*': 'evant/chrismas' },
 }
+
+// RANKING
+o['get the total number when we compute each word after the slash tag'] = {
+  it: () => rank('/admin/user/:userId'),
+  is: 8
+}
+
+
