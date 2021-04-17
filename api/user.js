@@ -1,4 +1,4 @@
-import { SUCCESS, TYPE_JSON } from './defs.js'
+import { SUCCESS } from './defs.js'
 import { POST, withBody } from './router.js'
 import * as db from './db.js'
 
@@ -15,16 +15,16 @@ POST.user.registerForm = withBody(
   },
   {
     ownContact: (value) =>
-      (/^\+225((01[0456789][1-3])|(05[0456789][4-6])|(07[0456789][7-9]))([0-9]{2}){3}$/.test(
+      (/^\+225 ((01 [0456789][1-3])|(05 [0456789][4-6])|(07 [0456789][7-9])) ([0-9]{2}) [0-9]{4}$/.test(
         value,
       ) &&
-        value.length === 14) ||
+        value.length === 18) ||
       'please enter a valid phone number please',
     emergencyContact: (value) =>
-      (/^\+225((01[0456789][1-3])|(05[0456789][4-6])|(07[0456789][7-9]))([0-9]{2}){3}$/.test(
+      (/^\+225 ((01 [0456789][1-3])|(05 [0456789][4-6])|(07 [0456789][7-9])) ([0-9]{2}) [0-9]{4}$/.test(
         value,
       ) &&
-        value.length === 14) ||
+        value.length === 18) ||
       'please enter a valid phone number to join in case of emergency',
   },
 )

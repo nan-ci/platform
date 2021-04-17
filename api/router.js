@@ -31,7 +31,7 @@ export const withBody = (fn, validation) => async (params) => {
     return new Response(JSON.stringify({ errors }), {
       status: 200,
       statusText: 'error',
-      headers: { 'Content-Type': 'application/json; charset=utf-8' },
+      headers: { 'Content-Type': 'application/json' },
     })
   }
   return fn({ session: params.session, body })
