@@ -1,16 +1,15 @@
 import { Link, Div, Color, Title } from './elements.jsx'
 import { roles } from '../data/discord.js'
 
-
 const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
-const LinkMatch = ({ match, children, ...props }) => (
+const LinkMatch = ({ match, children, path, ...props }) => (
   <li>
-    {match ? (
+    {path === props.href ? (
       <Color.Green>{children}</Color.Green>
     ) : (
-      <a {...props}>{children}</a>
+      <Link {...props}>{children}</Link>
     )}
   </li>
 )
@@ -50,7 +49,7 @@ const Version = () => (
   <Div fg="comment">#/bin/nan --hash={HASH.slice(0, 80 - 17)}</Div>
 )
 
-const Nav = () => (
+const Nav = ({ path }) => (
   <nav>
     <Version />
     {'\n'}
@@ -58,25 +57,27 @@ const Nav = () => (
     {'\n'}
     <ul style={{ width: '100%' }}>
       {'  '}
-      <LinkMatch href="/" match>
+      <LinkMatch path={path} href="/">
         Home
       </LinkMatch>
       {' - '}
-      <LinkMatch href="/doc">Documentation</LinkMatch>
+      <LinkMatch path={path} href="/profile">Profile</LinkMatch>
       <LogAction />
     </ul>
     {'\n'}
   </nav>
 )
 
-export const Header = ({ user, page, title, children }) => (
+export const Header = ({ user, page, title, children }) => {
+  const { pathname: path } = useURL()
+  return (
   <header>
-    <Nav />
+    <Nav path={path} />
     {'\n'}
-    <Title>Title</Title>
+    <Title>Page</Title>
     {'\n'}
-    <h1>{`  ${title}`} </h1>
+    <h1>{`  ${path}`} </h1>
     {'\n'}
     {children}
   </header>
-)
+)}

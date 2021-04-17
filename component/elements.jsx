@@ -1,6 +1,7 @@
 import { toChildArray } from 'preact'
 
 import { css } from '../lib/dom.js'
+import { RouterLink } from '../lib/router.js'
 import * as Icons from './icons.jsx'
 
 /*
@@ -57,11 +58,14 @@ export const Title = ({ children, ...props }) => (
 export const Footer = ({ children }) => <footer>{children}</footer>
 
 const iconStyle = { style: { marignLeft: '2em' } }
-export const Link = colorize(({ icon, children, ...props }) => (
-  <a {...props}>
-    {Icons[icon]
+export const Link = colorize(({ icon, children, ...props }) => {
+  const tag = /^(http|\/api\/)/.test(props.href) ? 'a' : RouterLink
+  return h(
+    tag,
+    props,
+    Icons[icon]
       ? h(Icons[icon], { ...iconStyle, fill: props.style?.color })
-      : null}
-    {children}
-  </a>
-))
+      : null,
+    children,
+  )
+})

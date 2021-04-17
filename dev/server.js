@@ -43,7 +43,7 @@ createServer(async (req, res) => {
   }
 
   // Handle the root index
-  if (url.pathname === '/') return res.end(await generate('index'))
+  if (!url.pathname.startsWith('/api/')) return res.end(await generate('index'))
 
   // Forward to the mock of cloudflare worker
   const { body, options } = await API(req)

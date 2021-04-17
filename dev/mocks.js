@@ -143,3 +143,10 @@ const passToProvider = (url, request) => {
   console.log({ url, request })
   throw Error('Unexpected Request')
 }
+
+// DOM
+const start = Date.now()
+globalThis.requestAnimationFrame = (fn) =>
+  setTimeout(() => fn(Date.now() - start), 16)
+globalThis.location = { href: `https://${config.route}` }
+globalThis.window = globalThis
