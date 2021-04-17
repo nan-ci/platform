@@ -101,4 +101,5 @@ if (import.meta.url.endsWith(process.argv[1])) {
     }
     console.timeEnd(`${n + 1}/${files.length} - ${file}`)
   }
+  process.exit(0)
 }
