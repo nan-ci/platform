@@ -77,6 +77,15 @@ export const Header = ({ user, page, title, children }) => (
     <Title>Title</Title>
     {'\n'}
     <h1>{`  ${title}`} </h1>
+    <br />
+    <h1>
+      {user && (
+        <>
+          {' '}
+          welcome back <Color.Green>{user.name}</Color.Green>
+        </>
+      )}
+    </h1>
     {'\n'}
     {children}
   </header>

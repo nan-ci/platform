@@ -11,7 +11,9 @@ render(
     <Header user={user} title="Akwaba NaN" />
     <Main>
       <P fg="comment">{logo}</P>
-      <RegistrationForm />
+      {user && user.discordId && !user.profilData && (
+        <RegistrationForm user={user} />
+      )}
     </Main>
     <Footer>
       {divider}

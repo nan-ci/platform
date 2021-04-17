@@ -12,6 +12,7 @@ export const RegistrationForm = () => {
     const json = JSON.stringify(data)
     console.log('json', json)
     const fetching = await fetch('/api/user/registerForm', {
+      credentials: 'include',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: json,
@@ -25,25 +26,31 @@ export const RegistrationForm = () => {
     }
   }
 
-  console.log(errors)
-
   return (
     <>
       <Form onSubmit={(e) => onSubmit(e)} title="Profile-Info" submit="save">
-        <Text
+        <PhoneInput
           name="ownContact"
           comment="please enter your phone number"
           errors={errors}
-          value={'+225'}
         />
         {'\n'}
-        <Text
+        <PhoneInput
           name="emergencyContact"
           comment="please enter a phone number to join in case of emergency"
           errors={errors}
-          value={'+225'}
         />{' '}
       </Form>
     </>
   )
 }
+
+const PhoneInput = (props) => (
+  <Text
+    value={'+225'}
+    minLength="14"
+    maxLength="14"
+    pattern="^\+225((01[0456789][1-3])|(05[0456789][4-6])|(07[0456789][7-9]))([0-9]{2}){3}$"
+    {...props}
+  />
+)

@@ -8,12 +8,9 @@ POST.user.registerForm = withBody(
   async ({ session, body }) => {
     const oldData = await db.get(session)
     let updateValue = { ...oldData, profilData: body }
-    console.log('oldData', session, oldData, body, updateValue)
-
     // update
+    console.log('values', oldData, updateValue)
     await db.put(session, updateValue)
-    const get = await db.get(session)
-    console.log('up to date', get)
     return new Response(JSON.stringify({ message: 'ok all right' }), SUCCESS)
   },
   {

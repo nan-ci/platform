@@ -81,9 +81,6 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
             onInput={onInput}
             onFocus={onFocus}
             value={val}
-            minLength="14"
-            maxLength="14"
-            pattern="^\+225((01[0456789][1-3])|(05[0456789][4-6])|(07[0456789][7-9]))([0-9]{2}){3}$"
             {...props}
           />
         </span>
