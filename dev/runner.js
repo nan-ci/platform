@@ -3,6 +3,7 @@ import { performance } from 'perf_hooks'
 import { basename, dirname, join } from 'path'
 
 import { rootDir, setImmediate, eq } from './utils.js'
+import './mocks.js'
 
 const logs = []
 const { log } = console
@@ -67,7 +68,7 @@ export const run = async () => {
     headers[n] = `${count} - ${file.slice(5, -3)}`
     console.clear()
     put(-n, headers.join('\n'))
-    const runs = tests.map((t, i) => parallel(t, (str) => put(i+1, str)))
+    const runs = tests.map((t, i) => parallel(t, (str) => put(i + 1, str)))
     const results = await Promise.all(runs)
     const elapsed = (performance.now() - start).toFixed(1)
     const [failed, ...rest] = results.filter((r) => r?.fail)
