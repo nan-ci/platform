@@ -8,7 +8,6 @@ import { rootDir, DEV, time } from './utils.js'
 try {
   const head = await readFile(join(rootDir, '.git/HEAD'), 'utf8')
   const parts = head.split(' ')[1].trim().split('/')
-  console.log({parts, head})
   const last = parts[parts.length - 1]
   const hash = await readFile(join(rootDir, '.git', ...parts), 'utf8')
   process.env.HASH = `${last}@${hash.trim()}`
