@@ -87,4 +87,27 @@ o['get the total number when we compute each word after the slash tag'] = {
   is: 8
 }
 
+o['get the correct number when we match to *'] = {
+  it: () => rank('*'),
+  is: 1,
+}
 
+o['get the correct number when we create a new user '] = {
+  it: () => rank('/admin/user/new'),
+  is: 9,
+}
+
+o['* should match anything and handle all params to get the correct number'] = {
+  it: () => rank('/admin/user/:userId/*'),
+  is: 9
+}
+
+o['trailing slash with user param to get the correct number'] = {
+  it: () => rank('/admin/user/:userId/'),
+  is: 8,
+}
+
+o['handle all params to get correct number'] = {
+  it: () => rank('/admin/user/:user/:userId/'),
+  is: 10,
+}
