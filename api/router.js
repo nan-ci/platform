@@ -17,6 +17,22 @@ export const withUser = (fn) => async (params) => {
   return fn(params)
 }
 
+export const withBody = (fn, validation) => async ({ request, session }) => {
+  const body = await request.json()
+  const errors = {}
+  for (let [name, item] of Object.entries(validation)) {
+    const validError = item(body[name])
+    if (validError !== true) errors[name] = validError
+  }
+  if (Object.keys(errors).length > 0)
+    return new Response(JSON.stringify({ errors }), {
+      status: 200,
+      statusText: 'error',
+      headers: { 'content-type': 'application/json' },
+    })
+  return fn({ body, session })
+}
+
 export const getCookie = (request, key) => {
   const cookieStr = request.headers.get('Cookie')
   if (!cookieStr) return undefined

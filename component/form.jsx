@@ -42,11 +42,21 @@ const Comment = ({ children }) => (
     {children}
   </Color.Comment>
 )
-export const Text = ({ name, value, comment, errors, children, ...props }) => {
+export const Text = ({
+  name,
+  value,
+  comment,
+  errors,
+  formatNumber,
+  children,
+  ...props
+}) => {
   const [val, setVal] = useState(value || '')
   const size = Math.max(val.length || 0, 1)
   const style = props.style || (props.style = {})
-  const onInput = ({ target }) => setVal(target.value)
+  const onInput = formatNumber
+    ? formatNumber
+    : ({ target }) => setVal(target.value)
   const onFocus = ({ target }) =>
     setTimeout(
       () =>
