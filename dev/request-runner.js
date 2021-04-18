@@ -6,5 +6,5 @@ const db = `/tmp/${args.hash}.kv.json`
 NAN.entries = await readFile(db, 'utf8').then(JSON.parse, () => ({}))
 process.stdin.setEncoding('utf8')
 const response = await API({ ...args, body: process.stdin })
+process.stdout.write(`${JSON.stringify(response)}\n`)
 writeFile(db, JSON.stringify(NAN.entries), 'utf8').catch(console.error)
-console.log(JSON.stringify(response))
