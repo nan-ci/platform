@@ -9,11 +9,9 @@
     "build": "./script/build.sh",
     "deploy": "./script/deploy.sh"
   },
-  "devDependencies": {
-    "esbuild": "^0.11.2",
-    "fast-toml": "^0.5.4"
-  },
   "dependencies": {
+    "esbuild": "^0.11.2",
+    "fast-toml": "^0.5.4",
     "preact": "^10.5.13"
   }
 }
