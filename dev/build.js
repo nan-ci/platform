@@ -5,14 +5,20 @@ import * as esbuild from 'esbuild'
 
 import { rootDir, DEV, time } from './utils.js'
 
+const getHash = async head => {
+  if (!head.startsWith('ref:')) return { hash: head.trim(), branch: 'detached' }
+  const parts = head.split(' ')[1].trim().split('/')
+  const branch = parts[parts.length - 1]
+  const hash = await readFile(join(rootDir, '.git', ...parts), 'utf8')
+  return { hash: hash.trim(), branch }
+}
+  
 try {
   const head = await readFile(join(rootDir, '.git/HEAD'), 'utf8')
-  const parts = head.split(' ')[1].trim().split('/')
-  const last = parts[parts.length - 1]
-  const hash = await readFile(join(rootDir, '.git', ...parts), 'utf8')
-  process.env.HASH = `${last}@${hash.trim()}`
+  const { hash, branch } = await getHash(head)
+  process.env.HASH = `${branch}@${hash.trim()}`
 } catch (err) {
-  console.warn('Unable to load git commit version, fallback to time based hash')
+  console.warn('Unable to load git commit version, fallback to time based hash', err)
   const now = Math.floor((Date.now() - 16e11) / 1000)
   process.env.HASH = `unk@${now.toString(36)}`
 }
