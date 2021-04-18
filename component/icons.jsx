@@ -8,12 +8,7 @@ svg.icon {
 `)
 
 const Icon = (d, props) => (rest) => (
-  <svg
-    class="icon"
-    viewBox="0 0 24 24"
-    {...props}
-    {...rest}
-  >
+  <svg class="icon" viewBox="0 0 24 24" {...props} {...rest}>
     <path d={d} />
   </svg>
 )

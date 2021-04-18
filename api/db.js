@@ -1,6 +1,6 @@
 const get = async (key) => (await NAN.getWithMetadata(key))?.metadata
 const set = (key, metadata) => NAN.put(key, '', { metadata })
-const del = key => NAN.delete(key)
+const del = (key) => NAN.delete(key)
 const put = (key, value, opts) => NAN.put(key, value, opts)
 const update = async (key, p) => set(key, { ...(await get(key)), ...p })
 const find = async (prefix) => (await NAN.list({ prefix, limit: 1 })).keys[0]

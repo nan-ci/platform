@@ -281,7 +281,7 @@ o['GET /logout with stored session'] = {
     const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
     await db.set(session, {})
     const headers = { Cookie: `nan-session=${session}` }
-    const res = await GET('/logout', { headers })
+    await GET('/logout', { headers })
     return NAN.entries[session]
   },
 }

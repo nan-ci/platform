@@ -1,9 +1,9 @@
 import { render } from 'preact'
 
-import { logo } from './data/ascii.js'
+import { logo, center } from './data/ascii.js'
 import { user } from './lib/auth.js'
 import { Header } from './component/header.jsx'
-import { Main, Footer, P } from './component/elements.jsx'
+import { Main, Footer, P, divider } from './component/elements.jsx'
 
 render(
   <>
@@ -12,9 +12,9 @@ render(
      <P fg="comment">{logo}</P>
     </Main>
     <Footer>
-      <P fg="comment">
-# Work in progress - NaN - Abidjan
-      </P>
+      {divider}
+      <P fg="comment">{center('Work in progress - NaN - Abidjan')}</P>
+      {divider}
     </Footer>
   </>,
   document.getElementById('root'),
