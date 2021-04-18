@@ -35,7 +35,8 @@ const handleRequest = async (req, res, again) => {
   )
 
   const url = req.url.slice(41)
-  console.log(req.method, url, { version, hash })
+  const { method, rawHeaders } = req
+  console.log(method, url, { version, hash })
   const checkout = spawnSync('git', ['checkout', hash])
   if (checkout.status) {
     if (again) {
@@ -47,14 +48,8 @@ const handleRequest = async (req, res, again) => {
     return handleRequest(req, res, true)
   }
 
-  const params = JSON.stringify({
-    url,
-    hash,
-    method: req.method,
-    rawHeaders: req.rawHeaders,
-  })
-  // TODO specify the right `DOMAIN`
-  const env = { DOMAIN: `https://${hash}.platform-au0l.pages.dev` }
+  const env = { DOMAIN: `https://${version}.platform-au0l.pages.dev` }
+  const params = JSON.stringify({ url, hash, method, rawHeaders })
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
   const stdout = read(page.stdout)
@@ -63,7 +58,10 @@ const handleRequest = async (req, res, again) => {
     res.statusCode = 500
     return res.end(await stderr)
   }
-  sendResponse({ ...JSON.parse(await stdout), res, hash })
+
+  const root = `https://${req.headers.host}/${hash}/`
+  const host = env.DOMAIN
+  sendResponse({ ...JSON.parse(await stdout), res, root, host })
 }
 
 const servOpts = {

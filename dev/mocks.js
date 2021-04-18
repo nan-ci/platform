@@ -144,7 +144,7 @@ const passToProvider = (url, request) => {
   throw Error('Unexpected Request')
 }
 
-export const sendResponse = ({ body, options, res, hash }) => {
+export const sendResponse = ({ body, options, res, root, host }) => {
   res.statusCode = options.status
   const entries = Object.entries(options.headers || {})
   for (const [k, v] of entries) res.setHeader(k, v)
@@ -159,14 +159,17 @@ export const sendResponse = ({ body, options, res, hash }) => {
   }
 
   // If it's a local redirection, we stop here
-  if (options.headers.Location[0] === '/') return res.end(body)
+  if (options.headers.Location[0] === '/') {
+    res.setHeader('Location', `${host || ''}${options.headers.Location}`)
+    return res.end(body)
+  }
 
   // For OAuth we skip the provider and redirect back directly
   const redirect = { github_com: 'github', discordapp_com: 'discord' }
   const location = new URL(options.headers.Location)
   const provider = redirect[location.hostname.replace('.', '_')]
   const state = location.searchParams.get('state')
-  const path = `${hash ? `/${hash}` : ''}/api/auth/${provider}`
+  const path = `${root || '/'}api/auth/${provider}`
   res.setHeader('Location', `${path}?code=wesh&state=${state}`)
   res.end(body)
 }
