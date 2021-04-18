@@ -1,74 +1,78 @@
-import { FatLink } from './elements.jsx'
+import { Link, Div, Color } from './elements.jsx'
 import { roles } from '../data/discord.js'
+
 
 const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
 const LinkMatch = ({ match, children, ...props }) => (
-  <li>{match ? children : <a {...props}>{children}</a>}</li>
+  <li>{match ? <Color.green>{children}</Color.green> : <a {...props}>{children}</a>}</li>
 )
 
-const LogOut = () => {
-  const onclick = () => localStorage.clear()
-  return <a href="/api/logout" onclick={onclick}>Logout</a>
+const clearStorage = () => localStorage.clear()
+
+const LogAction = () => {
+  if (!user) {
+    return (
+      <li>
+      {' - '}
+        <Link href="/api/link/github" icon="Github">
+          Join with Github
+        </Link>
+      </li>
+    )
+  }
+
+  return user.discordId ? (
+    <li>
+      {' - '}
+      <a href="/api/logout" onclick={clearStorage}>
+        Logout
+      </a>
+    </li>
+  ) : (
+    Object.entries(roles).map(([key, { id, name, color }]) => (
+      <li>
+        {' - '}
+        <Link
+          key={key}
+          href={`/api/link/discord?speciality=${key}`}
+          icon="Discord"
+          style={{color:parseColor(color)}}
+        >
+          {name}
+        </Link>
+      </li>
+    ))
+  )
 }
 
-export const Header = ({ user, page }) => (
+const Version = () => <Div fg="comment">#/bin/nan --hash={HASH.repeat(2).slice(0, 79-17)}</Div>
+const Nav = () => (
+  <nav>
+    <Version />
+    {'\n'}
+    <Color.purple>Menu:</Color.purple>
+    <ul style={{width: '100%'}}>
+      {'  '}
+      <LinkMatch href="/" match>
+        Home
+      </LinkMatch>
+      {' - '}
+      <LinkMatch href="/doc">Documentation</LinkMatch>
+      <LogAction />
+    </ul>
+    {'\n'}
+  </nav>
+)
+
+export const Header = ({ user, page, title, children }) => (
   <header>
-    <nav>
-      <ul>
-        <li>Logo</li>
-        <LinkMatch href="/" match={page === 'home'}>
-          Home
-        </LinkMatch>
-        <LinkMatch href="/doc" match={page === 'doc'}>
-          Documentation
-        </LinkMatch>
-      </ul>
-      <ul>
-        <li>
-          {user && <LogOut />}
-        </li>
-      </ul>
-    </nav>
-    <h1>
-      <code>NaN</code> Platform
-    </h1>
-    <p>
-      Page Subheading with <mark>highlighting</mark>
-    </p>
-    <br />
-    <p>
-      {!user ? (
-        <FatLink href="/api/link/github" icon="Github">
-          Join with Github
-        </FatLink>
-      ) : (
-        <>
-          {user.discordId ? (
-            <b>
-              Welcome{' '}
-              <span style={{ color: parseColor(roles[user.speciality].color) }}>
-                {user.name}
-              </span>
-            </b>
-          ) : (
-            <>
-              <b>Welcome {user.name}</b>
-              {Object.entries(roles).map(([key, { id, name, color }]) => (
-                <FatLink
-                  key={key}
-                  href={`/api/link/discord?speciality=${key}`}
-                  icon="Discord"
-                  color={parseColor(color)}
-                >
-                  {name}
-                </FatLink>
-              ))}
-            </>
-          )}
-        </>
-      )}
-    </p>
+    <Nav />
+    {'\n'}
+    <Color.purple>Title:</Color.purple>
+    <h1>{`  ${title}`} </h1>
+    {'\n'}
+    {children}
   </header>
 )

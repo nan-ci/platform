@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises'
 export { deepStrictEqual as eq } from 'assert'
 
 export const DEV = process.env.NODE_ENV === 'developement'
-export const setImmediate = (fn, delay) => (fn(), setInterval(fn, delay)) 
+export const setImmediate = (fn, delay) => (fn(), setInterval(fn, delay))
 export const rootDir = join(fileURLToPath(dirname(import.meta.url)), '../')
 export const time = (actions) =>
   Promise.all(

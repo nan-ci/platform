@@ -1,6 +1,6 @@
 import { readdirSync } from 'fs'
-import { basename, dirname, join } from 'path'
 import { performance } from 'perf_hooks'
+import { basename, dirname, join } from 'path'
 
 import { rootDir, setImmediate, eq } from './utils.js'
 
