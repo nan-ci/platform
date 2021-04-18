@@ -28,14 +28,14 @@ const handleRequest = async (req, res, again) => {
     res.statusCode = 403
     return res.end()
   }
-  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('access-control-allow-origin', '*')
   res.setHeader(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept',
+    'access-control-allow-headers',
+    'origin, x-requested-with, content-type, accept',
   )
 
   const url = req.url.slice(41)
-  const { method, rawHeaders } = req
+  const { method, headers } = req
   console.log(method, url, { version, hash })
   const checkout = spawnSync('git', ['checkout', hash])
   if (checkout.status) {
@@ -49,7 +49,7 @@ const handleRequest = async (req, res, again) => {
   }
 
   const env = { DOMAIN: `https://${version}.platform-au0l.pages.dev` }
-  const params = JSON.stringify({ url, hash, method, rawHeaders })
+  const params = JSON.stringify({ url, hash, method, headers })
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
   const stdout = read(page.stdout)
@@ -59,9 +59,12 @@ const handleRequest = async (req, res, again) => {
     return res.end(await stderr)
   }
 
-  const root = `https://${req.headers.host}/${hash}/`
+  const root = `https://${headers.host}/${hash}/`
   const host = env.DOMAIN
-  sendResponse({ ...JSON.parse(await stdout), res, root, host })
+  const result = JSON.parse(await stdout)
+  console.log('->', result)
+  console.error(await stderr)
+  sendResponse({ ...result, res, root, host })
 }
 
 const servOpts = {

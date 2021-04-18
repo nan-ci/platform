@@ -100,16 +100,17 @@ o['GET /auth/github with a proper state'] = {
 
     // expect a redirection
     eq({ body: res.body, status }, { body: null, status: 301 })
-    eq(headers.Location, `/?${new URLSearchParams(user)}`)
-    const [session, ...parts] = headers['Set-Cookie'].split('; ')
+    eq(headers.location, `/?${new URLSearchParams(user)}`)
+    const [session, ...parts] = headers['set-cookie'].split('; ')
     eq(session.startsWith('nan-session=user:4ytg:tester:'), true)
     eq(parts.sort(), [
-      'HttpOnly',
-      'SameSite=Strict',
-      'Secure',
+      'httponly',
+      'max-age=31536000',
+      'samesite=strict',
+      'secure',
       `domain=${hostname}`,
       'path=/',
-    ])
+    ].sort())
 
     // the user session is set in the database
     eq(NAN.entries[session.slice(12)]?.metadata, user)
@@ -123,7 +124,7 @@ o['GET /link/github generate a github link'] = {
 
     // we should get a redirection
     eq({ body, status: options.status }, { body: null, status: 301 })
-    const { searchParams, origin, pathname } = new URL(options.headers.Location)
+    const { searchParams, origin, pathname } = new URL(options.headers.location)
     const { client_id, scope, state } = Object.fromEntries(searchParams)
 
     // validate that a session is creacted for the random given state
@@ -171,7 +172,7 @@ o['GET /auth/discord with a proper state'] = {
     // location should include user own discordId
     const discordId = '13371337'
     const discordUser = { ...user, discordId, email, avatar, speciality }
-    eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
+    eq(headers.location, `/?${new URLSearchParams(discordUser)}`)
 
     // the user session is set in the database
     eq(NAN.entries[name]?.metadata, discordUser)
@@ -192,7 +193,7 @@ o['GET /link/discord with a session generate a state without a speciality'] = {
     const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
     await db.set(session, user)
     return GET('/link/discord', {
-      headers: { Cookie: `nan-session=${session}` },
+      headers: { cookie: `nan-session=${session}` },
     })
   },
   is: new Response('Missing Speciality', BAD_REQUEST),
@@ -204,12 +205,12 @@ o['GET /link/discord with a session generate a state'] = {
     const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
     await db.set(session, user)
     const { body, options } = await GET('/link/discord?speciality=javascript', {
-      headers: { Cookie: `nan-session=${session}` },
+      headers: { cookie: `nan-session=${session}` },
     })
 
     // we should get a redirection
     eq({ body, status: options.status }, { body: null, status: 301 })
-    const { searchParams, origin, pathname } = new URL(options.headers.Location)
+    const { searchParams, origin, pathname } = new URL(options.headers.location)
     const { client_id, scope, state } = Object.fromEntries(searchParams)
 
     // validate that a session is creacted for the random given state
@@ -250,7 +251,7 @@ o['GET /auth/discord with a proper state'] = {
     // location should include user own discordId
     const discordId = '13381338'
     const discordUser = { ...user, discordId, email, avatar, speciality }
-    eq(headers.Location, `/?${new URLSearchParams(discordUser)}`)
+    eq(headers.location, `/?${new URLSearchParams(discordUser)}`)
 
     // if user already exists in discord we expect to have
     // another PATCH request made to discord servers
@@ -270,8 +271,8 @@ o['GET /logout'] = {
   is: new Response(null, {
     status: 301,
     headers: {
-      'Set-Cookie': `nan-session=; path=/; domain=${hostname}; Max-Age=-1`,
-      Location: '/',
+      'set-cookie': `nan-session=; path=/; domain=${hostname}; max-age=-1`,
+      location: '/',
     },
   }),
 }
@@ -280,7 +281,7 @@ o['GET /logout with stored session'] = {
   it: async () => {
     const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
     await db.set(session, {})
-    const headers = { Cookie: `nan-session=${session}` }
+    const headers = { cookie: `nan-session=${session}` }
     await GET('/logout', { headers })
     return NAN.entries[session]
   },
