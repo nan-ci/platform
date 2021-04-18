@@ -25,7 +25,6 @@ NAN.entries = await readFile(db, 'utf8')
   .catch(() => ({}))
 
 // Then start a proxy server on port 3000
-const chunk = (_, i, h) => (i % 2 ? [] : [[h[i], h[i + 1]]])
 createServer(async (req, res) => {
   const { url: path, method } = req
   const url = new URL(`${process.env.DOMAIN}${path}`)
@@ -47,8 +46,7 @@ createServer(async (req, res) => {
   if (url.pathname === '/') return res.end(await generate('index'))
 
   // Forward to the mock of cloudflare worker
-  const headers = Object.fromEntries(req.rawHeaders.flatMap(chunk))
-  const { body, options } = await API(path, { method, headers })
+  const { body, options } = await API(req)
 
   // Save KV data
   await writeFile(db, JSON.stringify(NAN.entries), 'utf8')
