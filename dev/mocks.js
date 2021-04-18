@@ -144,7 +144,7 @@ const passToProvider = (url, request) => {
   throw Error('Unexpected Request')
 }
 
-export const sendResponse = ({ body, options, res }) => {
+export const sendResponse = ({ body, options, res, hash }) => {
   res.statusCode = options.status
   const entries = Object.entries(options.headers || {})
   for (const [k, v] of entries) res.setHeader(k, v)
@@ -166,7 +166,8 @@ export const sendResponse = ({ body, options, res }) => {
   const location = new URL(options.headers.Location)
   const provider = redirect[location.hostname.replace('.', '_')]
   const state = location.searchParams.get('state')
-  res.setHeader('Location', `/api/auth/${provider}?code=wesh&state=${state}`)
+  const path = `${hash ? `/${hash}` : ''}/api/auth/${provider}`
+  res.setHeader('Location', `${path}?code=wesh&state=${state}`)
   res.end(body)
 }
 
