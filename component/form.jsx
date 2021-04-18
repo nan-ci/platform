@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { equal, divider, Color } from './elements.jsx'
+import { equal, Color, Title } from './elements.jsx'
 import { css } from '../lib/dom.js'
 
 css(`
@@ -26,33 +26,62 @@ label > .str:focus-within, button:focus {
 
 .str:before, .str:after { content: '"' }
 
+label:hover > .name {
+  font-weight: bold;
+}
+
 button:hover {
   text-shadow: 1px 1px 2px #000;
   outline: 1px dashed;
   outline-offset: 0.5ch;
 }`)
 
-export const Text = ({ name, comment, errors, ...props }) => {
-  const [size, setSize] = useState(Math.max(props.value?.length || 0, 1))
-
-  const updateSize = ({ target }) => setSize(Math.max(target.value.length, 1))
+const Comment = ({ children }) => (
+  <Color.Comment>
+    {'  #'}
+    {children}
+  </Color.Comment>
+)
+export const Text = ({ name, value, comment, errors, children, ...props }) => {
+  const [val, setVal] = useState(value || '')
+  const size = Math.max(val.length || 0, 1)
   const style = props.style || (props.style = {})
+  const onInput = ({ target }) => setVal(target.value)
+  const onFocus = ({ target }) =>
+    setTimeout(
+      () =>
+        target.selectionStart === target.selectionEnd ||
+        target.setSelectionRange(val.length, val.length),
+    )
+
   style.width = `${size}ch`
 
-  const description = errors[name]
-    ? <Color.comment>{'  #'}<Color.red> Invalid</Color.red>: {errors[name]}</Color.comment>
-    : comment && <Color.comment>{`  # ${comment}`}</Color.comment>
-
+  const description = errors[name] ? (
+    <Comment>
+      <Color.Red> Invalid</Color.Red>: {errors[name]}
+    </Comment>
+  ) : (
+    comment && <Comment>{comment}</Comment>
+  )
 
   return (
     <div>
       {description}
       {'\n'}
       <label>
-        {`  ${name}`}
+        {'  '}
+        <span class="name">{name}</span>
         {equal}
         <span class="str">
-          <input type="text" name={name} oninput={updateSize} {...props} />
+          {children}
+          <input
+            type="text"
+            name={name}
+            onInput={onInput}
+            onFocus={onFocus}
+            value={val}
+            {...props}
+          />
         </span>
       </label>
     </div>
@@ -62,14 +91,14 @@ export const Text = ({ name, comment, errors, ...props }) => {
 export const Form = ({ title, children, submit, ...props }) => (
   <form {...props}>
     {'\n'}
-    <Color.purple>{title}:</Color.purple>
+    <Title>{title}</Title>
     {'\n'}
     {children}
     {submit && (
       <>
-        <Color.comment>{'\n  > '}</Color.comment>
+        <Color.Comment>{'\n  > '}</Color.Comment>
         <button type="submit">[{submit}]</button>
-        <Color.comment>{' <'}</Color.comment>
+        <Color.Comment>{' <'}</Color.Comment>
       </>
     )}
   </form>
