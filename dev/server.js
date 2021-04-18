@@ -13,10 +13,10 @@ const PORT = process.env.PORT || port + 1
 process.env.DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`
 
 // run tests
-await (await import('./runner.js')).run()
+await (await import('./test-runner.js')).run()
 
 // load CF worker mock
-const { API } = await import('./mocks.js')
+const { API, sendResponse } = await import('./mocks.js')
 
 // load KV data
 const db = join(rootDir, '.nan.kv.json')
@@ -52,27 +52,5 @@ createServer(async (req, res) => {
   await writeFile(db, JSON.stringify(NAN.entries), 'utf8')
 
   // Apply headers from the worker
-  res.statusCode = options.status
-  const entries = Object.entries(options.headers || {})
-  for (const [k, v] of entries) res.setHeader(k, v)
-
-  // Default case, just return the body
-  if (options.status !== 301) return res.end(body)
-
-  // Make cookies insecure for http support
-  if (options.headers['Set-Cookie']) {
-    const cookie = options.headers['Set-Cookie'].replace('; Secure', '')
-    res.setHeader('Set-Cookie', cookie)
-  }
-
-  // If it's a local redirection, we stop here
-  if (options.headers.Location[0] === '/') return res.end(body)
-
-  // For OAuth we skip the provider and redirect back directly
-  const redirect = { github_com: 'github', discordapp_com: 'discord' }
-  const location = new URL(options.headers.Location)
-  const provider = redirect[location.hostname.replace('.', '_')]
-  const state = location.searchParams.get('state')
-  res.setHeader('Location', `/api/auth/${provider}?code=wesh&state=${state}`)
-  res.end(body)
+  sendResponse({ body, options, res })
 }).listen(PORT, () => console.log(`Dev server ready on ${process.env.DOMAIN}`))
