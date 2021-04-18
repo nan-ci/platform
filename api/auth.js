@@ -30,7 +30,7 @@ GET.auth.discord = async ({ url }) => {
   if (!session?.user) return new Response('Bad State', UNAUTHORIZED)
   const authResponse = await fetch(`${DISCORD}/oauth2/token`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
       scope: 'identify email guilds.join',
       client_id: DISCORD_CLIENT,
@@ -43,7 +43,7 @@ GET.auth.discord = async ({ url }) => {
   const auth = await authResponse.json()
   if (auth.error) return new Response(auth.error_description, BAD_REQUEST)
   const userResponse = await fetch(`${DISCORD}/users/@me`, {
-    headers: { Authorization: `Bearer ${auth.access_token}` },
+    headers: { authorization: `Bearer ${auth.access_token}` },
   })
   const { speciality } = session
   const { id: discordId, email, avatar } = await userResponse.json()
@@ -53,7 +53,7 @@ GET.auth.discord = async ({ url }) => {
   // join discord server
   const join = await joinGuild(discordId, {
     method: 'PUT',
-    headers: { Authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+    headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
     body: JSON.stringify({
       nick: user.name ? `${user.login} (${user.name})` : user.login,
       access_token: auth.access_token,
@@ -63,8 +63,8 @@ GET.auth.discord = async ({ url }) => {
 
   join.ok || console.error('Unable to join discord:', join.statusText)
   await pendingUpdate
-  const Location = `/?${new URLSearchParams(user)}`
-  return new Response(null, { headers: { Location }, status: 301 })
+  const location = `/?${new URLSearchParams(user)}`
+  return new Response(null, { headers: { location }, status: 301 })
 }
 
 GET.auth.github = async ({ url: { searchParams, hostname } }) => {
@@ -77,7 +77,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   // get github token
   const res = await fetch('https://github.com/login/oauth/access_token', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
     body: String(
       new URLSearchParams({
         client_id: GITHUB_CLIENT,
@@ -99,8 +99,8 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   const query = await fetch('https://api.github.com/graphql', {
     method: 'POST',
     headers: {
-      Authorization: `bearer ${token}`,
-      'User-Agent': 'nan-academy/nan-platform',
+      authorization: `bearer ${token}`,
+      'user-agent': 'nan-academy/nan-platform',
       ...TYPE_JSON,
     },
     body: JSON.stringify({ query: '{ viewer { login id name }}' }),
@@ -120,14 +120,15 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   return new Response(null, {
     status: 301,
     headers: {
-      Location: `/?${new URLSearchParams(user)}`,
-      'Set-Cookie': [
+      location: `/?${new URLSearchParams(user)}`,
+      'set-cookie': [
         `nan-session=${session}`,
+        'max-age=31536000',
         'path=/',
         `domain=${hostname}`,
-        'HttpOnly',
-        'SameSite=Strict',
-        'Secure',
+        'httponly',
+        'samesite=strict',
+        'secure',
       ].join('; '),
     },
   })
@@ -140,24 +141,24 @@ GET.link.discord = withUser(async ({ user, session, url }) => {
   const state = `${rand()}-${rand()}`
   const metadata = { user, name: session, speciality }
   await db.put(`discord:${state}`, '', { expirationTtl: 3600, metadata })
-  const Location = oauth2Url('discordapp.com/api/oauth2/authorize', {
+  const location = oauth2Url('discordapp.com/api/oauth2/authorize', {
     client_id: DISCORD_CLIENT,
     response_type: 'code',
     scope: 'identify email guilds.join',
     state,
   })
-  return new Response(null, { headers: { Location }, status: 301 })
+  return new Response(null, { headers: { location }, status: 301 })
 })
 
 GET.link.github = async () => {
   const state = `${rand()}-${rand()}`
   await db.put(`github:${state}`, '', { expirationTtl: 3600, metadata: {} })
-  const Location = oauth2Url('github.com/login/oauth/authorize', {
+  const location = oauth2Url('github.com/login/oauth/authorize', {
     client_id: GITHUB_CLIENT,
     scope: 'user',
     state,
   })
-  return new Response(null, { headers: { Location }, status: 301 })
+  return new Response(null, { headers: { location }, status: 301 })
 }
 
 GET.logout = async ({ session, url: { hostname } }) => {
@@ -165,9 +166,9 @@ GET.logout = async ({ session, url: { hostname } }) => {
   session && (await db.del(session))
 
   // Clear cookie
-  const cookie = `nan-session=; path=/; domain=${hostname}; Max-Age=-1`
+  const cookie = `nan-session=; path=/; domain=${hostname}; max-age=-1`
   return new Response(null, {
     status: 301,
-    headers: { Location: '/', 'Set-Cookie': cookie },
+    headers: { location: '/', 'set-cookie': cookie },
   })
 }

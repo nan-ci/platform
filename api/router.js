@@ -18,7 +18,7 @@ export const withUser = (fn) => async (params) => {
 }
 
 export const getCookie = (request, key) => {
-  const cookieStr = request.headers.get('Cookie')
+  const cookieStr = request.headers.get('cookie')
   if (!cookieStr) return undefined
   const x = cookieStr.indexOf(`${key}=`)
   if (x < 0) return

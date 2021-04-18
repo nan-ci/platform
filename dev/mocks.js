@@ -68,10 +68,9 @@ globalThis.Response = class Response {
   }
 }
 
-const chunk = (_, i, h) => (i % 2 ? [] : [[h[i], h[i + 1]]])
 globalThis.Request = class Request {
   constructor(req) {
-    this.headers = new Map(req.rawHeaders.flatMap(chunk))
+    this.headers = new Map(Object.entries(req.headers))
     this.url = `${DOMAIN}${req.url}`
     this.method = req.method
     Object.assign(this, makeBody(req.body || req))
@@ -114,13 +113,13 @@ const passToProvider = (url, request) => {
 
   // DISCORD user data
   if (url === 'https://discordapp.com/api/users/@me') {
-    const { Authorization } = request.headers || {}
+    const { authorization } = request.headers || {}
 
-    if (Authorization === 'Bearer discord-user-token-wesh') {
+    if (authorization === 'Bearer discord-user-token-wesh') {
       return { body: { id: '13371337', avatar, email } }
     }
 
-    if (Authorization === 'Bearer discord-user-token-already') {
+    if (authorization === 'Bearer discord-user-token-already') {
       return { body: { id: '13381338', avatar, email } }
     }
   }
@@ -153,24 +152,24 @@ export const sendResponse = ({ body, options, res, root, host }) => {
   if (options.status !== 301) return res.end(body)
 
   // Make cookies insecure for http support
-  if (options.headers['Set-Cookie']) {
-    const cookie = options.headers['Set-Cookie'].replace('; Secure', '')
-    res.setHeader('Set-Cookie', cookie)
+  if (options.headers['set-cookie']) {
+    const cookie = options.headers['set-cookie'].split('; ', 3).join('; ')
+    res.setHeader('set-cookie', cookie)
   }
 
   // If it's a local redirection, we stop here
-  if (options.headers.Location[0] === '/') {
-    res.setHeader('Location', `${host || ''}${options.headers.Location}`)
+  if (options.headers.location[0] === '/') {
+    res.setHeader('location', `${host || ''}${options.headers.location}`)
     return res.end(body)
   }
 
   // For OAuth we skip the provider and redirect back directly
   const redirect = { github_com: 'github', discordapp_com: 'discord' }
-  const location = new URL(options.headers.Location)
+  const location = new URL(options.headers.location)
   const provider = redirect[location.hostname.replace('.', '_')]
   const state = location.searchParams.get('state')
   const path = `${root || '/'}api/auth/${provider}`
-  res.setHeader('Location', `${path}?code=wesh&state=${state}`)
+  res.setHeader('location', `${path}?code=wesh&state=${state}`)
   res.end(body)
 }
 
