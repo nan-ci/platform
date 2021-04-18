@@ -49,6 +49,7 @@ const handleRequest = async (req, res, again) => {
 
   const params = JSON.stringify({
     url,
+    hash,
     method: req.method,
     rawHeaders: req.rawHeaders,
   })

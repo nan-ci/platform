@@ -1,15 +1,10 @@
 import { API } from './mocks.js'
+import { writeFile, readFile } from 'fs/promises'
 
-// Forward to the mock of cloudflare worker
-// node dev/request-runner.js '{"rawHeaders": [],"method": "GET", "url": "/api/link/github"}'
-
+const args = JSON.parse(process.argv[2])
+const db = `/tmp/${args.hash}.kv.json`
+NAN.entries = await readFile(db, 'utf8').then(JSON.parse, () => ({}))
 process.stdin.setEncoding('utf8')
-const response = await API({
-  ...JSON.parse(process.argv[2]),
-  body: process.stdin,
-})
-
+const response = await API({ ...args, body: process.stdin })
+writeFile(db, JSON.stringify(NAN.entries), 'utf8').catch(console.error)
 console.log(JSON.stringify(response))
-
-// TODO: replace header Location
-
