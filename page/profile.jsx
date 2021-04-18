@@ -1,7 +1,7 @@
 import { Main, Title, Color } from '../component/elements.jsx'
 import { useState } from 'preact/hooks'
-import { Form } from '../component/form'
-import { PhoneInput } from '../component/PhoneInput'
+import { Form } from '../component/form.jsx'
+import { Phoneinput } from '../component/phoneinput.js'
 import { user } from '../lib/auth'
 
 export const Profile = () => {
@@ -29,12 +29,12 @@ export const Profile = () => {
     <Main>
       <Title>Profile informations</Title>
       <Form title="profile form" onSubmit={onSubmit} submit="submit">
-        <PhoneInput
+        <Phoneinput
           name="ownContact"
           comment="please enter a number please"
           errors={errors}
         />
-        <PhoneInput
+        <Phoneinput
           name="emergencyContact"
           comment="please enter an emergency phone number"
           errors={errors}
