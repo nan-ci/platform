@@ -1,5 +1,8 @@
 import { Link, Div, Color, Title } from './elements.jsx'
 import { roles } from '../data/discord.js'
+import { user } from '../lib/auth.js'
+import { HASH } from '../lib/env.js'
+import { useURL } from '../lib/router.js'
 
 const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
@@ -68,7 +71,7 @@ const Nav = ({ path }) => (
   </nav>
 )
 
-export const Header = ({ user, page, title, children }) => {
+export const Header = ({ page, title, children }) => {
   const { pathname: path } = useURL()
   return (
   <header>

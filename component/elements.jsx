@@ -55,8 +55,6 @@ export const Title = ({ children, ...props }) => (
   </Color.Purple>
 )
 
-export const Footer = ({ children }) => <footer>{children}</footer>
-
 const iconStyle = { style: { marignLeft: '2em' } }
 export const Link = colorize(({ icon, children, ...props }) => {
   const tag = /^(http|\/api\/)/.test(props.href) ? 'a' : RouterLink
