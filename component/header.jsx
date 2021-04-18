@@ -1,7 +1,7 @@
 import { Link, Div, Color, Title } from './elements.jsx'
 import { roles } from '../data/discord.js'
 import { user } from '../lib/auth.js'
-import { HASH } from '../lib/env.js'
+import { HASH, API } from '../lib/env.js'
 import { useURL } from '../lib/router.js'
 
 const parseColor = (c) =>
@@ -24,21 +24,21 @@ const NavLink = (props) => <li> - <Link {...props} /></li>
 const LogAction = () => {
   if (!user) {
     return (
-      <NavLink href="/api/link/github" icon="Github">
+      <NavLink href={`${API}/link/github`} icon="Github">
         Join with Github
       </NavLink>
     )
   }
 
   return user.discordId ? (
-    <NavLink href="/api/logout" onclick={clearStorage}>
+    <NavLink href={`${API}/logout`} onclick={clearStorage}>
       Logout
     </NavLink>
   ) : (
     Object.entries(roles).map(([key, { id, name, color }]) => (
       <NavLink
         key={key}
-        href={`/api/link/discord?speciality=${key}`}
+        href={`${API}/link/discord?speciality=${key}`}
         icon="Discord"
         style={{ color: parseColor(color) }}
       >

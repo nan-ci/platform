@@ -20,12 +20,13 @@ const read = async (stream) => {
 }
 
 const handleRequest = async (req, res, again) => {
-  const hash = req.headers.referer?.match(
+  const hash = req.url.split('/', 2)[1]
+  const version = req.headers.referer?.match(
     /https:\/\/([a-z0-9]{8})\.platform-au0l\.pages\.dev/,
   )?.[1]
-  if (!hash) {
+  if (!version || !hash || hash.length !== 40) {
     res.statusCode = 403
-    return res.end('')
+    return res.end()
   }
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader(
@@ -33,7 +34,8 @@ const handleRequest = async (req, res, again) => {
     'Origin, X-Requested-With, Content-Type, Accept',
   )
 
-  console.log(req.method, req.url, { hash })
+  const url = req.url.slice(41)
+  console.log(req.method, url, { version, hash })
   const checkout = spawnSync('git', ['checkout', hash])
   if (checkout.status) {
     if (again) {
@@ -41,12 +43,12 @@ const handleRequest = async (req, res, again) => {
       return res.end(`git checkout ${hash}: not found`)
     }
 
-    const fetch = spawnSync('git', 'fetch')
+    const fetch = spawnSync('git', ['fetch'])
     return handleRequest(req, res, true)
   }
 
   const params = JSON.stringify({
-    url: req.url,
+    url,
     method: req.method,
     rawHeaders: req.rawHeaders,
   })
@@ -60,7 +62,7 @@ const handleRequest = async (req, res, again) => {
     res.statusCode = 500
     return res.end(await stderr)
   }
-  sendResponse({ ...JSON.parse(await stdout), res })
+  sendResponse({ ...JSON.parse(await stdout), res, hash })
 }
 
 const servOpts = {
