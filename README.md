@@ -12,9 +12,6 @@ git clone git@github.com:nan-ci/platform.git
 # open the directory
 cd platform
 
-# install
-npm install
-
 # run dev server
 npm start
 ```
@@ -42,7 +39,13 @@ git fetch
 git rebase origin/master
 
 # force update your branch
-git push orgin +HEAD
+git push orgin HEAD --force-with-lease
+```
+
+### Pull updates on your current branch
+
+```bash
+git pull -r --autostash
 ```
 
 ## Linter
