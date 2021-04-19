@@ -6,12 +6,14 @@ import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
+import { StudentList } from './page/studentlist'
 
 const App = () => (
   <>
     <Header />
     <Router>
       <Profile path="/profile" />
+      <StudentList path="/studentlist" />
       <Home path="*" />
     </Router>
     <footer>

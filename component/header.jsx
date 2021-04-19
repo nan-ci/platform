@@ -65,6 +65,9 @@ const Nav = ({ path }) => (
       </LinkMatch>
       {' - '}
       <LinkMatch path={path} href="/profile">Profile</LinkMatch>
+       {' - '}
+      <LinkMatch path={path} href="/studentlist">Liste des etudiants</LinkMatch>
+
       <LogAction />
     </ul>
     {'\n'}
