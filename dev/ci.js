@@ -19,8 +19,8 @@ const read = async (stream) => {
   return chunks.join('')
 }
 
-const logToFile = (hash, content) => writeFileSync(`/tmp/nan-${hash}.log`, content, { flag: 'a' })
-  || content
+const logToFile = (hash, content) =>
+  writeFileSync(`/tmp/nan-${hash}.log`, content, { flag: 'a' }) || content
 
 const allowedHeaders = [
   'x-nan-cookie',
@@ -33,7 +33,8 @@ const allowedHeaders = [
 const handleRequest = async (req, res, again) => {
   const hash = req.url.split('/', 2)[1]
   const url = req.url.slice(41)
-  if (/^\/log(\?|\/)?/.test(url)) return createReadStream(`/tmp/nan-${hash}.log`).pipe(res)
+  if (/^\/log(\?|\/)?/.test(url))
+    return createReadStream(`/tmp/nan-${hash}.log`).pipe(res)
   const { method, headers } = req
   const version = headers.referer?.match(
     /https:\/\/([a-z0-9]{8})\.platform-nan-dev-8sl\.pages\.dev/,
