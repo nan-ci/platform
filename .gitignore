@@ -112,3 +112,7 @@ api/index.js
 
 # test data
 .nan.kv.json
+
+# lock files
+package-lock.json
+yarn.lock
