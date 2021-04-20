@@ -60,7 +60,10 @@ GET.auth.discord = async ({ url }) => {
       headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
     },
     body: {
-      nick: user.name ? `${user.login} (${user.name})` : user.login,
+      nick:
+        user.name && user.name !== user.login
+          ? `${user.login} (${user.name})`
+          : user.login,
       access_token: auth.access_token,
       roles: [rolesByKey.student.id, specialities[speciality].id],
     },
