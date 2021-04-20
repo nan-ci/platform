@@ -11,7 +11,7 @@ export const avatar = 'a'
 export const login = 'tester'
 export const email = 'dev@nan.ci'
 export const name = 'Jean Patrick'
-export const user = { sid: '4ytg', login, name }
+export const user = { login, name }
 export const config = await getWranglerConfig()
 export const DOMAIN =
   process.env.DOMAIN || new URL(`https://${config.route}`).origin

@@ -102,7 +102,7 @@ o['GET /auth/github with a proper state'] = {
     eq({ body: res.body, status }, { body: null, status: 301 })
     eq(headers.location, `/?${new URLSearchParams(user)}`)
     const [session, ...parts] = headers['set-cookie'].split('; ')
-    eq(session.startsWith('nan-session=user:4ytg:tester:'), true)
+    eq(session.startsWith('nan-session=user:tester:'), true)
     eq(parts.sort(), [
       'httponly',
       'max-age=31536000',
@@ -158,7 +158,7 @@ o['GET /auth/discord without bad state'] = {
 o['GET /auth/discord with a proper state'] = {
   it: async () => {
     // set state in KV
-    const name = 'user:4ytg:tester:knddr12r:test-disc'
+    const name = 'user:tester:knddr12r:test-disc'
     const metadata = { user, name, speciality }
     await NAN.put('discord:proper-state', '', { metadata })
 
@@ -190,7 +190,7 @@ o['GET /link/discord without a session is Unauthorized'] = {
 o['GET /link/discord with a session generate a state without a speciality'] = {
   it: async () => {
     // This time, the user is connected, we can proceede
-    const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
+    const session = `user:tester:${Date.now().toString(36)}:${rand()}`
     await db.set(session, user)
     return GET('/link/discord', {
       headers: { cookie: `nan-session=${session}` },
@@ -202,7 +202,7 @@ o['GET /link/discord with a session generate a state without a speciality'] = {
 o['GET /link/discord with a session generate a state'] = {
   it: async () => {
     // This time, the user is connected, we can proceede
-    const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
+    const session = `user:tester:${Date.now().toString(36)}:${rand()}`
     await db.set(session, user)
     const { body, options } = await GET('/link/discord?speciality=javascript', {
       headers: { cookie: `nan-session=${session}` },
@@ -237,7 +237,7 @@ o['GET /link/discord with a session generate a state'] = {
 o['GET /auth/discord with a proper state'] = {
   it: async () => {
     // set state in KV
-    const name = 'user:4ytg:tester:knddr12r:test-exist'
+    const name = 'user:tester:knddr12r:test-exist'
     const metadata = { user, name, speciality }
     await NAN.put('discord:exists-state', '', { metadata })
 
@@ -280,7 +280,7 @@ o['GET /logout'] = {
 
 o['GET /logout with stored session'] = {
   it: async () => {
-    const session = `user:4ytg:tester:${Date.now().toString(36)}:${rand()}`
+    const session = `user:tester:${Date.now().toString(36)}:${rand()}`
     await db.set(session, {})
     const headers = { cookie: `nan-session=${session}` }
     await GET('/logout', { headers })
