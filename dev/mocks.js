@@ -49,7 +49,8 @@ const makeBody = (text) => ({
   json: async () => JSON.parse(await getText(text)),
 })
 
-globalThis.fetch = async (url, request) => {
+globalThis.fetch = async (url, request = {}) => {
+  request.method || (request.method = 'GET')
   const { body, status = 200 } = passToProvider(url, request)
   const text = typeof body === 'string' ? body : JSON.stringify(body)
   return {
@@ -131,6 +132,15 @@ const passToProvider = (url, request) => {
   ) {
     const discordId = url.slice(43 + GUILD.length)
     return { body: 'OK', status: discordId === '13381338' ? 204 : 201 }
+  }
+
+  // DISCORD get user guild roles
+  if (
+    method === 'GET' &&
+    url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
+  ) {
+    const discordId = url.slice(43 + GUILD.length)
+    return { body: { user: { id: discordId }, roles: [] } }
   }
 
   // DISCORD update user in the guild

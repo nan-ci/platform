@@ -1,5 +1,5 @@
 import { BAD_REQUEST, UNAUTHORIZED, TYPE_JSON, INTERNAL, rand } from './defs.js'
-import { roles } from '../data/discord.js'
+import { specialities, roles } from '../data/discord.js'
 import { GET, withUser } from './router.js'
 import * as db from './db.js'
 
@@ -14,12 +14,14 @@ const gql = async (query) => {
 }
 
 const DISCORD = 'https://discordapp.com/api'
-const joinGuild = async (id, request) => {
-  const url = `${DISCORD}/guilds/${GUILD}/members/${id}`
-  const join = await fetch(url, request)
-  return join.status === 204
-    ? joinGuild(id, { ...request, method: 'PATCH' })
-    : join
+const joinGuild = async ({ discordId, request, body }) => {
+  const url = `${DISCORD}/guilds/${GUILD}/members/${discordId}`
+  const join = await fetch(url, { ...request, body: JSON.stringify(body) })
+  if (join.status !== 204) return join
+  const user = await (await fetch(url)).json()
+  body.roles = [...new Set([...user.roles, ...body.roles])]
+  request.method = 'PATCH'
+  return fetch(url, { ...request, body: JSON.stringify(body) })
 }
 
 GET.auth.discord = async ({ url }) => {
@@ -51,14 +53,17 @@ GET.auth.discord = async ({ url }) => {
   const pendingUpdate = db.set(session.name, user)
 
   // join discord server
-  const join = await joinGuild(discordId, {
-    method: 'PUT',
-    headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
-    body: JSON.stringify({
+  const join = await joinGuild({
+    discordId,
+    request: {
+      method: 'PUT',
+      headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+    },
+    body: {
       nick: user.name ? `${user.login} (${user.name})` : user.login,
       access_token: auth.access_token,
-      roles: [ROLE, roles[speciality].id],
-    }),
+      roles: [roles.student.id, specialities[speciality].id],
+    },
   })
 
   join.ok || console.error('Unable to join discord:', join.statusText)
@@ -137,7 +142,8 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
 const oauth2Url = (url, args) => `https://${url}?${new URLSearchParams(args)}`
 GET.link.discord = withUser(async ({ user, session, url }) => {
   const speciality = url.searchParams.get('speciality')
-  if (!roles[speciality]) return new Response('Missing Speciality', BAD_REQUEST)
+  if (!specialities[speciality])
+    return new Response('Missing Speciality', BAD_REQUEST)
   const state = `${rand()}-${rand()}`
   const metadata = { user, name: session, speciality }
   await db.put(`discord:${state}`, '', { expirationTtl: 3600, metadata })
