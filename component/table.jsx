@@ -2,12 +2,11 @@ import { css } from '../lib/dom.js'
 
 css(`
 .table-container {
-  overflow-x:auto;
+  overflow:auto;
 }
 .table-nan {
   border-collapse: collapse;
   width: 100%;
-  display: table
 }
 
 .table-nan td, .table-nan th {
@@ -26,24 +25,23 @@ css(`
 }
 `)
 
-export const Table = ({ data, columns, overflow }) => {
-  console.log(overflow)
+export const Table = ({ data, columns }) => {
   return (
     <div class="table-container">
       <table class="table-nan">
         <tr>
           {columns.map((name) => (
-            <th key={name}>{name}</th>
+            <th key={name} class>{name}</th>
           ))}
         </tr>
-        {data.map((row) => (
-          <tr key={row.login}>
+        {data.map((row, key) => (
+          <tr key={key}>
             {columns.map((name) => (
               <td key={name}>{row[name]}</td>
             ))}
           </tr>
         ))}
-      </table>
+        </table>
     </div>
   )
 }
