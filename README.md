@@ -39,7 +39,7 @@ git fetch
 git rebase origin/master
 
 # force update your branch
-git push orgin HEAD --force-with-lease
+git push origin HEAD --force-with-lease
 ```
 
 ### Pull updates on your current branch
