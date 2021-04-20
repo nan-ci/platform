@@ -1,5 +1,5 @@
 import { BAD_REQUEST, UNAUTHORIZED, TYPE_JSON, INTERNAL, rand } from './defs.js'
-import { specialities, roles } from '../data/discord.js'
+import { specialities, roles, rolesByKey } from '../data/discord.js'
 import { GET, withUser } from './router.js'
 import * as db from './db.js'
 
@@ -17,11 +17,12 @@ const DISCORD = 'https://discordapp.com/api'
 const joinGuild = async ({ discordId, request, body }) => {
   const url = `${DISCORD}/guilds/${GUILD}/members/${discordId}`
   const join = await fetch(url, { ...request, body: JSON.stringify(body) })
-  if (join.status !== 204) return join
+  if (join.status !== 204) return { reply: join, roles: body.roles }
   const user = await (await fetch(url)).json()
   body.roles = [...new Set([...user.roles, ...body.roles])]
   request.method = 'PATCH'
-  return fetch(url, { ...request, body: JSON.stringify(body) })
+  const reply = await fetch(url, { ...request, body: JSON.stringify(body) })
+  return { reply, roles: body.roles }
 }
 
 GET.auth.discord = async ({ url }) => {
@@ -50,7 +51,6 @@ GET.auth.discord = async ({ url }) => {
   const { speciality } = session
   const { id: discordId, email, avatar } = await userResponse.json()
   const user = { ...session.user, discordId, email, avatar, speciality }
-  const pendingUpdate = db.set(session.name, user)
 
   // join discord server
   const join = await joinGuild({
@@ -62,12 +62,13 @@ GET.auth.discord = async ({ url }) => {
     body: {
       nick: user.name ? `${user.login} (${user.name})` : user.login,
       access_token: auth.access_token,
-      roles: [roles.student.id, specialities[speciality].id],
+      roles: [rolesByKey.student.id, specialities[speciality].id],
     },
   })
 
-  join.ok || console.error('Unable to join discord:', join.statusText)
-  await pendingUpdate
+  join.reply.ok || console.error('Unable to join discord:', join.reply)
+  user.role = roles.find(r => join.roles.includes(r.id))?.key || 'student'
+  const pendingUpdate = db.set(session.name, user)
   const location = `/?${new URLSearchParams(user)}`
   return new Response(null, { headers: { location }, status: 301 })
 }
