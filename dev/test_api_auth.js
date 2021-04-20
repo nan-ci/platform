@@ -1,6 +1,6 @@
 import { GET, requests, DOMAIN, login, avatar, email, user } from './mocks.js'
 import { rand, BAD_REQUEST, UNAUTHORIZED } from '../api/defs.js'
-import { roles } from '../data/discord.js'
+// import { roles } from '../data/discord.js'
 import * as db from '../api/db.js'
 import { eq } from './utils.js'
 
