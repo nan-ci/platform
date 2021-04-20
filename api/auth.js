@@ -67,7 +67,7 @@ GET.auth.discord = async ({ url }) => {
   })
 
   join.reply.ok || console.error('Unable to join discord:', join.reply)
-  user.role = roles.find(r => join.roles.includes(r.id))?.key || 'student'
+  user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'student'
   const pendingUpdate = db.set(session.name, user)
   const location = `/?${new URLSearchParams(user)}`
   return new Response(null, { headers: { location }, status: 301 })
@@ -116,13 +116,20 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   if (error) return new Response(error, INTERNAL)
 
   // create the user session
-  const { id, login, name } = data.viewer
-  const sid = Number(atob(id).slice(7)).toString(36)
-  const key = await db.find(`user:${sid}:`)
-  const session =
-    key?.name || `user:${sid}:${login}:${Date.now().toString(36)}:${rand()}`
-  const user = { sid, login, name }
-  await db.set(session, user)
+  const { id, name } = data.viewer
+  let { session } = (await db.get(`github-id:${id}`)) || {}
+  let user
+  if (session) {
+    user = await db.get(session)
+  } else {
+    const { login } = data.viewer
+    session = `user:${login}:${Date.now().toString(36)}:${rand()}`
+    user = { login, name }
+    await Promise.all([
+      db.set(`github-id:${id}`, { session }),
+      db.set(session, user),
+    ])
+  }
   return new Response(null, {
     status: 301,
     headers: {
