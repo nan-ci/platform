@@ -35,8 +35,8 @@ export const Table = ({ data, columns }) => {
             <th key={name}>{name}</th>
           ))}
         </tr>
-        {data.map((row, key) => (
-          <tr key={row[key]}>
+        {data.map((row) => (
+          <tr key={row.login}>
             {columns.map((name) => (
               <td key={name}>{row[name]}</td>
             ))}
