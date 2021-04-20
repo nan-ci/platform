@@ -23,10 +23,12 @@ export const StudentList = () => {
   return data.length > 0 ? (
     <Main>
       <span>Student list</span>
-      <Table data={data.map(extractMetaData)} columns={columns} />
+      <Table
+        data={data.map(extractMetaData)}
+        columns={columns}
+      />
     </Main>
   ) : (
     <span> No student found!</span>
   )
 }
-

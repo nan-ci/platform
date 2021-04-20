@@ -1,35 +1,36 @@
 import { css } from '../lib/dom.js'
 
 css(`
-.container {
+.table-container {
   overflow-x:auto;
 }
-.customers {
-  font-family: Arial, Helvetica, sans-serif;
+.table-nan {
   border-collapse: collapse;
   width: 100%;
+  display: table
 }
 
-.customers td, .customers th {
-  border: 1px solid #ddd;
+.table-nan td, .table-nan th {
+  border: 2px solid var(--foreground-light);
   padding: 8px;
 }
 
-.customers tr:nth-child(even){background-color: #e67e22;}
+.table-nan tr:nth-child(even){background-color: var(--orange-dark);}
 
-.customers th {
+.table-nan th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
-  background-color: #27ae60;
-  color: white;
+  background-color: var(--green-dark);
+  color: var(--foreground-light);
 }
 `)
 
-export const Table = ({ data, columns }) => {
+export const Table = ({ data, columns, overflow }) => {
+  console.log(overflow)
   return (
-    <div class="container">
-      <table class="customers">
+    <div class="table-container">
+      <table class="table-nan">
         <tr>
           {columns.map((name) => (
             <th key={name}>{name}</th>
