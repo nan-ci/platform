@@ -23,3 +23,4 @@ discord.on.GUILD_MEMBER_UPDATE(async ({ user, roles: userRoles, nick }) => {
 
 // TODO:
 // - provide a route to download a dump of the users
+// - handle resume / reconnect
