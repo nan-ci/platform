@@ -5,6 +5,7 @@ export const users = [
       sid: '4ytg',
       login: 'kigiri',
       name: 'Clément',
+      avatar: '🌟'
     },
   },
   {
@@ -15,7 +16,7 @@ export const users = [
       name: 'emmadal',
       discordId: '815974440831549521',
       email: 'emmadalcoder@gmail.com',
-      avatar: null,
+      avatar: '😇',
       speciality: 'javascript',
     },
   },
