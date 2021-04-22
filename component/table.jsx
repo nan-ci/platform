@@ -6,42 +6,38 @@ css(`
 }
 .table-nan {
   border-collapse: collapse;
-  width: 100%;
 }
-
 .table-nan td, .table-nan th {
   border: 2px solid var(--foreground-light);
-  padding: 8px;
-}
-
-.table-nan tr:nth-child(even){background-color: var(--orange-dark);}
-
-.table-nan th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: center;
-  background-color: var(--green-dark);
-  color: var(--foreground-light);
+  padding: 5px;
 }
 `)
 
 export const Table = ({ data, columns }) => {
   return (
     <div class="table-container">
-      <table class="table-nan">
+      <table class="table-nan" width="100%">
         <tr>
           {columns.map((name) => (
-            <th key={name} class>{name}</th>
+            <th
+              key={name[0]}
+              width={name[1].size}
+              style={{ background: name[1].bgcolor }}
+            >
+              {name[0]}
+            </th>
           ))}
         </tr>
-        {data.map((row, key) => (
-          <tr key={key}>
+        {data.map((row) => (
+          <tr key={row.login}>
             {columns.map((name) => (
-              <td key={name}>{row[name]}</td>
+              <td key={name[0]} style={{ background: name[1].color }}>
+                {row[name[0]]}
+              </td>
             ))}
           </tr>
         ))}
-        </table>
+      </table>
     </div>
   )
 }

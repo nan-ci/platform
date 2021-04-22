@@ -5,22 +5,51 @@ import { users } from '../data/users.js'
 
 export const StudentList = () => {
   const [data, setData] = useState([])
-  const [columns, setColumns] = useState([])
+  // const [columns, setColumns] = useState([])
 
   const extractMetaData = (item) => item.metadata
 
-  const getColumn = () => {
-    const arr = []
-    for (const user of users) {
-      for (const element of Object.keys(user.metadata)) {
-        arr.push(element)
-      }
-    }
-    setColumns([...new Set(arr)])
-  }
+  const columns = Object.entries({
+    login: {
+      size: '20%',
+      type: '',
+      bgcolor: 'var(--orange-dark)',
+      color: 'var(--red-dark)',
+    },
+    avatar: { size: '10%', type: '', bgcolor: 'var(--pink-dark)', color: '' },
+    name: { size: '30%', type: '', bgcolor: 'var(--purple-lighter)' },
+    phone: { size: '25%', type: '', bgcolor: 'var(--dark)', color: '' },
+    email: {
+      size: '20%',
+      type: '',
+      bgcolor: 'var(--cyan-darker)',
+      color: 'pink',
+    },
+    discordId: {
+      size: '40%',
+      type: '',
+      bgcolor: 'var(--red-light)',
+      color: 'orange',
+    },
+    speciality: {
+      size: '40%',
+      type: '',
+      bgcolor: 'var(--green-dark)',
+      color: 'red',
+    },
+  })
+
+  // const getColumn = () => {
+  //   const arr = []
+  //   for (const user of users) {
+  //     for (const element of Object.keys(user.metadata)) {
+  //       arr.push(element)
+  //     }
+  //   }
+  //   setColumns([...new Set(arr)])
+  // }
 
   useEffect(() => setData(users), [])
-  useEffect(() => getColumn(), [])
 
   return data.length > 0 ? (
     <Main>
