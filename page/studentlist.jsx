@@ -5,7 +5,6 @@ import { users } from '../data/users.js'
 
 export const StudentList = () => {
   const [data, setData] = useState([])
-  // const [columns, setColumns] = useState([])
 
   const extractMetaData = (item) => item.metadata
 
@@ -39,15 +38,6 @@ export const StudentList = () => {
     },
   })
 
-  // const getColumn = () => {
-  //   const arr = []
-  //   for (const user of users) {
-  //     for (const element of Object.keys(user.metadata)) {
-  //       arr.push(element)
-  //     }
-  //   }
-  //   setColumns([...new Set(arr)])
-  // }
 
   useEffect(() => setData(users), [])
 

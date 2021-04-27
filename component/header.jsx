@@ -1,10 +1,11 @@
 import { Link, Div, Color, Title } from './elements.jsx'
 import { roles } from '../data/discord.js'
+import { Skills } from '../page/skills.jsx'
 import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
 import { useURL } from '../lib/router.js'
 
-const parseColor = (c) =>
+export const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
 const LinkMatch = ({ match, children, path, ...props }) => (
@@ -20,10 +21,13 @@ const LinkMatch = ({ match, children, path, ...props }) => (
 const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
-const NavLink = (props) => <li> - <Link {...props} /></li>
+export const NavLink = (props) => <li> <Link {...props} /></li>
 const LogAction = () => {
   if (!user) {
     return (
+      // <NavLink href={`${API}/link/github`} icon="Github">
+      //   Join with Github
+      // </NavLink>
       <NavLink href={`${API}/link/github`} icon="Github">
         Join with Github
       </NavLink>
@@ -35,16 +39,20 @@ const LogAction = () => {
       Logout
     </NavLink>
   ) : (
-    Object.entries(roles).map(([key, { id, name, color }]) => (
-      <NavLink
-        key={key}
-        href={`${API}/link/discord?speciality=${key}`}
-        icon="Discord"
-        style={{ color: parseColor(color) }}
-      >
-        {name}
-      </NavLink>
-    ))
+    <Skills
+      roles={roles}
+      title="Which programming language do you want to learn ? 📚"
+    />
+    // Object.entries(roles).map(([key, { id, name, color }]) => (
+    //   <NavLink
+    //     key={key}
+    //     href={`${API}/link/discord?speciality=${key}`}
+    //     icon="Discord"
+    //     style={{ color: parseColor(color) }}
+    //   >
+    //     {name}
+    //   </NavLink>
+    // ))
   )
 }
 
@@ -64,9 +72,13 @@ const Nav = ({ path }) => (
         Home
       </LinkMatch>
       {' - '}
-      <LinkMatch path={path} href="/profile">Profile</LinkMatch>
-       {' - '}
-      <LinkMatch path={path} href="/studentlist">Student list</LinkMatch>
+      <LinkMatch path={path} href="/profile">
+        Profile
+      </LinkMatch>
+      {' - '}
+      <LinkMatch path={path} href="/studentlist">
+        Student list
+      </LinkMatch>
 
       <LogAction />
     </ul>
@@ -77,13 +89,14 @@ const Nav = ({ path }) => (
 export const Header = ({ page, title, children }) => {
   const { pathname: path } = useURL()
   return (
-  <header>
-    <Nav path={path} />
-    {'\n'}
-    <Title>Page</Title>
-    {'\n'}
-    <h1>{`  ${path}`} </h1>
-    {'\n'}
-    {children}
-  </header>
-)}
+    <header>
+      <Nav path={path} />
+      {'\n'}
+      <Title>Page</Title>
+      {'\n'}
+      <h1>{`  ${path}`} </h1>
+      {'\n'}
+      {children}
+    </header>
+  )
+}
