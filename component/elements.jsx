@@ -42,9 +42,20 @@ export const Main = ({ children }) => (
   </main>
 )
 
+export const Container = ({ children }) => (
+  <section class="container">
+    {toChildArray(children).map(() => [<div>{child}</div>])}
+  </section>
+)
+
 css(`
 footer {
   margin-bottom: 1ch;
+}
+.container {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: contain;
 }
 `)
 
