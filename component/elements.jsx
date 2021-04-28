@@ -43,9 +43,9 @@ export const Main = ({ children }) => (
 )
 
 export const Container = ({ children }) => (
-  <section class="container">
-    {toChildArray(children).map(() => [<div>{child}</div>])}
-  </section>
+  <div class="container">
+    {toChildArray(children).map((child) => [<section>{child}</section>])}
+  </div>
 )
 
 css(`

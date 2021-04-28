@@ -1,8 +1,9 @@
 import { logo } from '../data/ascii.js'
-import { Main, P } from '../component/elements.jsx'
+import { P } from '../component/elements.jsx'
+import { Layout } from '../component/layout.jsx'
 
 export const Home = () =>
-  <Main>
+  <Layout>
     <P fg="comment">{logo}</P>
     <span>Akwaba</span>
-  </Main>
+  </Layout>

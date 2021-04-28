@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'preact/hooks'
-import { Main } from '../component/elements.jsx'
 import { Table } from '../component/table.jsx'
 import { users } from '../data/users.js'
+import { Layout } from '../component/layout.jsx'
 
 export const StudentList = () => {
   const [data, setData] = useState([])
@@ -42,10 +42,10 @@ export const StudentList = () => {
   useEffect(() => setData(users), [])
 
   return data.length > 0 ? (
-    <Main>
+    <Layout>
       <span>Student list</span>
       <Table data={data.map(extractMetaData)} columns={columns} />
-    </Main>
+    </Layout>
   ) : (
     <span> No student found!</span>
   )
