@@ -271,8 +271,8 @@ o['GET /logout'] = {
   is: new Response(null, {
     status: 301,
     headers: {
-      'set-cookie': `nan-session=; path=/; domain=${hostname}; max-age=-1`,
-      location: '/',
+      'set-cookie': `nan-session=; path=/login; domain=${hostname}; max-age=-1`,
+      location: '/login',
     },
   }),
 }

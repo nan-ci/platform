@@ -166,9 +166,9 @@ GET.logout = async ({ session, url: { hostname } }) => {
   session && (await db.del(session))
 
   // Clear cookie
-  const cookie = `nan-session=; path=/; domain=${hostname}; max-age=-1`
+  const cookie = `nan-session=; path=/login; domain=${hostname}; max-age=-1`
   return new Response(null, {
     status: 301,
-    headers: { location: '/', 'set-cookie': cookie },
+    headers: { location: '/login', 'set-cookie': cookie },
   })
 }

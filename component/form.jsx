@@ -1,6 +1,6 @@
-import { useState } from 'preact/hooks';
-import { equal, Color, Title } from './elements.jsx';
-import { css } from '../lib/dom.js';
+import { useState } from 'preact/hooks'
+import { equal, Color, Title } from './elements.jsx'
+import { css } from '../lib/dom.js'
 
 css(`
 input { outline: none }
@@ -38,32 +38,40 @@ label:hover > .name {
   margin-top: 20px;
 }
 
+button {
+  background: var(--purple);
+  border: 1px solid var(--purple);
+  padding: 10px;
+  width: auto;
+}
+
 button:hover {
   text-shadow: 1px 1px 2px #000;
   outline: 1px dashed;
+  cursor: pointer;
   outline-offset: 0.5ch;
-}`);
+}`)
 
 const Comment = ({ children }) => (
   <Color.Comment>
     {'  #'}
     {children}
   </Color.Comment>
-);
+)
 
 export const Text = ({ name, value, comment, errors, children, ...props }) => {
-  const [val, setVal] = useState(value || '');
-  const size = Math.max(val.length || 0, 1);
-  const style = props.style || (props.style = {});
-  const onInput = ({ target }) => setVal(target.value);
+  const [val, setVal] = useState(value || '')
+  const size = Math.max(val.length || 0, 1)
+  const style = props.style || (props.style = {})
+  const onInput = ({ target }) => setVal(target.value)
   const onFocus = ({ target }) =>
     setTimeout(
       () =>
         target.selectionStart === target.selectionEnd ||
         target.setSelectionRange(val.length, val.length),
-    );
+    )
 
-  style.width = `${size}ch`;
+  style.width = `${size}ch`
 
   const description = errors[name] ? (
     <Comment>
@@ -71,7 +79,7 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
     </Comment>
   ) : (
     comment && <Comment>{comment}</Comment>
-  );
+  )
 
   return (
     <div>
@@ -94,37 +102,54 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
         </span>
       </label>
     </div>
-  );
-};
+  )
+}
 
 export const Form = ({ title, children, submit, ...props }) => (
   <form {...props}>
     {'\n'}
     <Title>{title}</Title>
-    {'\n'}
     {children}
     {submit && (
       <>
         <Color.Comment>{'\n  > '}</Color.Comment>
-        <button type="submit">[{submit}]</button>
+        <button type="submit">{submit}</button>
         <Color.Comment>{' <'}</Color.Comment>
       </>
     )}
   </form>
-);
+)
 
-export const Input = ({ width, type, value, placeholder, onChange }) => {
+export const Input = ({
+  width,
+  type,
+  value,
+  placeholder,
+  onChange,
+  required,
+}) => {
   return (
     <div class="div-input">
       <input
         class="str"
         type={type}
         value={value}
-        name={value}
         size={width}
         placeholder={placeholder}
         onInput={(e) => onChange(e)}
+        required={required}
       />
     </div>
-  );
-};
+  )
+}
+
+export const Button = ({ value, type, link, icon }) => {
+  const onClick = () => {
+    document.location.href = link
+  }
+  return (
+    <button type={type} onClick={onClick}>
+      {value}
+    </button>
+  )
+}

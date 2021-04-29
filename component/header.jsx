@@ -25,9 +25,6 @@ export const NavLink = (props) => <li> <Link {...props} /></li>
 const LogAction = () => {
   if (!user) {
     return (
-      // <NavLink href={`${API}/link/github`} icon="Github">
-      //   Join with Github
-      // </NavLink>
       <NavLink href={`${API}/link/github`} icon="Github">
         Join with Github
       </NavLink>
@@ -43,16 +40,6 @@ const LogAction = () => {
       roles={roles}
       title="Which programming language do you want to learn ? 📚"
     />
-    // Object.entries(roles).map(([key, { id, name, color }]) => (
-    //   <NavLink
-    //     key={key}
-    //     href={`${API}/link/discord?speciality=${key}`}
-    //     icon="Discord"
-    //     style={{ color: parseColor(color) }}
-    //   >
-    //     {name}
-    //   </NavLink>
-    // ))
   )
 }
 
