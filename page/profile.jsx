@@ -1,6 +1,6 @@
-import { Main,Title,Image} from '../component/elements.jsx'
+import { Layout,Title,Image} from '../component/elements.jsx'
 
-export const Profile = () => <Main>
+export const Profile = () => <Layout>
                 <Title>Mon compte</Title>
                 <div class="u-pad-default">
                     <div class="user-card">
@@ -88,4 +88,4 @@ export const Profile = () => <Main>
                         </form>
                     </section>
                 </div>
-</Main>
+</Layout>

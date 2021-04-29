@@ -28,7 +28,7 @@ export const SideBar = () =>{
                     </ul>
                 </div>
                 <div class="sidebar__second">
-                    <ul class="mac-control">
+                   <ul class="mac-control">
                         <li>
                             <span class="--red"></span>
                         </li>

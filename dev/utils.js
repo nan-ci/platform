@@ -46,6 +46,6 @@ export const getContentType = (ext) => {
     case ".gif":
       return "image/gif";
     case ".svg":
-      return "image/svg";
+      return "image/svg+xml";
   }
 }

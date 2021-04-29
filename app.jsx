@@ -1,24 +1,24 @@
 import { render } from 'preact'
 
-import { center } from './data/ascii.js'
-import { Header } from './component/header.jsx'
-import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
-import { SideBar } from './component/sideBar';
-
-
-
+import {Auth} from './page/auth.jsx';
+import {Evaluations} from './page/evaluations.jsx';
+import {Results} from './page/results.jsx';
+import {Evaluation} from './page/evaluation.jsx';
+import {Quizz} from './page/quizz.jsx';
 
 const App = () => (
-  <>
-    <SideBar />
       <Router>
+          <Auth path="/auth" />
           <Profile path="/profil" />
+          <Evaluations path="/evaluations" />
+          <Quizz path="/evaluation/quizz"/>
+          <Evaluation path="/evaluation/:evaluationId"/>
+          <Results path="/results" />
           <Home path="*" />
       </Router>
-  </>
 )
 
 render(h(App, {}), document.getElementById('root'))

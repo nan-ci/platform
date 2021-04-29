@@ -1,6 +1,7 @@
 import { logo } from '../data/ascii.js'
-import { Main, P,Title } from '../component/elements.jsx'
-export const Home = () => <Main>
+import { Layout, P,Title } from '../component/elements.jsx'
+
+export const Home = () => <Layout>
                 <Title>Roadmap</Title>
                 <div class="snake-tm">
                     <div class="block">
@@ -12,4 +13,4 @@ export const Home = () => <Main>
                     <div class="block">Long bois mlem I am bekom fat wrinkler puggo maximum borkdrive big ol pupper I am bekom fat, fluffer vvv adorable doggo lotsa pats snoot. I am bekom fat ur givin me a spook length boy wow very biscit very good spot.</div>
                     <div class="block">Doggo ipsum long bois lotsa pats blep. What a nice floof ruff super chub very good spot, the neighborhood pupper lotsa pats. Borkdrive shibe shoober what a nice floof, borking doggo.</div>
                   </div>
-</Main>
+</Layout>

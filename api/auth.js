@@ -136,11 +136,11 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   return new Response(null, {
     status: 301,
     headers: {
-      location: `/?${new URLSearchParams(user)}`,
+      location: `/auth?${new URLSearchParams(user)}`,
       'set-cookie': [
         `nan-session=${session}`,
         'max-age=31536000',
-        'path=/',
+        'path=/auth',
         `domain=${hostname}`,
         'httponly',
         'samesite=strict',
