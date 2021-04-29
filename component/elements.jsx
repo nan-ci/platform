@@ -47,7 +47,7 @@ export const Main = ({ children }) => (
   </div>
 )
 
-export const Image = ({alt,image,...props}) => <img src={"./img/"+image} alt={alt ? alt: image} {...props}/>
+export const Image = ({alt,image,...props}) => <img src={"../assets/img/"+image} alt={alt ? alt: image} {...props}/>
 
 
 css(`

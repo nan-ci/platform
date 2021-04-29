@@ -1,4 +1,4 @@
-import {Link} from './elements.jsx';
+import {Link,Image} from './elements.jsx';
 
 export const SideBar = () =>{
   return <div class="sidebar" id="sideMenu">
@@ -7,7 +7,7 @@ export const SideBar = () =>{
                         <li>
                             <Link href="/profil">
                                 <div class="user-photo">
-                                    <img src="/public/img/user.png" alt="photo de profil" />
+                                  <Image image="user.png" alt="photo de profil" />
                                 </div>
                             </Link>
                         </li>

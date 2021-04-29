@@ -2,7 +2,7 @@ import { createServer, request } from 'http'
 import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 
-import { rootDir } from './utils.js'
+import { rootDir,getExtname,getContentType } from './utils.js'
 
 // Start esbuild's server on a random local port
 const { generate, serve } = await import('./build.js')
@@ -42,14 +42,11 @@ createServer(async (req, res) => {
     return req.pipe(proxyReq, { end: true })
   }
 
-  if(url.pathname.startsWith("/img/")){
-    const r = await generate('index');
-    var type = mime[path.extname(file).slice(1)] || 'text/plain';
-    var s = fs.createReadStream(file);
-    s.on('open', function () {
-        res.setHeader('Content-Type', type);
-        s.pipe(res);
-    });
+
+  if(path.startsWith('/assets/')){
+    const file = await readFile(join(rootDir,path));
+    res.writeHead(200,{'Content-Type':getContentType(getExtname(path))})
+   return res.end(file)
   }
   // Handle the root index
   if (!url.pathname.startsWith('/api/')) return res.end(await generate('index'))

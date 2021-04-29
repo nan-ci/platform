@@ -106,6 +106,7 @@ dist
 # Editor junk
 .idea/
 .vscode/
+.DS_store
 
 # build
 public/
