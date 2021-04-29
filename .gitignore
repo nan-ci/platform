@@ -105,6 +105,7 @@ dist
 
 # Editor junk
 .idea/
+.vscode/
 
 # build
 public/

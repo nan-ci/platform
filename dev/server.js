@@ -42,6 +42,15 @@ createServer(async (req, res) => {
     return req.pipe(proxyReq, { end: true })
   }
 
+  if(url.pathname.startsWith("/img/")){
+    const r = await generate('index');
+    var type = mime[path.extname(file).slice(1)] || 'text/plain';
+    var s = fs.createReadStream(file);
+    s.on('open', function () {
+        res.setHeader('Content-Type', type);
+        s.pipe(res);
+    });
+  }
   // Handle the root index
   if (!url.pathname.startsWith('/api/')) return res.end(await generate('index'))
 

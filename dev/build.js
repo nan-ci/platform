@@ -12,7 +12,7 @@ const getHash = async head => {
   const hash = await readFile(join(rootDir, '.git', ...parts), 'utf8')
   return { hash: hash.trim(), branch }
 }
-  
+
 try {
   const head = await readFile(join(rootDir, '.git/HEAD'), 'utf8')
   const { hash, branch } = await getHash(head)
@@ -26,8 +26,7 @@ try {
 const templateDir = join(rootDir, 'template')
 const readEntry = async ({ name, ext, base }) => [
   name,
-  ext === '.js'
-    ? (await import(join(templateDir, base))).default()
+  ext === '.js'? (await import(join(templateDir, base))).default()
     : await readFile(join(templateDir, base), 'utf8'),
 ]
 
