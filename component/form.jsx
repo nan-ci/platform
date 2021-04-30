@@ -88,18 +88,50 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
   )
 }
 
+
 export const Form = ({ title, children, submit, ...props }) => (
-  <form {...props}>
-    {'\n'}
-    <Title>{title}</Title>
-    {'\n'}
+  <form class="form" {...props}>
     {children}
-    {submit && (
-      <>
-        <Color.Comment>{'\n  > '}</Color.Comment>
-        <button type="submit">[{submit}]</button>
-        <Color.Comment>{' <'}</Color.Comment>
-      </>
-    )}
   </form>
 )
+
+export const InputGroup = ({children,labelText,labelForAttr}) => {
+  return <div class="input-group">
+      <label for={labelForAttr}>{labelText}</label>
+      {children}
+  </div>
+};
+
+export const Input = ({
+  type,
+  value,
+  placeholder,
+  onChange,
+  required,
+  ...rest
+}) => {
+  return (
+      <input
+
+       {...rest}
+       class="str"
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        onInput={(e) => onChange(e)}
+        required={required}
+      />
+  )
+}
+
+export const Button = ({ value, type, link, icon,...rest }) => {
+  const onClick = (e) => {
+    e.preventDefault();
+    document.location.href = link
+  }
+  return (
+    <button type={type} onClick={onClick} {...rest}>
+      {value}
+    </button>
+  )
+}

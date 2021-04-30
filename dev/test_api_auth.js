@@ -273,7 +273,7 @@ o['GET /logout'] = {
     status: 301,
     headers: {
       'set-cookie': `nan-session=; path=/; domain=${hostname}; max-age=-1`,
-      location: '/',
+      location: '/auth',
     },
   }),
 }

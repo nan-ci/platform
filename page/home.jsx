@@ -1,7 +1,8 @@
 import { logo } from '../data/ascii.js'
-import { Layout, P,Title } from '../component/elements.jsx'
+import {P,Title } from '../component/elements.jsx'
+import {Layout} from '../component/layout.jsx'
 
-export const Home = ({path}) => <Layout path={path}>
+export const Home = () => <Layout>
                 <Title>Roadmap</Title>
                 <div class="snake-tm">
                     <div class="block">

@@ -1,4 +1,4 @@
-[{
+export const results = [{
   "id":1,
   "quizz":{
     "name":"les bases de javascript",

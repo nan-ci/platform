@@ -1,4 +1,4 @@
-[{
+export const evaluations = [{
   "id":1,
   "name":"les bases de javascript",
   "image":"code.jpg",

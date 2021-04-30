@@ -1,8 +1,9 @@
-import { Layout,Image} from '../component/elements.jsx'
+import {Image} from '../component/elements.jsx'
 import {ResultCard} from '../component/resultCard.jsx';
-import resultsJson from '../data/results.json';
+import {results} from '../data/results.js';
+import {Layout} from '../component/layout.jsx'
 
-export const Results = ({path}) => <Layout path={path}>
+export const Results = () => <Layout>
                <div class=" u-pad-default u-mb-3">
                     <div class="user-ranking">
                         <div class="ur_box">
@@ -69,7 +70,7 @@ export const Results = ({path}) => <Layout path={path}>
 
                 <div class="u-pad-default">
                     <ul class="timeline-history">
-                      {resultsJson.map((data,index) =><li key={index}><ResultCard  data={data}/></li>)}
+                      {results.map((data,index) =><li key={index}><ResultCard  data={data}/></li>)}
                     </ul>
                     <Image image="plant.png" class="plant" alt="grass"/>
                 </div>

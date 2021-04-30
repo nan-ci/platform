@@ -1,26 +1,31 @@
-import { Link, Div, Color, Title } from './elements.jsx'
+import { Link, Div,Image } from './elements.jsx'
 import { specialities } from '../data/discord.js'
 import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
 import { useURL } from '../lib/router.js'
+import {ChevronRight,Home,LogOut,Close} from './icons.jsx';
 
 const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
+
 const LinkMatch = ({ match, children, path, ...props }) => (
   <li>
-    {path === props.href ? (
-      <Color.Green>{children}</Color.Green>
-    ) : (
-      <Link {...props}>{children}</Link>
-    )}
+      <Link {...props}>
+          <div class={`n-item${path === props.href ? " active":""}`}>
+            {h(ChevronRight)}
+              <span>{children}</span>
+          </div>
+      </Link>
   </li>
 )
+
 
 const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
 const NavLink = (props) => <li> - <Link {...props} /></li>
+
 const LogAction = () => {
   if (!user) {
     return (
@@ -52,38 +57,72 @@ const Version = () => (
   <Div fg="comment">#/bin/nan --hash={HASH.slice(0, 80 - 17)}</Div>
 )
 
+const SideBarFirst = () => (
+  <div class="sidebar__first">
+      <ul>
+          <li>
+              <Link href="/profil">
+                  <div class="user-photo">
+                    <Image image="user.png" alt="photo de profil" />
+                  </div>
+              </Link>
+          </li>
+          <li>
+              <Link href="/">
+              {h(Home)}
+              </Link>
+          </li>
+          <li>
+            <Link href={`${API}/logout`}>
+               {h(LogOut)}
+            </Link>
+          </li>
+      </ul>
+    </div>
+);
+
+const SideBarSecond = ({children}) => (
+  <div class="sidebar__second">
+        <ul class="mac-control">
+            <li>
+                <span class="--red"></span>
+            </li>
+            <li>
+                <span class="--yellow"></span>
+            </li>
+            <li>
+                <span class="--green"></span>
+            </li>
+        </ul>
+       {children}
+      </div>
+  );
+
 const Nav = ({ path }) => (
-  <nav>
-    <Version />
-    {'\n'}
-    <Title>Menu</Title>
-    {'\n'}
-    <ul style={{ width: '100%' }}>
-      {'  '}
-      <LinkMatch path={path} href="/">
-        Home
-      </LinkMatch>
-      {' - '}
-      <LinkMatch path={path} href="/profile">
-        Profile
-      </LinkMatch>
-      <LogAction />
-    </ul>
-    {'\n'}
-  </nav>
+  <nav class="side-nav">
+  <ul>
+      <li>
+          <div class="n-item" id="sidebar_close_controller">
+              {h(Close)}
+              <span>Fermer</span>
+          </div>
+      </li>
+      <LinkMatch path={path} href="/">Tableau de bord</LinkMatch>
+      <LinkMatch path={path} href="/evaluations">Evaluations et Quizz</LinkMatch>
+      <LinkMatch path={path} href="/results">Mes Résultats</LinkMatch>
+      <LinkMatch path={path} href="/profil">Mon Profil</LinkMatch>
+  </ul>
+</nav>
 )
 
-export const Header = ({ page, title, children }) => {
+export const Header = () => {
   const { pathname: path } = useURL()
   return (
-    <header>
-      <Nav path={path} />
-      {'\n'}
-      <Title>Page</Title>
-      {'\n'}
-      <h1>{`  ${path}`} </h1>
-      {'\n'}
-      {children}
-    </header>
+    <div class="sidebar" id="sideMenu">
+      <SideBarFirst/>
+      <SideBarSecond>
+        <Nav path={path} />
+      </SideBarSecond>
+    </div>
   )
 }

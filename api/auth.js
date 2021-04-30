@@ -186,6 +186,6 @@ GET.logout = async ({ session, url: { hostname } }) => {
   const cookie = `nan-session=; path=/; domain=${hostname}; max-age=-1`
   return new Response(null, {
     status: 301,
-    headers: { location: '/', 'set-cookie': cookie },
+    headers: { location: '/auth', 'set-cookie': cookie },
   })
 }

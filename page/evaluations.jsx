@@ -1,10 +1,11 @@
-import { Layout,Title,Image} from '../component/elements.jsx'
+import {Title,Image} from '../component/elements.jsx'
+import {Layout} from '../component/layout.jsx'
 import {EvaluationCard} from '../component/evaluationCard.jsx';
-import evaluationJson from '../data/evaluations.json';
+import {evaluations} from '../data/evaluations.js';
 
 
-export const Evaluations = ({path}) => {
-  return <Layout path={path}>
+export const Evaluations = () => {
+  return <Layout>
       <Title>Evaluations</Title>
       <div class="grid-container u-pad-default u-mb-3">
           <div class="dashed-card">
@@ -30,10 +31,9 @@ export const Evaluations = ({path}) => {
           </div>
       </div>
 
-    <Title>Travail à faire</Title>
-
+      <Title>Travail à faire</Title>
       <div class="grid-container u-pad-default">
-          {evaluationJson.map((data,index)=><EvaluationCard key={index} data={data}/>)}
+          {evaluations.map((data,index)=><EvaluationCard key={index} data={data}/>)}
       </div>
 </Layout>
 

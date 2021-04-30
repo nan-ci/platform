@@ -1,9 +1,10 @@
-import { Layout,Title,Image,Link} from '../component/elements.jsx'
-import evaluationJson from '../data/evaluations.json';
+import {Title,Image,Link} from '../component/elements.jsx'
+import {Layout} from '../component/layout.jsx'
+import {evaluations} from '../data/evaluations.js';
 
 export const Evaluation = ({evaluationId}) => {
- const currentEvaluation = evaluationJson.find(ev => ev.id === +evaluationId);
-  return <Layout path="/evaluations">
+ const currentEvaluation = evaluations.find(ev => ev.id === +evaluationId);
+  return <Layout>
   <Title>Quizz n°1</Title>
   <div class="quiz-desc">
       <Image image={"illustrations/"+currentEvaluation.image} class="img-quiz-illustration" alt="illustration" />

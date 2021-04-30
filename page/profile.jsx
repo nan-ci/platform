@@ -1,91 +1,74 @@
-import { Layout,Title,Image} from '../component/elements.jsx'
+import {Title,Image} from '../component/elements.jsx'
+import {Layout} from '../component/layout.jsx'
+import {InputGroup,Input,Form,Button} from '../component/form.jsx';
 
-export const Profile = ({path}) => <Layout path={path}>
-                <Title>Mon compte</Title>
-                <div class="u-pad-default">
-                    <div class="user-card">
-                        <div class="photo">
-                           <Image image="user.png" alt="user" />
-                        </div>
-                        <div class="uc_content">
-                            <div class="ucc-field">
-                                <small>Nom d'utilisateur</small>
-                                <span>JohnDoe_0923</span>
-                            </div>
-                            <div class="ucc-field">
-                                <small>Nom</small>
-                                <span>Doe</span>
-                            </div>
-                            <div class="ucc-field">
-                                <small>Prénoms</small>
-                                <span>John Halaric Simon</span>
-                            </div>
-                            <div class="ucc-field">
-                                <small>Date de naissance</small>
-                                <span>10/09/1910</span>
-                            </div>
-                            <div class="ucc-field">
-                                <small>e-mail</small>
-                                <span>johndoe@gmail.com</span>
-                            </div>
-                            <div class="ucc-field">
-                                <small>numéro de téléphone</small>
-                                <span>(+225) 0198899887</span>
-                            </div>
-                        </div>
-                        <a href="#">
-                            <button class="btn-purple">Modifier</button>
-                        </a>
-                    </div>
 
-                    <section>
-                        <div class="pr-heading">
-                            <h2>Mot de passe </h2>
-                            <hr />
-                        </div>
+const data = {
+  "username":"JohnDoe",
+  "name":"Doe",
+  "lastname":"John Halaric Simon",
+  "birth date":"10/09/1910",
+  "email":"johndoe@gmail.com",
+  "number":"(+225) 019889988"
+}
 
-                        <form class="form">
-                            <div class="input-group">
-                                <label for="un">Mot de passe actuel</label>
-                                <input type="password" class="--limited --bg-d" id="un" />
-                            </div>
-                            <div class="input-group">
-                                <label for="deux">Nouveau mot de passe</label>
-                                <input type="password" class="--limited --bg-d" id="deux" />
-                            </div>
-                            <button class="btn-purple">Changer le mot de passe</button>
-                        </form>
-                    </section>
+export const Profile = () => <Layout>
+    <Title>Mon compte</Title>
+    <div class="u-pad-default">
+        <div class="user-card">
+            <div class="photo">
+                <Image image="user.png" alt="user" />
+            </div>
+            <div class="uc_content">
+              {Object.keys(data).map((key,ind) => <div class="ucc-field">
+                    <small>{key}</small>
+                    <span>{data[key]}</span>
+                </div> )}
+            </div>
+            <Button class="btn-purple" value="modifier" link="/" />
+        </div>
 
-                    <section>
-                        <div class="pr-heading">
-                            <h2>Reseaux </h2>
-                            <hr />
-                        </div>
+        <section>
+            <div class="pr-heading">
+                <h2>Mot de passe </h2>
+                <hr />
+            </div>
+            <Form >
+                <InputGroup labelText="mot de passe actuel" labelFor="un">
+                      <Input type="password" value="" class="--limited --bg-d" id="un" required="true"/>
+                </InputGroup>
+                <InputGroup labelText="nouveau mot de passe" labelFor="deux">
+                      <Input type="password" value=""  class="--limited --bg-d" id="deux" required="true"/>
+                </InputGroup>
+                <Button class="btn-purple" type="submit" value="Changer le mot de passe " link="/" />
+            </Form>
+        </section>
 
-                        <form class="form">
-                            <div class="input-group">
-                                <label for="sk">Skype</label>
-                                <input type="text" class="--limited --bg-d" id="sk" placeholder="nom d'utilisateur" />
-                            </div>
-                            <div class="input-group">
-                                <label for="ln">Linkedin</label>
-                                <input type="text" class="--limited --bg-d" id="ln" placeholder="linkedin.com/in/profilename" />
-                            </div>
-                            <div class="input-group">
-                                <label for="tw">Twitter</label>
-                                <input type="text" class="--limited --bg-d" id="tw" placeholder="@username" />
-                            </div>
-                            <div class="input-group">
-                                <label for="sw">Youtube</label>
-                                <input type="text" class="--limited --bg-d" id="sw" placeholder="ma chaîne" />
-                            </div>
-                            <div class="input-group">
-                                <label for="sw">Site web</label>
-                                <input type="text" class="--limited --bg-d" id="sw" placeholder="monsite.com" />
-                            </div>
-                            <button class="btn-purple">Enregistrer</button>
-                        </form>
-                    </section>
-                </div>
+
+        <section>
+            <div class="pr-heading">
+                <h2>Reseaux </h2>
+                <hr />
+            </div>
+            <Form>
+                <InputGroup labelText="Skype" labelFor="sk">
+                      <Input type="text" value="" class="--limited --bg-d" id="sk" required="true" placeholder=" nom d'utillisateur " />
+                </InputGroup>
+                <InputGroup labelText="Linkendin" labelFor="ln">
+                      <Input type="text" value="" class="--limited --bg-d" id="ln" required="true" placeholder="linkendin.com/in/profilename"/>
+                </InputGroup>
+                <InputGroup labelText="Twitter" labelFor="tw">
+                      <Input type="text" value="" class="--limited --bg-d" id="tw" required="true" placeholder="@username"/>
+                </InputGroup>
+                <InputGroup labelText="Youtube" labelFor="yt">
+                      <Input type="text" value="" class="--limited --bg-d" id="yt" required="true" placeholder="ma chaine" />
+                </InputGroup>
+                <InputGroup labelText="Site web" labelFor="sw">
+                      <Input type="text" value="" class="--limited --bg-d" id="sw" required="true" placeholder="monsite.com" />
+                </InputGroup>
+                <Button class="btn-purple" type="submit" value="enregister" link="/" />
+            </Form>
+        </section>
+
+    </div>
 </Layout>
