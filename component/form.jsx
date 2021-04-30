@@ -143,12 +143,16 @@ export const Input = ({
   )
 }
 
-export const Button = ({ value, type, link, icon }) => {
+export const Button = ({ value, type, link, block }) => {
   const onClick = () => {
     document.location.href = link
   }
   return (
-    <button type={type} onClick={onClick}>
+    <button
+      type={type}
+      onClick={onClick}
+      style={block ? { width: '100%' } : ''}
+    >
       {value}
     </button>
   )
