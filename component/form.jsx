@@ -18,7 +18,11 @@ input { outline: none }
 input, .str {
   color: var(--yellow);
 }
-
+input {
+  display:inline-block;
+  padding:9px;
+  line-height:140%;
+}
 label > .str:focus-within, button:focus {
   background: var(--background-darker);
   outline-color: var(--comment);
@@ -30,9 +34,21 @@ label:hover > .name {
   font-weight: bold;
 }
 
+.div-input {
+  margin-top: 20px;
+}
+
+button {
+  background: var(--purple);
+  border: 1px solid var(--purple);
+  padding: 10px;
+  width: auto;
+}
+
 button:hover {
   text-shadow: 1px 1px 2px #000;
   outline: 1px dashed;
+  cursor: pointer;
   outline-offset: 0.5ch;
 }`)
 
@@ -42,6 +58,7 @@ const Comment = ({ children }) => (
     {children}
   </Color.Comment>
 )
+
 export const Text = ({ name, value, comment, errors, children, ...props }) => {
   const [val, setVal] = useState(value || '')
   const size = Math.max(val.length || 0, 1)
@@ -92,14 +109,47 @@ export const Form = ({ title, children, submit, ...props }) => (
   <form {...props}>
     {'\n'}
     <Title>{title}</Title>
-    {'\n'}
     {children}
     {submit && (
       <>
         <Color.Comment>{'\n  > '}</Color.Comment>
-        <button type="submit">[{submit}]</button>
+        <button type="submit">{submit}</button>
         <Color.Comment>{' <'}</Color.Comment>
       </>
     )}
   </form>
 )
+
+export const Input = ({
+  width,
+  type,
+  value,
+  placeholder,
+  onChange,
+  required,
+}) => {
+  return (
+    <div class="div-input">
+      <input
+        class="str"
+        type={type}
+        value={value}
+        size={width}
+        placeholder={placeholder}
+        onInput={(e) => onChange(e)}
+        required={required}
+      />
+    </div>
+  )
+}
+
+export const Button = ({ value, type, link, icon }) => {
+  const onClick = () => {
+    document.location.href = link
+  }
+  return (
+    <button type={type} onClick={onClick}>
+      {value}
+    </button>
+  )
+}
