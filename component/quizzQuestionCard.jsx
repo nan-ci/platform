@@ -1,5 +1,4 @@
 
-
 export const QuestionCard = ({questionNumber,question}) => {
   return    <div class="question">
   <div class="question-number --answered">

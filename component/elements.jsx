@@ -33,7 +33,7 @@ export const Color = Object.fromEntries(
 export const divider = <Color.Comment># {'··'.repeat(38)} #</Color.Comment>
 export const equal = <Color.Pink> = </Color.Pink>
 
-export const Layout = ({ children }) => {
+export const Layout = ({path,children }) => {
 
   /* useEffect(() => {
     document.body.setAttribute('class','dark-theme');
@@ -41,7 +41,7 @@ export const Layout = ({ children }) => {
   }, []);   */
 
   return <>
-    <SideBar/>
+    <SideBar path={path}/>
     <div class="main-content">
       <div class="top-bar">
         <svg version="1.1" xmlns="http://www.w3.org/2000/svg" class="menu-icon" id="hamburgerMenu" width="24"
@@ -67,7 +67,7 @@ export const Layout = ({ children }) => {
   </>
 }
 
-export const Image = ({alt,image,...props}) => <img src={"../assets/img/"+image} alt={alt ? alt: image} {...props}/>
+export const Image = ({alt,image,...props}) => <img src={"/assets/img/"+image} alt={alt ? alt: image} {...props}/>
 
 
 css(`

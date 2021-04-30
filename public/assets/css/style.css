@@ -176,7 +176,7 @@ ul li, ol li {
     font-size: 1.4rem;
     padding: 1rem;
     transition: all .1s ease-in-out; }
-    .sidebar .n-item:hover {
+    .sidebar .n-item:hover,.sidebar .n-item.active {
       background-color: #171721;
       color: #545dd3;
       padding-left: 1.3rem; }

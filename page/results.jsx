@@ -2,7 +2,7 @@ import { Layout,Image} from '../component/elements.jsx'
 import {ResultCard} from '../component/resultCard.jsx';
 import resultsJson from '../data/results.json';
 
-export const Results = () => <Layout>
+export const Results = ({path}) => <Layout path={path}>
                <div class=" u-pad-default u-mb-3">
                     <div class="user-ranking">
                         <div class="ur_box">
@@ -45,7 +45,7 @@ export const Results = () => <Layout>
 
                 <div class="grid-container u-pad-default u-mb-3">
                     <div class="dashed-card">
-                        <Image image="cons/top-rated.svg" alt="icons" />
+                        <Image image="icons/top-rated.svg" alt="icons" />
                         <div>
                             <span>123</span>
                             <small>Mon rang</small>

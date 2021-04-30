@@ -44,7 +44,7 @@ createServer(async (req, res) => {
 
 
   if(path.startsWith('/assets/')){
-    const file = await readFile(join(rootDir,path));
+    const file = await readFile(join(rootDir,'public',path));
     res.writeHead(200,{'Content-Type':getContentType(getExtname(path))})
    return res.end(file)
   }

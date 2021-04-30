@@ -3,8 +3,8 @@ import {EvaluationCard} from '../component/evaluationCard.jsx';
 import evaluationJson from '../data/evaluations.json';
 
 
-export const Evaluations = () => {
-  return <Layout>
+export const Evaluations = ({path}) => {
+  return <Layout path={path}>
       <Title>Evaluations</Title>
       <div class="grid-container u-pad-default u-mb-3">
           <div class="dashed-card">

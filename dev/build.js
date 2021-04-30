@@ -44,6 +44,7 @@ const config = {
   jsxFactory: 'h',
   format: 'esm',
   define: Object.fromEntries(envEntries),
+  loader:{".svg":"dataurl",".png":"dataurl"},
   inject: [DEV ? 'lib/preact-shim-dev.js' : 'lib/preact-shim.js'],
   ...(DEV ? { sourcemap: 'inline' } : { splitting: true, minify: true }),
 }

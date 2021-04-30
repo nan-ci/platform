@@ -1,6 +1,6 @@
 import { Layout,Title,Image} from '../component/elements.jsx'
 
-export const Profile = () => <Layout>
+export const Profile = ({path}) => <Layout path={path}>
                 <Title>Mon compte</Title>
                 <div class="u-pad-default">
                     <div class="user-card">

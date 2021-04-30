@@ -3,7 +3,7 @@ import evaluationJson from '../data/evaluations.json';
 
 export const Evaluation = ({evaluationId}) => {
  const currentEvaluation = evaluationJson.find(ev => ev.id === +evaluationId);
-  return <Layout>
+  return <Layout path="/evaluations">
   <Title>Quizz n°1</Title>
   <div class="quiz-desc">
       <Image image={"illustrations/"+currentEvaluation.image} class="img-quiz-illustration" alt="illustration" />
