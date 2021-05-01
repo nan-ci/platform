@@ -1,5 +1,5 @@
 import { Link, Div, Color, Title } from './elements.jsx'
-import { roles } from '../data/discord.js'
+import { roles, specialities } from '../data/discord.js'
 import { Skills } from '../page/skills.jsx'
 import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
@@ -21,7 +21,7 @@ const LinkMatch = ({ match, children, path, ...props }) => (
 const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
-export const NavLink = (props) => <li> <Link {...props} /></li>
+export const NavLink = (props) => <li><Link {...props} /></li>
 const LogAction = () => {
   if (!user) {
     return (
@@ -32,12 +32,15 @@ const LogAction = () => {
   }
 
   return user.discordId ? (
-    <NavLink href={`${API}/logout`} onclick={clearStorage}>
-      Logout
-    </NavLink>
+    <>
+      {' - '}
+      <NavLink href={`${API}/logout`} onclick={clearStorage}>
+        Logout
+      </NavLink>
+    </>
   ) : (
     <Skills
-      roles={roles}
+      roles={specialities}
       title="Which programming language do you want to learn ? 📚"
     />
   )
@@ -59,6 +62,14 @@ const Nav = ({ path }) => (
         Home
       </LinkMatch>
       {' - '}
+      <LinkMatch path={path} href="/challenge">
+        Challenge
+      </LinkMatch>
+      {' - '}
+      <LinkMatch path={path} href="/timeline">
+        Timeline
+      </LinkMatch>
+      {' - '}
       <LinkMatch path={path} href="/profile">
         Profile
       </LinkMatch>
@@ -66,7 +77,6 @@ const Nav = ({ path }) => (
       <LinkMatch path={path} href="/studentlist">
         Student list
       </LinkMatch>
-
       <LogAction />
     </ul>
     {'\n'}
