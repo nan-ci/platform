@@ -440,14 +440,6 @@ ul li, ol li {
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0; }
 
-.login-page {
-  position: relative;
-  min-height: 100vh;
-  display: flex; }
-  @media only screen and (max-width: 62em) {
-    .login-page {
-      display: block; } }
-
 .lg-illustration {
   flex: 1;
   background: linear-gradient(#15151d61, #15151d), url(../img/christina.jpg);
