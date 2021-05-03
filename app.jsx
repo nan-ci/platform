@@ -1,5 +1,4 @@
 import { render } from 'preact'
-
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
@@ -19,6 +18,6 @@ const App = () => (
           <Results path="/results" />
           <Home path="*" />
       </Router>
-)
+);
 
 render(h(App, {}), document.getElementById('root'))

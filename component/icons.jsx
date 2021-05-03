@@ -5,6 +5,17 @@ svg.icon {
   height: 2ch;
   margin: -0.5ch 0;
 }
+.top-bar .menu-icon {
+  fill: #fff;
+  margin-right: 2rem;
+  cursor: pointer; }
+  #hamburgerMenu {
+    display: none; }
+    @media only screen and (max-width: 62em) {
+      #hamburgerMenu {
+        display: inline-block; } }
+        .img-logoNaN {
+          height: 3rem; }
 `)
 
 export const Icon = (title,defs,ds,props) => (rest) => {

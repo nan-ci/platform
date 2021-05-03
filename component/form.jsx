@@ -34,7 +34,36 @@ button:hover {
   text-shadow: 1px 1px 2px #000;
   outline: 1px dashed;
   outline-offset: 0.5ch;
-}`)
+}
+
+.form .input-group {
+  margin-bottom: 2rem; }
+  .form .input-group label {
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #b0b0bd9d;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: block; }
+  .form .input-group input {
+    font-size: 1.7rem;
+    padding: 1.4rem 2rem;
+    border-radius: 5px;
+    background-color: transparent;
+    border: 1px solid #2d2e3b;
+    color: #f4f2f2;
+    width: 100%; }
+    .form .input-group input.--limited {
+      max-width: 50rem; }
+    .form .input-group input.--bg-d {
+      background-color: #15151d; }
+    .form .input-group input::placeholder {
+      color: #f2f3f465; }
+    .form .input-group input:focus {
+      border: 1px solid #545dd3;
+      outline: none; }
+
+`)
 
 const Comment = ({ children }) => (
   <Color.Comment>

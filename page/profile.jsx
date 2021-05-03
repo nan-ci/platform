@@ -1,6 +1,59 @@
-import {Title,Image} from '../component/elements.jsx'
+import {Title} from '../component/elements.jsx'
+import {Img} from '../component/image.jsx';
 import {Layout} from '../component/layout.jsx'
 import {InputGroup,Input,Form,Button} from '../component/form.jsx';
+import { css } from '../lib/dom.js';
+
+
+css(`
+.user-card {
+  padding: 2rem;
+  background-color: #121219;
+  border-radius: 6px;
+  margin-top: 4rem;
+  max-width: 50rem; }
+  .user-card .photo {
+    height: 10rem;
+    width: 10rem;
+    border-radius: 6px;
+    overflow: hidden; }
+    .user-card .photo img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover; }
+  .user-card .uc_content {
+    background-color: #171721;
+    padding: 1.5rem;
+    border-radius: 6px;
+    margin-top: 3rem;
+    margin-bottom: 2rem; }
+  .user-card .ucc-field {
+    position: relative;
+    font-size: 1.4rem;
+    margin-bottom: 2rem; }
+    .user-card .ucc-field small {
+      display: block;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #b0b0bd9d; }
+    .user-card .ucc-field span {
+      color: #fff; }
+
+.pr-heading {
+  margin-top: 6rem;
+  margin-bottom: 4rem;
+  position: relative; }
+  .pr-heading h2 {
+    font-weight: 500;
+    font-size: 2.1rem;
+    display: inline-block;
+    background-color: #171721;
+    padding-right: 2rem;
+    position: absolute;
+    top: -17px; }
+  .pr-heading hr {
+    border: 1px solid #23242e; }
+`);
 
 
 const data = {
@@ -17,7 +70,7 @@ export const Profile = () => <Layout>
     <div class="u-pad-default">
         <div class="user-card">
             <div class="photo">
-                <Image image="user.png" alt="user" />
+                <Img source="user.png" alt="user" />
             </div>
             <div class="uc_content">
               {Object.keys(data).map((key,ind) => <div class="ucc-field">

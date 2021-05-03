@@ -1,4 +1,34 @@
-import {Link,Image} from './elements.jsx';
+import {css} from '../lib/dom.js';
+
+css(`
+.result-card {
+  background-color: #343644;
+  padding: 2rem;
+  border-radius: 3px;
+  position: relative; }
+   .result-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -5rem;
+    height: 3px;
+    width: 4.8rem;
+    background-color: #343644; }
+   .result-card.--pass {
+    border: 2px solid #28837383; }
+  .result-card.--fail {
+    border: 2px solid #a54a4a83; }
+   .result-card .rs-title {
+    font-size: 1.8rem;
+    font-weight: 500; }
+   .result-card p {
+    font-size: 1.4rem;
+    font-weight: 300;
+    color: #b0b0bd; }
+    .sp-link {
+      color: #545dd3; }
+`)
 
 export const ResultCard = ({data}) => {
   return  <div class={`result-card ${data.pass ? '--pass' : '--fail'}`}>

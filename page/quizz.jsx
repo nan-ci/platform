@@ -2,6 +2,34 @@ import {QuestionCard} from '../component/quizzQuestionCard.jsx'
 import {evaluations} from '../data/evaluations.js';
 import {Main} from '../component/elements.jsx';
 import {LogoNaN} from '../component/icons.jsx';
+import { css } from '../lib/dom.js';
+
+css(`
+.--quiz-page {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: #171721; }
+
+  .badge-time {
+    color: #b0b0bd;
+    background-color: #14141c;
+    padding: 10px 15px;
+    font-size: 1.5rem;
+    display: inline-block;
+    border-radius: 4px; }
+    .badge-time span {
+      color: #b33128; }
+
+  .questions-list {
+    margin-top: 7rem;
+    margin-bottom: 7rem; }
+
+`);
+
 
 export const Quizz = () => {
 

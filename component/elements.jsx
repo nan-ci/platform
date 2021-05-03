@@ -6,6 +6,23 @@ import * as Icons from './icons.jsx'
   This file contains all basic components
 */
 
+css(`
+.page-heading {
+  font-size: 3rem;
+  color: #fff;
+  font-weight: initial;
+  font-family: "Poppins", sans-serif; }
+  .main-block .main-content {
+    width: 100%;
+    color: #f4f2f2;
+    padding-bottom: 4rem; }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
+      column-gap: 1.5rem; }
+`);
+
 const colors = window.colors || {}
 const getStyle = (props) => props.style || (props.style = {})
 const colorize = (tag) => (props) => {
@@ -33,8 +50,6 @@ export const equal = <Color.Pink> = </Color.Pink>
 
 export const Main = ({children}) => <div className="main-content">{children}</div>
 
-export const Image = ({alt,image,...props}) => <img src={"/assets/img/"+image} alt={alt ? alt: image} {...props}/>
-
 
 css(`
 footer {
@@ -46,7 +61,11 @@ export const Title = ({children,...props}) => (
   <div class="u-pad-default" {...props}>
     <h1 class="page-heading">{children}</h1>
   </div>
-)
+);
+
+export const GridContainer = ({children,...rest}) => {
+  return <div class={"grid-container u-pad-default"+(rest.class && ' '+rest.class)}>{children}</div>
+}
 
 const iconStyle = { style: { marignLeft: '2em' } }
 export const Link = colorize(({ icon, children, ...props }) => {
