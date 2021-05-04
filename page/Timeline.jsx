@@ -1,6 +1,6 @@
 import { Img } from '../component/image.jsx'
 import { ResultCard } from '../component/resultCard.jsx'
-import { results } from '../data/results.js'
+import { quizz } from '../data/quizz'
 import { Layout } from '../component/layout.jsx'
 import { css } from '../lib/dom.js'
 import { TimelineCard } from '../component/timelinecard'
@@ -145,7 +145,7 @@ export const Timeline = () => (
 
     <div class="u-pad-default">
       <ul class="timeline-history">
-        {results.flatMap((data) => (
+        {quizz.flatMap((data) => (
           <li key={data.id}>
             <ResultCard data={data} />
           </li>

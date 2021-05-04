@@ -208,7 +208,7 @@ const Nav = ({ path }) => (
           </div>
       </li>
       <LinkMatch path={path} href="/">Home</LinkMatch>
-      <LinkMatch path={path} href="/evaluations">Challenge</LinkMatch>
+      <LinkMatch path={path} href="/challenges">Challenges</LinkMatch>
       <LinkMatch path={path} href="/timeline">Timeline</LinkMatch>
       <LinkMatch path={path} href="/profil">Profile</LinkMatch>
   </ul>

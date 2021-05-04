@@ -61,5 +61,4 @@ export const Evaluation = ({evaluationId}) => {
       </ol>
   </div>
 </Layout>
-
 }
