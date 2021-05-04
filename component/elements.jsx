@@ -57,19 +57,20 @@ footer {
 }
 `)
 
-export const Title = ({children,...props}) => (
-  <div class="u-pad-default" {...props}>
-    <h1 class="page-heading">{children}</h1>
+export const Title = ({ children }) => (
+  <div class="u-pad-default">
+    {toChildArray(children).map((child) => [
+      <h1 class="page-heading">{child}</h1>
+    ])}
   </div>
-);
+)
 
-export const GridContainer = ({ children }) => {
-  return (
-    <div class={'grid-container u-pad-default'}>
-      {toChildArray(children).map(child => [<span>{child}</span>])}
-    </div>
-  )
-}
+export const GridContainer = ({ children }) => (
+  <div class={'grid-container u-pad-default'}>
+    {toChildArray(children).map((child) => [<span>{child}</span>])}
+  </div>
+)
+
 
 const iconStyle = { style: { marignLeft: '2em' } }
 export const Link = colorize(({ icon, children, ...props }) => {
