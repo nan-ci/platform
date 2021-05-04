@@ -204,13 +204,13 @@ const Nav = ({ path }) => (
       <li>
           <div class="n-item" id="sidebar_close_controller">
               {h(Close)}
-              <span>Fermer</span>
+              <span>Close</span>
           </div>
       </li>
-      <LinkMatch path={path} href="/">Tableau de bord</LinkMatch>
-      <LinkMatch path={path} href="/evaluations">Evaluations et Quizz</LinkMatch>
-      <LinkMatch path={path} href="/results">Mes Résultats</LinkMatch>
-      <LinkMatch path={path} href="/profil">Mon Profil</LinkMatch>
+      <LinkMatch path={path} href="/">Home</LinkMatch>
+      <LinkMatch path={path} href="/evaluations">Challenge</LinkMatch>
+      <LinkMatch path={path} href="/timeline">Timeline</LinkMatch>
+      <LinkMatch path={path} href="/profil">Profile</LinkMatch>
   </ul>
 </nav>
 )

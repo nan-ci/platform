@@ -1,7 +1,7 @@
 export const results = [{
   "id":1,
   "quizz":{
-    "name":"les bases de javascript",
+    "name":"Basics of javascript",
     "questions":[{},{},{}]
   },
   "submitionDate":"10/02/2021",

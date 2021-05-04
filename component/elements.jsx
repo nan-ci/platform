@@ -63,8 +63,12 @@ export const Title = ({children,...props}) => (
   </div>
 );
 
-export const GridContainer = ({children,...rest}) => {
-  return <div class={"grid-container u-pad-default"+(rest.class && ' '+rest.class)}>{children}</div>
+export const GridContainer = ({ children }) => {
+  return (
+    <div class={'grid-container u-pad-default'}>
+      {toChildArray(children).map(child => [<span>{child}</span>])}
+    </div>
+  )
 }
 
 const iconStyle = { style: { marignLeft: '2em' } }
