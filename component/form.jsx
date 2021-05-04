@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks'
-import { equal, Color, Title } from './elements.jsx'
+import { equal, Color } from './elements.jsx'
 import { css } from '../lib/dom.js'
 
 css(`
