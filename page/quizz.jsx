@@ -1,8 +1,8 @@
-import {QuestionCard} from '../component/quizzQuestionCard.jsx'
-import {evaluations} from '../data/evaluations.js';
-import {Main} from '../component/elements.jsx';
-import {LogoNaN} from '../component/icons.jsx';
-import { css } from '../lib/dom.js';
+import { QuizzCard } from '../component/quizzcard.jsx'
+import { challenges } from '../data/challenges.js'
+import { Main } from '../component/elements.jsx'
+import { LogoNaN } from '../component/icons.jsx'
+import { css } from '../lib/dom.js'
 
 css(`
 .--quiz-page {
@@ -12,8 +12,11 @@ css(`
   position: sticky;
   top: 0;
   z-index: 100;
-  background-color: #171721; }
-
+  background-color: #171721;
+}
+  .quiz-desc {
+    margin-left: 3rem;
+  }
   .badge-time {
     color: #b0b0bd;
     background-color: #14141c;
@@ -22,34 +25,36 @@ css(`
     display: inline-block;
     border-radius: 4px; }
     .badge-time span {
-      color: #b33128; }
-
-  .questions-list {
-    margin-top: 7rem;
-    margin-bottom: 7rem; }
-
-`);
-
+      color: #b33128;
+    }
+  .quizz-section {
+    display: flex;
+    flex-flow: row wrap;
+    margin: 2rem;
+   }
+`)
 
 export const Quizz = () => {
-
-  return <Main>
-       <div class="top-bar --quiz-page">
-           {h(LogoNaN)}
-          <div class="badge-time">
-              temps restant &bull; <span>13:12:01</span>
-          </div>
-       </div>
-
-      <div class="quiz-desc">
-          <h1>{evaluations[0].name}</h1>
-          <h2>Quiz n° 12345</h2>
-          <ul class="questions-list">
-            {evaluations[0].questions.map((question,index) => <li key={index}>
-                 <QuestionCard questionNumber={index+1} question={question} />
-              </li>)}
-          </ul>
-          <button class="btn-green">Soumettre le quiz</button>
+  return (
+    <Main>
+      <div class="top-bar --quiz-page">
+        {h(LogoNaN)}
+        <div class="badge-time">
+          remaining time &bull; <span>13:12:01</span>
+        </div>
       </div>
-  </Main>
+      <div class="quiz-desc">
+        <section class="quizz-header">
+          <h1>{challenges[0].name}</h1>
+          <h2>Percentage of validation: 60%</h2>
+        </section>
+        <section class="quizz-section">
+          {challenges[0].quizz.flatMap((quizz, index) => (
+            <QuizzCard key={quizz.title} quizz={quizz} index={index} />
+          ))}
+        </section>
+        <button class="btn-green">Submit</button>
+      </div>
+    </Main>
+  )
 }

@@ -1,30 +1,28 @@
 export const challenges = [
   {
     id: 1,
-    name: 'les bases de javascript',
+    name: 'Basics of Javascript',
     img: 'javascript.svg',
     title: 'evaluation2',
-    questions: [
+    quizz: [
       {
-        enonce: "Qu'est ce que le javascript",
-        responses: {
-          a: { libelle: 'un language de programmation', isTrue: true },
-          b: { libelle: 'un code', isTrue: false },
-        },
+        title: "What's the Javascript",
+        options: [{ label: 'An programming language', isTrue: true },
+        {label: 'A code', isTrue: false }
+      ]
       },
       {
-        enonce: "Qu'es ce que le html",
-        responses: {
-          a: { libelle: 'un language de programmation', isTrue: false },
-          b: { libelle: 'un language de balisage', isTrue: true },
-        },
+        title: "What's the HTML",
+        options: [{label: 'un language de programmation', isTrue: false },
+        {label:'un language de balisage', isTrue: true }
+      ],
       },
       {
-        enonce: "Qu'es ce que le css",
-        responses: {
-          a: { libelle: 'un language de balissage', isTrue: false },
-          b: { libelle: 'une feuille de style en cascade', isTrue: true },
-        },
+        title: "What's the CSS",
+        options: [
+          {label:'un language de balissage', isTrue: false },
+          {label: 'une feuille de style en cascade', isTrue: true },
+        ],
       },
     ],
     nbreTentatives: 3,
@@ -37,7 +35,7 @@ export const challenges = [
     name: 'les bases de javascript',
     img: 'code.jpg',
     title: 'evaluation2',
-    questions: [],
+    quizz: [],
     nbreTentatives: 2,
     percentToPass: 30,
     description: 'ceci est un quizz de javascript',
@@ -48,7 +46,7 @@ export const challenges = [
     name: 'les bases de javascript',
     img: 'code.jpg',
     title: 'evaluation2',
-    questions: [],
+    quizz: [],
     nbreTentatives: 5,
     percentToPass: 70,
     description: 'ceci est un quizz de javascript',
@@ -59,7 +57,7 @@ export const challenges = [
     name: 'les bases de javascript',
     img: 'code.jpg',
     title: 'evaluation2',
-    questions: [],
+    quizz: [],
     nbreTentatives: 2,
     percentToPass: 50,
     description: 'ceci est un quizz de javascript',

@@ -5,15 +5,15 @@ import { css, link } from '../lib/dom.js'
 import { API } from '../lib/env.js'
 import { Github, Discord } from '../component/icons.jsx'
 
-// link('https://fonts.gstatic.com', 'preconnect')
-// link(
-//   'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap',
-//   'stylesheet',
-// )
-// link(
-//   'https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@300;400;500;600;700&display=swap',
-//   'stylesheet',
-// )
+link('https://fonts.gstatic.com', 'preconnect')
+link(
+  'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap',
+  'stylesheet',
+)
+link(
+  'https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@300;400;500;600;700&display=swap',
+  'stylesheet',
+)
 
 css(`
 .login-page {

@@ -4,15 +4,15 @@ import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
 import { Auth } from './page/auth.jsx'
 import { Challenges } from './page/challenges.jsx'
+import { Quizz } from './page/quizz.jsx'
 import { Timeline } from './page/timeline.jsx'
-// import { Quizz } from './page/quizz.jsx'
 
 const App = () => (
   <Router>
     <Auth path="/auth" />
     <Profile path="/profil" />
     <Challenges path="/challenges" />
-    {/* <Quizz path="/challenge/:challengeId" /> */}
+    <Quizz path="/challenge/:challengeId" />
     <Timeline path="/timeline" />
     <Home path="*" />
   </Router>

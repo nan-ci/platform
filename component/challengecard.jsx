@@ -1,5 +1,5 @@
 import { css } from '../lib/dom.js'
-import { Link, P, Span } from './elements.jsx'
+import { Link } from './elements.jsx'
 import { Img } from './image.jsx'
 
 css(`
