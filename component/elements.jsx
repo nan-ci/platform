@@ -48,8 +48,9 @@ export const Color = Object.fromEntries(
 export const divider = <Color.Comment># {'··'.repeat(38)} #</Color.Comment>
 export const equal = <Color.Pink> = </Color.Pink>
 
-export const Main = ({children}) => <div className="main-content">{children}</div>
-
+export const Main = ({ children }) => (
+  <div className="main-content">{children}</div>
+)
 
 css(`
 footer {

@@ -2,7 +2,8 @@ import { Link } from '../component/elements.jsx'
 import { Img } from '../component/image.jsx'
 import { css, link } from '../lib/dom.js'
 import { API } from '../lib/env.js'
-import { Github, Discord } from '../component/icons.jsx'
+import { Github, Discord, LogoNaN } from '../component/icons.jsx'
+import { h } from 'preact'
 
 link('https://fonts.gstatic.com', 'preconnect')
 link(
@@ -106,11 +107,10 @@ css(`
 `)
 
 export const Auth = () => {
+  console.log(h(LogoNaN))
   return (
     <>
-      <div className="lg-illustration">
-        <Img source="logo-nan.png" description="logo" size={500} />
-      </div>
+      <div className="lg-illustration"></div>
       <div className="login-box">
         <div>
           <h1 className="lg-title">Not A Number</h1>
