@@ -1,4 +1,3 @@
-import { useEffect } from 'preact/hooks'
 import { Link } from '../component/elements.jsx'
 import { Img } from '../component/image.jsx'
 import { css, link } from '../lib/dom.js'
@@ -107,11 +106,6 @@ css(`
 `)
 
 export const Auth = () => {
-  useEffect(() => {
-    document.body.setAttribute('class', 'simple-theme')
-    document.body.firstChild.setAttribute('class', 'login-page')
-  }, [])
-
   return (
     <>
       <div className="lg-illustration">
