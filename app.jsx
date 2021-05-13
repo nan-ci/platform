@@ -5,17 +5,24 @@ import { Home } from './page/home.jsx'
 import { Auth } from './page/auth.jsx'
 import { Challenges } from './page/challenges.jsx'
 import { Quizz } from './page/quizz.jsx'
-import { Timeline } from './page/timeline.jsx'
+import { Timeline } from './page/Timeline.jsx'
+import {navigate,useURL} from './lib/router.js';
+import {user} from './lib/auth.js';
 
-const App = () => (
-  <Router>
-    <Auth path="/auth" />
-    <Profile path="/profil" />
-    <Challenges path="/challenges" />
-    <Quizz path="/challenge/:challengeId" />
-    <Timeline path="/timeline" />
-    <Home path="*" />
-  </Router>
-)
-
+const App = () => {
+  const {pathname} = useURL();
+  if(!user && pathname !== '/auth'){
+    navigate('/auth');
+    return null;
+  }
+    return (<Router>
+      <Auth path="/auth" />
+      <Profile path="/profil" />
+      <Challenges path="/challenges" />
+      <Quizz path="/challenge/:challengeId" />
+      <Timeline path="/timeline" />
+      <Home path="*" />
+    </Router>
+  )
+}
 render(h(App, {}), document.getElementById('root'))

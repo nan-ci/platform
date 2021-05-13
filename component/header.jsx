@@ -114,14 +114,7 @@ const LinkMatch = ({ match, children, path, ...props }) => (
 )
 
 
-const clearStorage = async (e) => {
-  e.preventDefault();
-  localStorage.clear();
-  const res = await fetch(`${API}/logout`,{method:"GET"});
-  if(res.ok){
-      navigate('/auth',{replace:false})
-  }
-}
+const clearStorage = () => localStorage.clear();
 
 // prettier-ignore
 const NavLink = (props) => <li> - <Link {...props} /></li>

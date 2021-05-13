@@ -1,18 +1,10 @@
 import { Link } from '../component/elements.jsx'
 import { Img } from '../component/image.jsx'
-import { css, link } from '../lib/dom.js'
+import { css} from '../lib/dom.js'
 import { API } from '../lib/env.js'
 import { Github, Discord } from '../component/icons.jsx'
+import {user} from '../lib/auth.js';
 
-link('https://fonts.gstatic.com', 'preconnect')
-link(
-  'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap',
-  'stylesheet',
-)
-link(
-  'https://fonts.googleapis.com/css2?family=Open+Sans&family=Poppins:wght@300;400;500;600;700&display=swap',
-  'stylesheet',
-)
 
 css(`
 .login-page {
@@ -115,23 +107,22 @@ export const Auth = () => {
         <div>
           <h1 className="lg-title">Not A Number</h1>
           <ul>
-            <li>
+          {!user &&  <li>
               <Link href={`${API}/link/github`}>
                 <div className="social-connexion">
                   {h(Github)}
                   <span>Login with Github</span>
                 </div>
               </Link>
-            </li>
-            <p className="span-title">OR</p>
-            <li>
+            </li>}
+         {user &&  <li>
               <Link href={`${API}/link/discord`}>
                 <div className="social-connexion">
                   {h(Discord)}
                   <span>Login with Discord</span>
                 </div>
               </Link>
-            </li>
+            </li>}
           </ul>
         </div>
       </div>
