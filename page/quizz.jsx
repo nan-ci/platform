@@ -49,7 +49,7 @@ export const Quizz = () => {
           <h2>Percentage of validation: 60%</h2>
         </section>
         <section class="quizz-section">
-          {challenges[0].quizz.flatMap((quizz, index) => (
+          {challenges[0].quizz.map((quizz, index) => (
             <QuizzCard key={quizz.title} quizz={quizz} index={index} />
           ))}
         </section>

@@ -1,10 +1,9 @@
 import { Link } from '../component/elements.jsx'
 import { Img } from '../component/image.jsx'
-import { css} from '../lib/dom.js'
+import { css } from '../lib/dom.js'
 import { API } from '../lib/env.js'
-import { Github, Discord } from '../component/icons.jsx'
-import {user} from '../lib/auth.js';
-
+import { Icon } from '../component/elements.jsx'
+import { user } from '../lib/auth.js'
 
 css(`
 .login-page {
@@ -101,28 +100,34 @@ export const Auth = () => {
   return (
     <>
       <div className="lg-illustration">
-        <Img source="logo-nan.png" description="logo" size={500} />
+        <Icon
+          icon="LogoNaN"
+          style={{ width: '500px', height: '500px', opacity: '0.10' }}
+        />
       </div>
       <div className="login-box">
         <div>
           <h1 className="lg-title">Not A Number</h1>
           <ul>
-          {!user &&  <li>
-              <Link href={`${API}/link/github`}>
-                <div className="social-connexion">
-                  {h(Github)}
-                  <span>Login with Github</span>
-                </div>
-              </Link>
-            </li>}
-         {user &&  <li>
-              <Link href={`${API}/link/discord`}>
-                <div className="social-connexion">
-                  {h(Discord)}
-                  <span>Login with Discord</span>
-                </div>
-              </Link>
-            </li>}
+            {user ? (
+              <li>
+                <Link href={`${API}/link/discord`}>
+                  <div className="social-connexion">
+                    <Icon icon="Discord" />
+                    <span>Login with Discord</span>
+                  </div>
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <Link href={`${API}/link/github`}>
+                  <div className="social-connexion">
+                    <Icon icon="Github" />
+                    <span>Login with Github</span>
+                  </div>
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>

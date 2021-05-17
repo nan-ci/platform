@@ -133,7 +133,7 @@ export const Timeline = () => (
       <p class="p-desc">
         <span>Number of registrants :</span> 2109
       </p>
-      <br/>
+      <br />
       <h2 class="page-subheading">Resume</h2>
     </div>
 

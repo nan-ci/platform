@@ -32,7 +32,11 @@
     `
     document.head.appendChild(style)
     window.colors = Object.fromEntries(parts)
+
+
   })()</script>
+
+
   <style>
     .u-pad-default {
   padding-left: 1.5rem;
@@ -60,7 +64,7 @@ body {
   font-family: 'Poppins', sans-serif; }
   body.dark-theme {
     background-color: #14141c;
-    background-image: url(https://archiveprogram.github.com/assets/img/direction/ascii-pattern-tall.svg);
+    background-image: url('/assets/img/ascii-pattern-tall.svg');
     padding: 0 5rem;
     background-size: 80%;
     background-attachment: fixed;
@@ -70,6 +74,8 @@ body {
         padding: 0; } }
   body.simple-theme {
     background-color: #14141c; }
+
+
 
 
     .login-page {
@@ -131,6 +137,5 @@ a, a:hover {
 </head>
 <body class="dark-theme"><div class="main-block" id="root"></div>
   <script type="module" src="./js/app.js"></script>
-  <script type="module" src="./assets/js/index.js"></script>
 </body>
 </html>

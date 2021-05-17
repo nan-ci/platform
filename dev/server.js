@@ -1,8 +1,9 @@
 import { createServer, request } from 'http'
 import { readFile, writeFile } from 'fs/promises'
-import { join } from 'path'
+import { join, extname } from 'path'
+import mime from 'mime'
 
-import { rootDir,getExtname,getContentType } from './utils.js'
+import { rootDir } from './utils.js'
 
 // Start esbuild's server on a random local port
 const { generate, serve } = await import('./build.js')
@@ -28,7 +29,6 @@ NAN.entries = await readFile(db, 'utf8')
 createServer(async (req, res) => {
   const { url: path, method } = req
   const url = new URL(`${process.env.DOMAIN}${path}`)
-  console.log(req.method, url.pathname, Object.fromEntries(url.searchParams))
 
   if (path.startsWith('/js/')) {
     // Forward each incoming request to esbuild
@@ -42,11 +42,10 @@ createServer(async (req, res) => {
     return req.pipe(proxyReq, { end: true })
   }
 
-
-  if(path.startsWith('/assets/')){
-    const file = await readFile(join(rootDir,'public',path));
-    res.writeHead(200,{'Content-Type':getContentType(getExtname(path))})
-   return res.end(file)
+  if (path.startsWith('/assets/')) {
+    const file = await readFile(join(rootDir, 'public', path))
+    res.writeHead(200, { 'Content-Type': mime.getType(extname(path)) })
+    return res.end(file)
   }
   // Handle the root index
   if (!url.pathname.startsWith('/api/')) return res.end(await generate('index'))

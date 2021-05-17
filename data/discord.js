@@ -13,5 +13,5 @@ export const roles = [
   { id: '833808124317532221', name: 'Student', key: 'student' },
 ]
 
-export const rolesById = Object.fromEntries(roles.map(r => [r.id, r]))
-export const rolesByKey = Object.fromEntries(roles.map(r => [r.key, r]))
+export const rolesById = Object.fromEntries(roles.map((r) => [r.id, r]))
+export const rolesByKey = Object.fromEntries(roles.map((r) => [r.key, r]))

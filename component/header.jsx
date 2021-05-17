@@ -1,11 +1,9 @@
-import { Link, Div } from './elements.jsx'
-import {Img} from './image.jsx';
-import { specialities } from '../data/discord.js'
-import { user } from '../lib/auth.js'
-import { HASH, API } from '../lib/env.js'
-import { navigate, useURL } from '../lib/router.js'
-import {css} from '../lib/dom.js';
-import {ChevronRight,Home,LogOut,Close} from './icons.jsx';
+import { Link, Div, Icon } from './elements.jsx'
+import { Img } from './image.jsx'
+import { API } from '../lib/env.js'
+import { useURL } from '../lib/router.js'
+import { css } from '../lib/dom.js'
+import { useEffect } from 'preact/hooks'
 
 css(`
 .sidebar {
@@ -101,54 +99,25 @@ css(`
 const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
-
 const LinkMatch = ({ match, children, path, ...props }) => (
   <li>
-      <Link {...props}>
-          <div class={`n-item${path === props.href ? " active":""}`}>
-            {h(ChevronRight)}
-              <span>{children}</span>
-          </div>
-      </Link>
+    <Link {...props}>
+      <div class={`n-item${path === props.href ? ' active' : ''}`}>
+        <Icon icon="ChevronRight" />
+        <span>{children}</span>
+      </div>
+    </Link>
   </li>
 )
 
-
-const clearStorage = () => localStorage.clear();
+const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
-const NavLink = (props) => <li> - <Link {...props} /></li>
+// const NavLink = (props) => <li> - <Link {...props} /></li>
 
-const LogAction = () => {
-  if (!user) {
-    return (
-      <NavLink href={`${API}/link/github`} icon="Github">
-        Join with Github
-      </NavLink>
-    )
-  }
-
-  return user.discordId ? (
-    <NavLink href={`${API}/logout`} onclick={clearStorage}>
-      Logout
-    </NavLink>
-  ) : (
-    Object.entries(specialities).map(([key, { id, name, color }]) => (
-      <NavLink
-        key={key}
-        href={`${API}/link/discord?speciality=${key}`}
-        icon="Discord"
-        style={{ color: parseColor(color) }}
-      >
-        {name}
-      </NavLink>
-    ))
-  )
-}
-
-const Version = () => (
-  <Div fg="comment">#/bin/nan --hash={HASH.slice(0, 80 - 17)}</Div>
-)
+// const Version = () => (
+//   <Div fg="comment">#/bin/nan --hash={HASH.slice(0, 80 - 17)}</Div>
+// )
 
 const SideBarFirst = () => (
   <div class="sidebar__first">
@@ -162,57 +131,82 @@ const SideBarFirst = () => (
           </li>
           <li>
               <Link href="/">
-              {h(Home)}
+              <Icon icon="Home" />
               </Link>
           </li>
           <li>
             <Link href={`${API}/logout`} onclick={clearStorage}>
-               {h(LogOut)}
+             <Icon icon="LogOut" />
             </Link>
           </li>
       </ul>
     </div>
 );
 
-const SideBarSecond = ({children}) => (
+const SideBarSecond = ({ children }) => (
   <div class="sidebar__second">
-        <ul class="mac-control">
-            <li>
-                <span class="--red"></span>
-            </li>
-            <li>
-                <span class="--yellow"></span>
-            </li>
-            <li>
-                <span class="--green"></span>
-            </li>
-        </ul>
-       {children}
-      </div>
-  );
+    <ul class="mac-control">
+      <li>
+        <span class="--red"></span>
+      </li>
+      <li>
+        <span class="--yellow"></span>
+      </li>
+      <li>
+        <span class="--green"></span>
+      </li>
+    </ul>
+    {children}
+  </div>
+)
 
 const Nav = ({ path }) => (
   <nav class="side-nav">
-  <ul>
+    <ul>
       <li>
-          <div class="n-item" id="sidebar_close_controller">
-              {h(Close)}
-              <span>Close</span>
-          </div>
+        <div class="n-item" id="sidebar_close_controller">
+          <Icon icon="Close" />
+          <span>Close</span>
+        </div>
       </li>
-      <LinkMatch path={path} href="/">Home</LinkMatch>
-      <LinkMatch path={path} href="/challenges">Challenges</LinkMatch>
-      <LinkMatch path={path} href="/timeline">Timeline</LinkMatch>
-      <LinkMatch path={path} href="/profil">Profile</LinkMatch>
-  </ul>
-</nav>
+      <LinkMatch path={path} href="/">
+        Home
+      </LinkMatch>
+      <LinkMatch path={path} href="/challenges">
+        Challenges
+      </LinkMatch>
+      <LinkMatch path={path} href="/timeline">
+        Timeline
+      </LinkMatch>
+      <LinkMatch path={path} href="/profil">
+        Profile
+      </LinkMatch>
+    </ul>
+  </nav>
 )
 
 export const Header = () => {
   const { pathname: path } = useURL()
+
+  useEffect(() => {
+    const hmenu = document.getElementById('hamburgerMenu')
+    const sidebar = document.getElementById('sideMenu')
+    const closeSidebarController = document.getElementById(
+      'sidebar_close_controller',
+    )
+
+    hmenu.addEventListener('click', () => {
+      sidebar.classList.toggle('open')
+    })
+
+    closeSidebarController.addEventListener('click', () => {
+      sidebar.classList.toggle('open')
+    })
+  }, [])
+
   return (
-    <div class="sidebar" id="sideMenu">
-      <SideBarFirst/>
+    <div class={`sidebar`} id="sideMenu">
+      <SideBarFirst />
       <SideBarSecond>
         <Nav path={path} />
       </SideBarSecond>

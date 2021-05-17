@@ -84,7 +84,7 @@ o['partial * should match anything after the match also handle params'] = {
 // RANKING
 o['get the total number when we compute each word after the slash tag'] = {
   it: () => rank('/admin/user/:userId'),
-  is: 8
+  is: 8,
 }
 
 o['get the correct number when we match to *'] = {
@@ -99,7 +99,7 @@ o['get the correct number when we create a new user '] = {
 
 o['* should match anything and handle all params to get the correct number'] = {
   it: () => rank('/admin/user/:userId/*'),
-  is: 9
+  is: 9,
 }
 
 o['trailing slash with user param to get the correct number'] = {

@@ -72,7 +72,7 @@ GET.auth.discord = async ({ url }) => {
   join.reply.ok || console.error('Unable to join discord:', join.reply)
   user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'student'
   const pendingUpdate = db.set(session.name, user)
-  const location = `/?${new URLSearchParams(user)}`
+  const location = `/auth?${new URLSearchParams(user)}`
   return new Response(null, { headers: { location }, status: 301 })
 }
 
@@ -140,7 +140,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
       'set-cookie': [
         `nan-session=${session}`,
         'max-age=31536000',
-        'path=/auth',
+        'path=/',
         `domain=${hostname}`,
         'httponly',
         'samesite=strict',

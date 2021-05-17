@@ -1,8 +1,8 @@
-import {Title,Link} from '../component/elements.jsx'
-import {Img} from '../component/image.jsx';
-import {Layout} from '../component/layout.jsx'
-import {evaluations} from '../data/evaluations.js';
-import {css} from '../lib/dom.js';
+import { Title, Link } from '../component/elements.jsx'
+import { Img } from '../component/image.jsx'
+import { Layout } from '../component/layout.jsx'
+import { evaluations } from '../data/evaluations.js'
+import { css } from '../lib/dom.js'
 
 css(`
 .quiz-desc {
@@ -33,32 +33,44 @@ css(`
       color: #545dd3; }
     .quiz-desc li:last-child {
       margin-top: 3rem; }
-`);
+`)
 
-export const Evaluation = ({evaluationId}) => {
- const currentEvaluation = evaluations.find(ev => ev.id === +evaluationId);
-  return <Layout>
-  <Title>Quizz n°1</Title>
-  <div class="quiz-desc">
-      <Img source={"illustrations/"+currentEvaluation.image} class="img-quiz-illustration" alt="illustration" />
-      <h1>{currentEvaluation.name}</h1>
-      <div class="badge-time">
+export const Evaluation = ({ evaluationId }) => {
+  const currentEvaluation = evaluations.find((ev) => ev.id === +evaluationId)
+  return (
+    <Layout>
+      <Title>Quizz n°1</Title>
+      <div class="quiz-desc">
+        <Img
+          source={'illustrations/' + currentEvaluation.image}
+          class="img-quiz-illustration"
+          alt="illustration"
+        />
+        <h1>{currentEvaluation.name}</h1>
+        <div class="badge-time">
           temps restant &bull; <span>{currentEvaluation.time}</span>
-      </div>
-      <p class="para-desc">
-        {currentEvaluation.description}
-      </p>
+        </div>
+        <p class="para-desc">{currentEvaluation.description}</p>
 
-      <ol>
-          <li><span>Nombre de question:</span> {currentEvaluation.questions.length}</li>
-          <li><span>Nombre de tentative:</span> {currentEvaluation.nbreTentatives}</li>
-          <li><span>Pourcentage de validation:</span> {currentEvaluation.percentToPass}%</li>
+        <ol>
           <li>
-              <Link href="/evaluation/quizz">
-                  <button class="btn-green">Passer le quiz</button>
-              </Link>
+            <span>Nombre de question:</span>{' '}
+            {currentEvaluation.questions.length}
           </li>
-      </ol>
-  </div>
-</Layout>
+          <li>
+            <span>Nombre de tentative:</span> {currentEvaluation.nbreTentatives}
+          </li>
+          <li>
+            <span>Pourcentage de validation:</span>{' '}
+            {currentEvaluation.percentToPass}%
+          </li>
+          <li>
+            <Link href="/evaluation/quizz">
+              <button class="btn-green">Passer le quiz</button>
+            </Link>
+          </li>
+        </ol>
+      </div>
+    </Layout>
+  )
 }

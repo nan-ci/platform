@@ -7,21 +7,23 @@ export const challenges = [
     quizz: [
       {
         title: "What's the Javascript",
-        options: [{ label: 'An programming language', isTrue: true },
-        {label: 'A code', isTrue: false }
-      ]
+        options: [
+          { label: 'An programming language', isTrue: true },
+          { label: 'A code', isTrue: false },
+        ],
       },
       {
         title: "What's the HTML",
-        options: [{label: 'un language de programmation', isTrue: false },
-        {label:'un language de balisage', isTrue: true }
-      ],
+        options: [
+          { label: 'un language de programmation', isTrue: false },
+          { label: 'un language de balisage', isTrue: true },
+        ],
       },
       {
         title: "What's the CSS",
         options: [
-          {label:'un language de balissage', isTrue: false },
-          {label: 'une feuille de style en cascade', isTrue: true },
+          { label: 'un language de balissage', isTrue: false },
+          { label: 'une feuille de style en cascade', isTrue: true },
         ],
       },
     ],

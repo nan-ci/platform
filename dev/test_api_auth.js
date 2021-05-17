@@ -103,14 +103,17 @@ o['GET /auth/github with a proper state'] = {
     eq(headers.location, `/auth?${new URLSearchParams(user)}`)
     const [session, ...parts] = headers['set-cookie'].split('; ')
     eq(session.startsWith('nan-session=user:tester:'), true)
-    eq(parts.sort(), [
-      'httponly',
-      'max-age=31536000',
-      'samesite=strict',
-      'secure',
-      `domain=${hostname}`,
-      'path=/auth',
-    ].sort())
+    eq(
+      parts.sort(),
+      [
+        'httponly',
+        'max-age=31536000',
+        'samesite=strict',
+        'secure',
+        `domain=${hostname}`,
+        'path=/',
+      ].sort(),
+    )
 
     // the user session is set in the database
     eq(NAN.entries[session.slice(12)]?.metadata, user)
@@ -172,7 +175,7 @@ o['GET /auth/discord with a proper state'] = {
     // location should include user own discordId
     const discordId = '13371337'
     const discordUser = { ...user, discordId, email, avatar, speciality }
-    eq(headers.location, `/?${new URLSearchParams(discordUser)}`)
+    eq(headers.location, `/auth?${new URLSearchParams(discordUser)}`)
 
     // the user session is set in the database
     eq(NAN.entries[name]?.metadata, discordUser)
@@ -252,7 +255,7 @@ o['GET /auth/discord with a proper state'] = {
     const role = 'student'
     const discordId = '13381338'
     const discordUser = { ...user, discordId, email, avatar, speciality, role }
-    eq(headers.location, `/?${new URLSearchParams(discordUser)}`)
+    eq(headers.location, `/auth?${new URLSearchParams(discordUser)}`)
 
     // if user already exists in discord we expect to have
     // another PATCH request made to discord servers

@@ -117,19 +117,20 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
   )
 }
 
-
 export const Form = ({ title, children, submit, ...props }) => (
   <form class="form" {...props}>
     {children}
   </form>
 )
 
-export const InputGroup = ({children,labelText,labelForAttr}) => {
-  return <div class="input-group">
+export const InputGroup = ({ children, labelText, labelForAttr }) => {
+  return (
+    <div class="input-group">
       <label for={labelForAttr}>{labelText}</label>
       {children}
-  </div>
-};
+    </div>
+  )
+}
 
 export const Input = ({
   type,
@@ -140,22 +141,21 @@ export const Input = ({
   ...rest
 }) => {
   return (
-      <input
-
-       {...rest}
-       class="str"
-        type={type}
-        value={value}
-        placeholder={placeholder}
-        onInput={(e) => onChange(e)}
-        required={required}
-      />
+    <input
+      {...rest}
+      class="str"
+      type={type}
+      value={value}
+      placeholder={placeholder}
+      onInput={(e) => onChange(e)}
+      required={required}
+    />
   )
 }
 
-export const Button = ({ value, type, link, icon,...rest }) => {
+export const Button = ({ value, type, link, icon, ...rest }) => {
   const onClick = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     document.location.href = link
   }
   return (

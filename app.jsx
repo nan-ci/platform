@@ -8,14 +8,17 @@ import { Quizz } from './page/quizz.jsx'
 import { Timeline } from './page/Timeline.jsx'
 import {navigate,useURL} from './lib/router.js';
 import {user} from './lib/auth.js';
+import { useEffect } from 'preact/hooks'
 
 const App = () => {
+
   const {pathname} = useURL();
   if(!user && pathname !== '/auth'){
     navigate('/auth');
     return null;
   }
-    return (<Router>
+
+  return (<Router>
       <Auth path="/auth" />
       <Profile path="/profil" />
       <Challenges path="/challenges" />

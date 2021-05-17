@@ -5,7 +5,7 @@ import * as esbuild from 'esbuild'
 
 import { rootDir, DEV, time } from './utils.js'
 
-const getHash = async head => {
+const getHash = async (head) => {
   if (!head.startsWith('ref:')) return { hash: head.trim(), branch: 'detached' }
   const parts = head.split(' ')[1].trim().split('/')
   const branch = parts[parts.length - 1]
@@ -18,7 +18,10 @@ try {
   const { hash, branch } = await getHash(head)
   process.env.HASH = `${branch}@${hash.trim()}`
 } catch (err) {
-  console.warn('Unable to load git commit version, fallback to time based hash', err)
+  console.warn(
+    'Unable to load git commit version, fallback to time based hash',
+    err,
+  )
   const now = Math.floor((Date.now() - 16e11) / 1000)
   process.env.HASH = `unk@${now.toString(36)}`
 }
@@ -26,7 +29,8 @@ try {
 const templateDir = join(rootDir, 'template')
 const readEntry = async ({ name, ext, base }) => [
   name,
-  ext === '.js'? (await import(join(templateDir, base))).default()
+  ext === '.js'
+    ? (await import(join(templateDir, base))).default()
     : await readFile(join(templateDir, base), 'utf8'),
 ]
 
@@ -44,7 +48,6 @@ const config = {
   jsxFactory: 'h',
   format: 'esm',
   define: Object.fromEntries(envEntries),
-  loader:{".svg":"dataurl",".png":"dataurl"},
   inject: [DEV ? 'lib/preact-shim-dev.js' : 'lib/preact-shim.js'],
   ...(DEV ? { sourcemap: 'inline' } : { splitting: true, minify: true }),
 }

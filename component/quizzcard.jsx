@@ -41,9 +41,9 @@ css(`
 `)
 
 export const QuizzCard = ({ quizz, index }) => {
-  const [response, setResponse] = useState({response:''})
+  const [response, setResponse] = useState({ response: '' })
   const handleChange = (e) => {
-    setResponse({ ...response, [e.target.name]: e.target.value})
+    setResponse({ ...response, [e.target.name]: e.target.value })
   }
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -53,20 +53,20 @@ export const QuizzCard = ({ quizz, index }) => {
       <div class="quizz-badge">{index + 1}</div>
       <p class="quizz-title">{quizz.title}</p>
 
-        <form onSubmit={handleSubmit} class="quizz-response">
-          {quizz.options.flatMap((item) => (
-            <label class="quizz-label">
-              <span class="quizz-span">{item.label}</span>
-              <input
-                type="radio"
-                checked={response.response === item.label}
-                name="response"
-                value={item.label}
-                onChange={handleChange}
-              />
-            </label>
-          ))}
-        </form>
+      <form onSubmit={handleSubmit} class="quizz-response">
+        {quizz.options.map((item) => (
+          <label class="quizz-label">
+            <span class="quizz-span">{item.label}</span>
+            <input
+              type="radio"
+              checked={response.response === item.label}
+              name="response"
+              value={item.label}
+              onChange={handleChange}
+            />
+          </label>
+        ))}
+      </form>
     </div>
   )
 }

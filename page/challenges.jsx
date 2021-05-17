@@ -8,7 +8,7 @@ export const Challenges = () => {
     <Layout>
       <Title>Challenges</Title>
       <GridContainer>
-        {challenges.flatMap((item) => (
+        {challenges.map((item) => (
           <ChallengeCard key={item.id} challenge={item} />
         ))}
       </GridContainer>

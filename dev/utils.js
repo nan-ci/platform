@@ -24,28 +24,3 @@ export const mapV = (obj, fn) =>
 export const times = (n, fn, i = -1) => {
   while (++i < n) fn(i)
 }
-
-export const getExtname = (path) => {
-  const split = path.split('/');
-  const lastPart = split[split.length-1].split('.');
-  return '.'+lastPart[1];
-}
-
-export const getContentType = (ext) => {
-  switch(ext){
-    case ".js":
-      return "text/javascript";
-    case ".css":
-      return "text/css";
-    case ".png":
-      return "image/png";
-    case ".jpeg":
-      return "image/jpeg";
-    case ".jpg":
-      return "image/jpg";
-    case ".gif":
-      return "image/gif";
-    case ".svg":
-      return "image/svg+xml";
-  }
-}

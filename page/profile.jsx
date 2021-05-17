@@ -58,7 +58,7 @@ export const Profile = () => (
     <Title>Profile</Title>
     <div class="u-pad-default">
       <div class="user-card">
-          <Img source="user.png" description="user" size={100}/>
+        <Img source="user.png" description="user" size={100} />
         <div class="uc_content">
           {Object.keys(profile).map((key, index) => (
             <div class="ucc-field" key={index}>
@@ -107,12 +107,7 @@ export const Profile = () => (
               disabled
             />
           </InputGroup>
-          <Button
-            class="btn-purple"
-            type="submit"
-            value="Save"
-            link="/"
-          />
+          <Button class="btn-purple" type="submit" value="Save" link="/" />
         </Form>
       </section>
     </div>

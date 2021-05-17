@@ -21,7 +21,7 @@ css(`
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(25rem, 1fr));
       column-gap: 1.5rem; }
-`);
+`)
 
 const colors = window.colors || {}
 const getStyle = (props) => props.style || (props.style = {})
@@ -48,8 +48,7 @@ export const Color = Object.fromEntries(
 export const divider = <Color.Comment># {'··'.repeat(38)} #</Color.Comment>
 export const equal = <Color.Pink> = </Color.Pink>
 
-export const Main = ({children}) => <div className="main-content">{children}</div>
-
+export const Main = ({ children }) => <div class="main-content">{children}</div>
 
 css(`
 footer {
@@ -60,7 +59,7 @@ footer {
 export const Title = ({ children }) => (
   <div class="u-pad-default">
     {toChildArray(children).map((child) => [
-      <h1 class="page-heading">{child}</h1>
+      <h1 class="page-heading">{child}</h1>,
     ])}
   </div>
 )
@@ -70,7 +69,6 @@ export const GridContainer = ({ children }) => (
     {toChildArray(children).map((child) => [<span>{child}</span>])}
   </div>
 )
-
 
 const iconStyle = { style: { marignLeft: '2em' } }
 export const Link = colorize(({ icon, children, ...props }) => {
@@ -84,3 +82,7 @@ export const Link = colorize(({ icon, children, ...props }) => {
     children,
   )
 })
+
+export const Icon = ({ icon, style, ...props }) => {
+  return h(Icons[icon], { style: { ...style }, ...props })
+}
