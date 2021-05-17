@@ -41,7 +41,7 @@ export const ResultCard = ({ data }) => {
         % ~ {data.foundQuestions} bonnes réponses sur{' '}
         {data.quizz.questions.length}
       </p>
-      <p>&bull; taux de validation: {data.taux}%</p>
+      <p>&bull; taux de validation: {data.rate}%</p>
       <br />
       <p>
         <a href="#" class="sp-link">

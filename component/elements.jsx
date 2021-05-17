@@ -58,9 +58,7 @@ footer {
 
 export const Title = ({ children }) => (
   <div class="u-pad-default">
-    {toChildArray(children).map((child) => [
-      <h1 class="page-heading">{child}</h1>,
-    ])}
+    <h1 class="page-heading">{children}</h1>
   </div>
 )
 

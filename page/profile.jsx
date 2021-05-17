@@ -60,10 +60,10 @@ export const Profile = () => (
       <div class="user-card">
         <Img source="user.png" description="user" size={100} />
         <div class="uc_content">
-          {Object.keys(profile).map((key, index) => (
-            <div class="ucc-field" key={index}>
-              <small>{key}</small>
-              <span>{profile[key]}</span>
+          {Object.entries(profile).map((val) => (
+            <div class="ucc-field" key={val}>
+              <small>{val[0]}</small>
+              <span>{val[1]}</span>
             </div>
           ))}
         </div>
