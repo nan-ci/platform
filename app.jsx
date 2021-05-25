@@ -1,27 +1,19 @@
 import { render } from 'preact'
-
-import { center } from './data/ascii.js'
-import { Header } from './component/header.jsx'
-import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
-import { StudentList } from './page/studentlist'
+import { StudentList } from './page/studentlist.jsx'
+import { Timeline } from './page/timeline.jsx'
+import { Challenges } from './page/challenges.jsx'
 
 const App = () => (
-  <>
-    <Header />
-    <Router>
-      <Profile path="/profile" />
-      <StudentList path="/studentlist" />
-      <Home path="*" />
-    </Router>
-    <footer>
-      {divider}
-      <P fg="comment">{center('Work in progress - NaN - Abidjan')}</P>
-      {divider}
-    </footer>
-  </>
+  <Router>
+    <Profile path="/profile" />
+    <StudentList path="/studentlist" />
+    <Timeline path="/studentlist" />
+    <Challenges path="/studentlist" />
+    <Home path="*" />
+  </Router>
 )
 
 render(h(App, {}), document.getElementById('root'))

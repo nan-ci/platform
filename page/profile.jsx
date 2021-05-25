@@ -1,3 +1,3 @@
-import { Main } from '../component/elements.jsx'
+import { Layout } from '../component/Layout.jsx'
 
-export const Profile = () => <Main>Profile :)</Main>
+export const Profile = () => <Layout>Profile :)</Layout>
