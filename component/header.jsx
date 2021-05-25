@@ -1,5 +1,4 @@
-import { Link, Div, Color, Title } from './elements.jsx'
-import { specialities } from '../data/discord.js'
+import { Link, Div, Color, Title, divider } from './elements.jsx'
 import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
 import { navigate, useURL } from '../lib/router.js'
@@ -22,14 +21,7 @@ const clearStorage = () => localStorage.clear()
 // prettier-ignore
 export const NavLink = (props) => <li> <Link {...props} /></li>
 const LogAction = () => {
-  if (!user) {
-    return navigate('/login')
-    // return (
-    //   <NavLink href={`${API}/link/github`} icon="Github">
-    //     Join with Github
-    //   </NavLink>
-    // )
-  }
+  if (!user) return navigate('/login')
 
   return user.discordId ? (
     <NavLink href={`${API}/logout`} onclick={clearStorage}>
@@ -37,16 +29,6 @@ const LogAction = () => {
     </NavLink>
   ) : (
     navigate('/learningchoice')
-    // Object.entries(roles).map(([key, { id, name, color }]) => (
-    //   <NavLink
-    //     key={key}
-    //     href={`${API}/link/discord?speciality=${key}`}
-    //     icon="Discord"
-    //     style={{ color: parseColor(color) }}
-    //   >
-    //     {name}
-    //   </NavLink>
-    // ))
   )
 }
 
@@ -86,6 +68,7 @@ export const Header = ({ page, title, children }) => {
       <h1>{`  ${path}`} </h1>
       {'\n'}
       {children}
+      {divider}
     </header>
   )
 }

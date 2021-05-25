@@ -7,7 +7,7 @@ import { Timeline } from './page/timeline.jsx'
 import { Login } from './page/login.jsx'
 import { Challenges } from './page/challenges.jsx'
 import { LearningChoice } from './page/learningchoice'
-import { user } from './lib/auth.js'
+import { Curriculum } from './page/curriculum.jsx'
 
 const App = () => (
   <Router>
@@ -17,6 +17,7 @@ const App = () => (
     <Timeline path="/studentlist" />
     <Challenges path="/studentlist" />
     <LearningChoice path="/learningchoice" />
+    <Curriculum path="/curriculum" />
     <Home path="*" />
   </Router>
 )
