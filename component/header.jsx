@@ -2,9 +2,9 @@ import { Link, Div, Color, Title } from './elements.jsx'
 import { specialities } from '../data/discord.js'
 import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
-import { useURL } from '../lib/router.js'
+import { navigate, useURL } from '../lib/router.js'
 
-const parseColor = (c) =>
+export const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
 const LinkMatch = ({ match, children, path, ...props }) => (
@@ -20,14 +20,15 @@ const LinkMatch = ({ match, children, path, ...props }) => (
 const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
-const NavLink = (props) => <li> - <Link {...props} /></li>
+export const NavLink = (props) => <li> <Link {...props} /></li>
 const LogAction = () => {
   if (!user) {
-    return (
-      <NavLink href={`${API}/link/github`} icon="Github">
-        Join with Github
-      </NavLink>
-    )
+    return navigate('/login')
+    // return (
+    //   <NavLink href={`${API}/link/github`} icon="Github">
+    //     Join with Github
+    //   </NavLink>
+    // )
   }
 
   return user.discordId ? (
@@ -35,16 +36,17 @@ const LogAction = () => {
       Logout
     </NavLink>
   ) : (
-    Object.entries(specialities).map(([key, { id, name, color }]) => (
-      <NavLink
-        key={key}
-        href={`${API}/link/discord?speciality=${key}`}
-        icon="Discord"
-        style={{ color: parseColor(color) }}
-      >
-        {name}
-      </NavLink>
-    ))
+    navigate('/learningchoice')
+    // Object.entries(roles).map(([key, { id, name, color }]) => (
+    //   <NavLink
+    //     key={key}
+    //     href={`${API}/link/discord?speciality=${key}`}
+    //     icon="Discord"
+    //     style={{ color: parseColor(color) }}
+    //   >
+    //     {name}
+    //   </NavLink>
+    // ))
   )
 }
 
