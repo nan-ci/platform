@@ -36,7 +36,6 @@ export const equal = <Color.Pink> = </Color.Pink>
 export const Main = ({ children }) => (
   <main>
     {toChildArray(children).map((child) => [
-      <div>{divider}</div>,
       <section>{child}</section>,
     ])}
   </main>
