@@ -9,7 +9,7 @@ const { generate, serve } = await import('./build.js')
 const { host: hostname, port } = await serve()
 
 // Set domain before we run the tests
-const PORT = process.env.PORT || port + 1
+const PORT = process.env.PORT || 8000
 process.env.DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`
 
 // run tests
