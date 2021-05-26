@@ -25,7 +25,7 @@ const LogAction = () => {
 
   return user.discordId ? (
     <NavLink href={`${API}/logout`} onclick={clearStorage}>
-      Logout
+     Logout
     </NavLink>
   ) : (
     navigate('/learningchoice')

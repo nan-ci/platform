@@ -3,10 +3,10 @@ import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
 import { StudentList } from './page/studentlist.jsx'
-import { Timeline } from './page/timeline.jsx'
+import { Settings } from './page/settings.jsx'
 import { Login } from './page/login.jsx'
 import { Challenges } from './page/challenges.jsx'
-import { LearningChoice } from './page/learningchoice'
+import { LearningChoice } from './page/learningchoice.jsx'
 import { Curriculum } from './page/curriculum.jsx'
 
 const App = () => (
@@ -14,7 +14,7 @@ const App = () => (
     <Profile path="/profile" />
     <Login path="/login" />
     <StudentList path="/studentlist" />
-    <Timeline path="/studentlist" />
+    <Settings path="/settings" />
     <Challenges path="/studentlist" />
     <LearningChoice path="/learningchoice" />
     <Curriculum path="/curriculum" />
