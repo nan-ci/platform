@@ -25,7 +25,7 @@ const LogAction = () => {
 
   return user.discordId ? (
     <NavLink href={`${API}/logout`} onclick={clearStorage}>
-      Logout
+     Logout
     </NavLink>
   ) : (
     navigate('/learningchoice')
@@ -60,12 +60,12 @@ const Nav = ({ path }) => (
         Challenges
       </LinkMatch>
       {' - '}
-      <LinkMatch path={path} href="/timeline">
-        Timeline
-      </LinkMatch>
-      {' - '}
       <LinkMatch path={path} href="/curriculum">
         Curriculum
+      </LinkMatch>
+      {' - '}
+      <LinkMatch path={path} href="/settings">
+        Settings
       </LinkMatch>
       {' - '}
       <LogAction />
