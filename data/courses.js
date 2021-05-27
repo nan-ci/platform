@@ -27,7 +27,10 @@ export const courses = [
     name: 'flutter',
     title: 'Learn flutter',
     description: '',
-    content: [],
+    curriculum: [
+      { id: 1, title: 'Getting started with Flutter', hours: 300 },
+      { id: 2, title: 'Advanced Flutter', hours: 300 },
+    ],
   },
   {
     id: 4,
