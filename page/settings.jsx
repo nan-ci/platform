@@ -1,3 +1,3 @@
-import { Layout } from "../component/Layout.jsx";
+import { Layout } from "../component/layout.jsx";
 
 export const Settings = () => <Layout>Settings 🚀</Layout>

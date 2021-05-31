@@ -1,5 +1,5 @@
 import { Div, divider, P } from '../component/elements.jsx'
-import { Layout } from '../component/Layout.jsx'
+import { Layout } from '../component/layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 css(`
