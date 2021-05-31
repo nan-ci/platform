@@ -33,9 +33,9 @@ export const Profile = () => (
         <i class="fa fa-envelope"></i> {user.email}
       </span>
       <span class="_info">
-        <i class="fa fa-map-marker"></i> Abidjan
+        <i class="fa fa-map-marker"></i> {user.location}
       </span>
-      <P class="_info">I love things about Javascript</P>
+      <P class="_info">{user.biography}</P>
       <span class="_info">
         <i class="fa fa-calendar"></i> Joined {new Date().toGMTString()}
       </span>
