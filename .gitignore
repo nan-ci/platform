@@ -104,7 +104,9 @@ dist
 .tern-port
 
 # Editor junk
-.idea/
+.idea/d
+.vscode/
+.DS_STORE
 
 # build
 public/

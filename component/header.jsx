@@ -20,15 +20,14 @@ const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
 export const NavLink = (props) => <li> <Link {...props} /></li>
-const LogAction = () => {
-  if (!user) return navigate('/login')
 
-  return user.discordId ? (
-    <NavLink href={`${API}/logout`} onclick={clearStorage}>
-     Logout
-    </NavLink>
-  ) : (
-    navigate('/learningchoice')
+const LogAction = () => {
+  return (
+    user.discordId && (
+      <NavLink href={`${API}/logout`} onclick={clearStorage}>
+        Logout
+      </NavLink>
+    )
   )
 }
 
@@ -76,6 +75,8 @@ const Nav = ({ path }) => (
 
 export const Header = ({ page, title, children }) => {
   const { pathname: path } = useURL()
+  if (!user) return navigate('/login')
+  if (!user.discordId) return navigate('/learningchoice')
   return (
     <header>
       <Nav path={path} />
