@@ -42,6 +42,44 @@ const Comment = ({ children }) => (
     {children}
   </Color.Comment>
 )
+
+export const Select = ({
+  name,
+  value,
+  comment,
+  errors,
+  children,
+  ...props
+}) => {
+  const [val, setVal] = useState(value || '')
+  const size = Math.max(val.length || 0, 1)
+  console.log('size', size)
+  const onInput = ({ target }) => setVal(target.value)
+  const style = props.style || (props.style = {})
+  style.width = `300px`
+  style.border = '2px solid white'
+  style.padding = '0.3rem'
+  style.background = 'none'
+  style.borderRadius = '0.3rem'
+
+  const description = errors[name] ? (
+    <Comment>
+      <Color.Red> Invalid</Color.Red>: {errors[name]}
+    </Comment>
+  ) : (
+    comment && <Comment>{comment}</Comment>
+  )
+
+  return (
+    <div>
+      {description}
+      {'\n\n'}
+      <select name={name} onChange={onInput} value={val} {...props}>
+        {children}
+      </select>
+    </div>
+  )
+}
 export const Text = ({ name, value, comment, errors, children, ...props }) => {
   const [val, setVal] = useState(value || '')
   const size = Math.max(val.length || 0, 1)
@@ -69,7 +107,6 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
       {description}
       {'\n'}
       <label>
-        {'  '}
         <span class="name">{name}</span>
         {equal}
         <span class="str">
@@ -88,18 +125,100 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
   )
 }
 
-export const Form = ({ title, children, submit, ...props }) => (
-  <form {...props}>
-    {'\n'}
-    <Title>{title}</Title>
-    {'\n'}
-    {children}
-    {submit && (
-      <>
-        <Color.Comment>{'\n  > '}</Color.Comment>
-        <button type="submit">[{submit}]</button>
-        <Color.Comment>{' <'}</Color.Comment>
-      </>
-    )}
-  </form>
-)
+export const Input = ({
+  name,
+  value,
+  comment,
+  errors,
+  type,
+  children,
+  ...props
+}) => {
+  const [val, setVal] = useState(value || '')
+  const size = Math.max(val.length || 0, 1)
+  const style = props.style || (props.style = {})
+  const onInput = ({ target }) => setVal(target.value)
+  const onFocus = ({ target }) =>
+    setTimeout(
+      () =>
+        target.selectionStart === target.selectionEnd ||
+        target.setSelectionRange(val.length, val.length),
+    )
+
+  style.width = `300px`
+  style.border = '2px solid white'
+  style.padding = '0.3rem'
+  style.background = 'none'
+  style.borderRadius = '0.3rem'
+  type === 'textarea' ? (style.height = '100px') : null
+
+  const description = errors[name] ? (
+    <Comment>
+      <Color.Red> Invalid</Color.Red>: {errors[name]}
+    </Comment>
+  ) : (
+    comment && <Comment>{comment}</Comment>
+  )
+
+  return (
+    <div>
+      {description}
+      {'\n\n'}
+      <label></label>
+      {type !== 'textarea' ? (
+        <input
+          type={type}
+          name={name}
+          onInput={onInput}
+          onFocus={onFocus}
+          value={val}
+          {...props}
+        />
+      ) : (
+        <textarea
+          type={type}
+          name={name}
+          onInput={onInput}
+          value={val}
+          {...props}
+        ></textarea>
+      )}
+    </div>
+  )
+}
+
+export const Form = ({ title, children, submit, onSubmit, ...props }) => {
+  return (
+    <form {...props} onSubmit={onSubmit}>
+      {'\n'}
+      <Title>{title}</Title>
+      {'\n'}
+      {children}
+      {'\n'}
+      {submit && (
+        <button
+          type="submit"
+          style={{
+            background: '#6070a4',
+            color: 'white',
+            padding: '0.6rem',
+            width: '250px',
+            margin: '0 auto',
+            textAlign: 'center',
+            fontWeight: 'bolder',
+            borderRadius: '5px',
+          }}
+        >
+          {submit}
+        </button>
+      )}
+      {/* {submit && (
+        <>
+          <Color.Comment>{'\n  > '}</Color.Comment>
+          <button type="submit">[{submit}]</button>
+          <Color.Comment>{' <'}</Color.Comment>
+        </>
+      )} */}
+    </form>
+  )
+}
