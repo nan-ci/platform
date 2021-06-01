@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks'
+import { Alert } from '../component/alert.jsx'
 import { Title } from '../component/elements.jsx'
 import { Layout } from '../component/layout.jsx'
 import { user } from '../lib/auth.js'
@@ -19,6 +20,7 @@ css(`
 }
 .btn-settings{
   background: var(--purple-darker);
+  outline: none;
   padding:7px;
   width: 25%;
   cursor: pointer;
@@ -37,6 +39,7 @@ export const Settings = () => {
       github: ''
     },
   )
+  const [alert, setAlert] = useState(false)
 
   const handleAccount = (e) => {
     setAccount({ ...account, [e.target.name]: e.target.value })
@@ -44,10 +47,12 @@ export const Settings = () => {
   const submitAccount = (e) => {
     e.preventDefault()
     localStorage.user = JSON.stringify(account)
+    setAlert(!alert)
   }
   return (
     <Layout>
       <center>Account settings for {user.name}</center>
+      <Alert alert={alert} message="Save with success" color="var(--green)"/>
       <form onSubmit={submitAccount}>
         <Title>Username</Title>
         <input
