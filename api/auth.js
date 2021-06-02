@@ -134,7 +134,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   return new Response(null, {
     status: 301,
     headers: {
-      location: `/?${new URLSearchParams(user)}`,
+      location: `/learningchoice?${new URLSearchParams(user)}`,
       'set-cookie': [
         `nan-session=${session}`,
         'max-age=31536000',
