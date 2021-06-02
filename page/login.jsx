@@ -3,6 +3,8 @@ import { NavLink } from '../component/header'
 import { logo } from '../data/ascii'
 import { css } from '../lib/dom'
 import { API } from '../lib/env'
+import { user } from '../lib/auth.js'
+import { navigate } from '../lib/router'
 
 css(`
 .div-login {
@@ -20,24 +22,29 @@ css(`
 }
 `)
 
-export const Login = () => (
-  <Div class="div-login">
-    <P fg="comment">{logo.split('#')}</P>
-    <P>
-      You should have a{' '}
-      <a target="_blank" href="https://www.github.com">
-        Github
-      </a>{' '}
-      and{' '}
-      <a target="_blank" href="https://www.discord.com">
-        Discord
-      </a>{' '}
-      account to continue. {'\n'}If you don't have, please create them before
-      connecting.{'\n'}
-    </P>
-    <br />
-    <NavLink href={`${API}/link/github`} style={{ fontSize: 23 }}>
-      <button class="btn-login">Join with Github</button>
-    </NavLink>
-  </Div>
-)
+export const Login = () => {
+  if (user && user.discordId) return navigate('/')
+  if (user && !user.discordId) return navigate('/learningchoice')
+
+  return (
+    <Div class="div-login">
+      <P fg="comment">{logo.split('#')}</P>
+      <P>
+        You should have a{' '}
+        <a target="_blank" href="https://www.github.com">
+          Github
+        </a>{' '}
+        and{' '}
+        <a target="_blank" href="https://www.discord.com">
+          Discord
+        </a>{' '}
+        account to continue. {'\n'}If you don't have, please create them before
+        connecting.{'\n'}
+      </P>
+      <br />
+      <NavLink href={`${API}/link/github`} style={{ fontSize: 23 }}>
+        <button class="btn-login">Join with Github</button>
+      </NavLink>
+    </Div>
+  )
+}

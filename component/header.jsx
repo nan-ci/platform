@@ -23,6 +23,7 @@ export const NavLink = (props) => <li> <Link {...props} /></li>
 
 const LogAction = () => {
   return (
+    user &&
     user.discordId && (
       <NavLink href={`${API}/logout`} onclick={clearStorage}>
         Logout
@@ -75,8 +76,10 @@ const Nav = ({ path }) => (
 
 export const Header = ({ page, title, children }) => {
   const { pathname: path } = useURL()
+  
   if (!user) return navigate('/login')
-  if (!user.discordId) return navigate('/learningchoice')
+  if(user && !user.discordId) return navigate('learningchoice');
+
   return (
     <header>
       <Nav path={path} />

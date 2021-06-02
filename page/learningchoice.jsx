@@ -38,7 +38,7 @@ export const LearningChoice = () => {
   return (
     <Div class="div-learning">
       <Form
-        submit="Submit"
+        submit="submit"
         onSubmit={send}
         style={{ textAlign: 'center' }}
         title="Fill this form below"
