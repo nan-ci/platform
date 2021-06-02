@@ -100,17 +100,20 @@ o['GET /auth/github with a proper state'] = {
 
     // expect a redirection
     eq({ body: res.body, status }, { body: null, status: 301 })
-    eq(headers.location, `/?${new URLSearchParams(user)}`)
+    eq(headers.location, `/learningchoice?${new URLSearchParams(user)}`)
     const [session, ...parts] = headers['set-cookie'].split('; ')
     eq(session.startsWith('nan-session=user:tester:'), true)
-    eq(parts.sort(), [
-      'httponly',
-      'max-age=31536000',
-      'samesite=strict',
-      'secure',
-      `domain=${hostname}`,
-      'path=/',
-    ].sort())
+    eq(
+      parts.sort(),
+      [
+        'httponly',
+        'max-age=31536000',
+        'samesite=strict',
+        'secure',
+        `domain=${hostname}`,
+        'path=/',
+      ].sort(),
+    )
 
     // the user session is set in the database
     eq(NAN.entries[session.slice(12)]?.metadata, user)

@@ -1,6 +1,5 @@
 import { Div, P } from '../component/elements.jsx'
 import { Input, Form, Select } from '../component/form.jsx'
-import { NavLink, parseColor } from '../component/header.jsx'
 import { specialities } from '../data/discord.js'
 import { css } from '../lib/dom.js'
 import { API } from '../lib/env.js'
@@ -16,13 +15,24 @@ css(`
   justify-content: center;
   align-items: center;
 }
+.navlink-learning{
+  margin: 5px 0px;
+}
+.navlink-learning:hover{
+  background: var(--white);
+}
+.title-learning{
+  font-size: 2.4rem;
+  margin: 5px 0px;
+}
 `)
 
 export const LearningChoice = () => {
   let [errors, setErrors] = useState({})
-  if (!user){
-    return navigate('/login')
-  }
+
+  if (!user)  return navigate('/login')
+  if(user && user.discordId) return navigate('/');
+  
   const send = (e) => {
     e.preventDefault()
     const form = new FormData(e.target)
@@ -39,7 +49,7 @@ export const LearningChoice = () => {
   return (
     <Div class="div-learning">
       <Form
-        submit="Submit"
+        submit="submit"
         onSubmit={send}
         style={{ textAlign: 'center' }}
         title="Fill this form below"
@@ -59,9 +69,7 @@ export const LearningChoice = () => {
           value={Object.keys(specialities)[0]}
         >
           {Object.entries(specialities).map(([key, { name, color }]) => (
-            <option value={key}>
-              {name}
-            </option>
+            <option value={key}>{name}</option>
           ))}
         </Select>
       </Form>
