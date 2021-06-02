@@ -146,10 +146,11 @@ export const Input = ({
     )
 
   style.width = `300px`
-  style.border = '2px solid white'
+  style.border = '2px solid var(--white)'
   style.padding = '0.3rem'
   style.background = 'none'
   style.borderRadius = '0.3rem'
+  style.outline = 'none'
   type === 'textarea' ? (style.height = '100px') : null
 
   const description = errors[name] ? (
@@ -212,13 +213,6 @@ export const Form = ({ title, children, submit, onSubmit, ...props }) => {
           {submit}
         </button>
       )}
-      {/* {submit && (
-        <>
-          <Color.Comment>{'\n  > '}</Color.Comment>
-          <button type="submit">[{submit}]</button>
-          <Color.Comment>{' <'}</Color.Comment>
-        </>
-      )} */}
     </form>
   )
 }

@@ -12,47 +12,32 @@ css(`
   justify-content: center;
   align-items:center;
 }
+.btn-login{
+  outline: none;
+  background: var(--comment-darker);
+  padding: 0.2em;
+  cursor: pointer;
+}
 `)
 
 export const Login = () => (
   <Div class="div-login">
     <P fg="comment">{logo.split('#')}</P>
-
-    <P fg="comment">
-      {'\n'}
-      <strong>NB : </strong>
-      you should have a github and discord account first.{'\n'}
-      If you don't have one, please create them before connecting.{'\n'} create
-      a github account{' '}
-      <NavLink
-        style={{ cursor: 'pointer' }}
-        target="_blank"
-        href="https://www.github.com"
-      >
-        https://www.github.com
-      </NavLink>
-      {'\n'} create a discord account{' '}
-      <NavLink
-        style={{ cursor: 'pointer' }}
-        target="_blank"
-        href="https://www.discord.com"
-      >
-        https://www.discord.com
-      </NavLink>
+    <P>
+      You should have a{' '}
+      <a target="_blank" href="https://www.github.com">
+        Github
+      </a>{' '}
+      and{' '}
+      <a target="_blank" href="https://www.discord.com">
+        Discord
+      </a>{' '}
+      account to continue. {'\n'}If you don't have, please create them before
+      connecting.{'\n'}
     </P>
     <br />
-    <NavLink href={`${API}/link/github`} style={{ fontSize: 30 }}>
-      <button
-        style={{
-          outline: 'none',
-          background: '#6070a4',
-          padding: '0.5rem',
-          borderRadius: '12px',
-          cursor: 'pointer',
-        }}
-      >
-        Join with Github
-      </button>
+    <NavLink href={`${API}/link/github`} style={{ fontSize: 23 }}>
+      <button class="btn-login">Join with Github</button>
     </NavLink>
   </Div>
 )
