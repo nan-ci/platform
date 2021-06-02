@@ -1,7 +1,7 @@
 import { useState } from 'preact/hooks'
 import { Alert } from '../component/alert.jsx'
 import { Title } from '../component/elements.jsx'
-import { Layout } from '../component/layout.jsx'
+import { Layout } from '../component/Layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 

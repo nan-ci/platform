@@ -1,3 +1,3 @@
-import { Layout } from '../component/layout.jsx'
+import { Layout } from '../component/Layout.jsx'
 
 export const Challenges = () => <Layout>Challenges 🧑‍🎓</Layout>
