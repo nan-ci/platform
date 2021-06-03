@@ -43,43 +43,6 @@ const Comment = ({ children }) => (
   </Color.Comment>
 )
 
-export const Select = ({
-  name,
-  value,
-  comment,
-  errors,
-  children,
-  ...props
-}) => {
-  const [val, setVal] = useState(value || '')
-  const size = Math.max(val.length || 0, 1)
-  console.log('size', size)
-  const onInput = ({ target }) => setVal(target.value)
-  const style = props.style || (props.style = {})
-  style.width = `300px`
-  style.border = '2px solid white'
-  style.padding = '0.3rem'
-  style.background = 'none'
-  style.borderRadius = '0.3rem'
-
-  const description = errors[name] ? (
-    <Comment>
-      <Color.Red> Invalid</Color.Red>: {errors[name]}
-    </Comment>
-  ) : (
-    comment && <Comment>{comment}</Comment>
-  )
-
-  return (
-    <div>
-      {description}
-      {'\n\n'}
-      <select name={name} onChange={onInput} value={val} {...props}>
-        {children}
-      </select>
-    </div>
-  )
-}
 export const Text = ({ name, value, comment, errors, children, ...props }) => {
   const [val, setVal] = useState(value || '')
   const size = Math.max(val.length || 0, 1)
@@ -131,12 +94,11 @@ export const Input = ({
   comment,
   errors,
   type,
+  inputType,
   children,
   ...props
 }) => {
   const [val, setVal] = useState(value || '')
-  const size = Math.max(val.length || 0, 1)
-  const style = props.style || (props.style = {})
   const onInput = ({ target }) => setVal(target.value)
   const onFocus = ({ target }) =>
     setTimeout(
@@ -145,28 +107,19 @@ export const Input = ({
         target.setSelectionRange(val.length, val.length),
     )
 
-  style.width = `300px`
-  style.border = '2px solid var(--white)'
-  style.padding = '0.3rem'
-  style.background = 'none'
-  style.borderRadius = '0.3rem'
-  style.outline = 'none'
-  type === 'textarea' ? (style.height = '100px') : null
-
   const description = errors[name] ? (
-    <Comment>
-      <Color.Red> Invalid</Color.Red>: {errors[name]}
-    </Comment>
+    <Title>
+      <Color.Red> # Invalid</Color.Red>: {errors[name]}
+    </Title>
   ) : (
-    comment && <Comment>{comment}</Comment>
+    comment && <Title>{comment}</Title>
   )
 
   return (
     <div>
       {description}
-      {'\n\n'}
-      <label></label>
-      {type !== 'textarea' ? (
+      {'\n'}
+      {inputType === 'input' && (
         <input
           type={type}
           name={name}
@@ -175,7 +128,8 @@ export const Input = ({
           value={val}
           {...props}
         />
-      ) : (
+      )}
+      {inputType === 'textarea' && (
         <textarea
           type={type}
           name={name}
@@ -184,32 +138,29 @@ export const Input = ({
           {...props}
         ></textarea>
       )}
+      {inputType === 'select' && (
+        <select name={name} onChange={onInput} value={val} {...props}>
+          {children}
+        </select>
+      )}
     </div>
   )
 }
 
-export const Form = ({ title, children, submit, onSubmit, ...props }) => {
+export const Form = ({
+  title,
+  children,
+  submit,
+  onSubmit,
+  buttonClassName,
+  ...props
+}) => {
   return (
     <form {...props} onSubmit={onSubmit}>
-      {'\n'}
-      <Title>{title}</Title>
-      {'\n'}
       {children}
       {'\n'}
       {submit && (
-        <button
-          type="submit"
-          style={{
-            background: '#6070a4',
-            color: 'white',
-            padding: '0.6rem',
-            width: '250px',
-            margin: '0 auto',
-            textAlign: 'center',
-            fontWeight: 'bolder',
-            borderRadius: '5px',
-          }}
-        >
+        <button type="submit" class={buttonClassName}>
           {submit}
         </button>
       )}

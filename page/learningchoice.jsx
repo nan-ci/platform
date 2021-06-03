@@ -1,6 +1,6 @@
-import { Div } from '../component/elements.jsx'
-import { Input, Form, Select } from '../component/form.jsx'
-import { roles, specialities } from '../data/discord.js'
+import { Div, P } from '../component/elements.jsx'
+import { Input, Form } from '../component/form.jsx'
+import { specialities } from '../data/discord.js'
 import { css } from '../lib/dom.js'
 import { API } from '../lib/env.js'
 import { useState } from 'preact/hooks'
@@ -15,13 +15,36 @@ css(`
   justify-content: center;
   align-items: center;
 }
+.navlink-learning{
+  margin: 5px 0px;
+}
+.navlink-learning:hover{
+  background: var(--white);
+}
+.title-learning{
+  font-size: 2.4rem;
+  margin: 5px 0px;
+}
+
+.input{
+  padding:0.5rem;
+  border: 2px solid white;
+  width:300px;
+}
+.send {
+   padding:0.5rem;
+   background:var(--comment-darker);
+   cursor:pointer;
+}
+
 `)
 
 export const LearningChoice = () => {
   let [errors, setErrors] = useState({})
-  if (!user) {
-    return navigate('/login')
-  }
+  let [col, setCol] = useState('6585772')
+  if (!user) return navigate('/login')
+  if (user && user.discordId) return navigate('/')
+
   const send = (e) => {
     e.preventDefault()
     const form = new FormData(e.target)
@@ -39,28 +62,32 @@ export const LearningChoice = () => {
     <Div class="div-learning">
       <Form
         submit="submit"
-        onSubmit={send}
         style={{ textAlign: 'center' }}
-        title="Fill this form below"
+        onSubmit={send}
+        buttonClassName="send"
       >
         <Input
+          inputType="textarea"
           name="why"
           comment="Why do you want to join NaN?"
           errors={errors}
-          type="text"
+          type="textarea"
+          className="input"
         />
         <br />
         <br />
-        <Select
+        <Input
+          inputType="select"
           name="speciality"
           comment="What do you want to learn 📚 ?"
           errors={errors}
           value={Object.keys(specialities)[0]}
+          className="input"
         >
           {Object.entries(specialities).map(([key, { name }]) => (
             <option value={key}>{name}</option>
           ))}
-        </Select>
+        </Input>
       </Form>
     </Div>
   )
