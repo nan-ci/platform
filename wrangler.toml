@@ -4,7 +4,7 @@ workers_dev = false
 account_id = "94917a33bd06f373d7688a39912e51c8"
 zone_id = "31e9526e534b476a45d9004c8eef7336"
 route = "dev.nan.ci/api/*"
-vars = { GUILD = '821033851153285170', GITHUB_CLIENT = 'e57476aac91fc32d161f', DISCORD_CLIENT = '826974634069983282' }
+vars = { GUILD = '849618048011730945', GITHUB_CLIENT = 'e57476aac91fc32d161f', DISCORD_CLIENT = '826974634069983282' }
 kv_namespaces = [
   { binding = "NAN", id = "a835efada9c74830884310cec84a0bee", preview_id = "db9d798994cd4f1e88591e35d748b02f" }
 ]
