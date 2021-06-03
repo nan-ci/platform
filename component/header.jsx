@@ -51,6 +51,35 @@ const Nav = ({ path }) => (
       <LinkMatch path={path} href="/profile">
         Profile
       </LinkMatch>
+      {' - '}
+      <LinkMatch path={path} href="/studentlist">
+        Student list
+      </LinkMatch>
+      {' - '}
+      {user && user.role === 'student' ? (
+        <>
+          <LinkMatch path={path} href="/challenges">
+            Challenges
+          </LinkMatch>
+          {' - '}
+          <LinkMatch path={path} href="/curriculum">
+            Curriculum
+          </LinkMatch>
+          {' - '}
+          <LinkMatch path={path} href="/settings">
+            Settings
+          </LinkMatch>
+          {' - '}
+        </>
+      ) : (
+        <>
+          <LinkMatch path={path} href="/challenges">
+            Buy formation
+          </LinkMatch>
+          {' - '}
+        </>
+      )}
+
       <LogAction />
     </ul>
     {'\n'}
@@ -59,9 +88,9 @@ const Nav = ({ path }) => (
 
 export const Header = ({ page, title, children }) => {
   const { pathname: path } = useURL()
-  
+
   if (!user) return navigate('/login')
-  if(user && !user.discordId) return navigate('learningchoice');
+  if (user && !user.discordId) return navigate('learningchoice')
 
   return (
     <header>

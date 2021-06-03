@@ -252,7 +252,7 @@ o['GET /auth/discord with a proper state'] = {
     eq({ body: res.body, status }, { body: null, status: 301 })
 
     // location should include user own discordId
-    const role = 'student'
+    const role = 'visitor'
     const discordId = '13381338'
     const discordUser = { ...user, discordId, email, avatar, speciality, role }
     eq(headers.location, `/?${new URLSearchParams(discordUser)}`)
