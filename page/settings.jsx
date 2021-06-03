@@ -2,6 +2,7 @@ import { useState } from 'preact/hooks'
 import { Alert } from '../component/alert.jsx'
 import { Title } from '../component/elements.jsx'
 import { Layout } from '../component/Layout.jsx'
+import { Input, Form } from '../component/form.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 
@@ -12,7 +13,6 @@ css(`
   border: 1px solid var(--white);
   padding: 0.6em;
   width: 100%;
-  margin: 10px 0px;
 }
 .hr-settings{
   border: 2px dashed var(--grey-lighter);
@@ -29,84 +29,83 @@ css(`
 `)
 
 export const Settings = () => {
-  const [account, setAccount] = useState(
-    user || {
-      name: '',
-      username: '',
-      avatar: '',
-      biography: '',
-      location: '',
-      github: ''
-    },
-  )
-  const [alert, setAlert] = useState(false)
 
-  const handleAccount = (e) => {
-    setAccount({ ...account, [e.target.name]: e.target.value })
+  const [alert, setAlert] = useState(false)
+  const [errors, setErrors] = useState({})
+
+  const checkErrors = (data) => {
+    let found = false;
+    if(!data.biography) {
+      setErrors((d) => {return{...d,biography:"biography is required"}});
+      found = true;
+    }
+    return found;
   }
+
   const submitAccount = (e) => {
     e.preventDefault()
-    localStorage.user = JSON.stringify(account)
-    setAlert(!alert)
+    const data = Object.fromEntries(new FormData(e.target))
+    if(!checkErrors(data)){
+      localStorage.user = JSON.stringify({ ...user, ...data })
+      setAlert(!alert)
+    }
   }
+
   return (
     <Layout>
       <center>Account settings for {user.name}</center>
-      <Alert alert={alert} message="Save with success" color="var(--green)"/>
-      <form onSubmit={submitAccount}>
-        <Title>Username</Title>
-        <input
-          class="input-settings"
+      <Alert alert={alert} message="Save with success" color="var(--green)" />
+      <Form
+        submit="save"
+        buttonClassName="btn-settings"
+        onSubmit={submitAccount}
+      >
+        <Input
+          inputType="input"
           name="username"
-          value={account.username || user.username}
-          onChange={handleAccount}
+          comment="Username"
+          class="input-settings"
+          value={user.username}
+          errors={errors}
         />
         <br />
-        <Title>Name</Title>
-        <input
-          class="input-settings"
+        <Input
+          inputType="input"
           name="name"
-          value={account.name || user.name}
-          onChange={handleAccount}
+          comment="Name"
+          class="input-settings"
+          value={user.name}
+          errors={errors}
         />
         <br />
-        <Title>Location</Title>
-        <input
-          class="input-settings"
+        <Input
+          inputType="input"
           name="location"
-          value={account.location || user.location}
-          onChange={handleAccount}
+          comment="Location"
+          class="input-settings"
+          value={user.location}
+          errors={errors}
         />
         <br />
-        <Title>Picture</Title>
-        <input
-          class="input-settings"
+        <Input
+          inputType="input"
           name="avatar"
-          value={account.avatar || user.avatar}
-          onChange={handleAccount}
+          comment="Picture"
+          class="input-settings"
+          value={user.avatar}
+          errors={errors}
         />
         <br />
-        <Title>Github</Title>
-        <input
-          class="input-settings"
-          name="github"
-          disabled
-          value={user.github}
-        />
-        <br />
-        <Title>Biography</Title>
-        <textarea
-          class="input-settings"
-          rows={2}
+        <Input
+          inputType="textarea"
+          rows={6}
           name="biography"
-          value={account.biography || user.biography}
-          onChange={handleAccount}
+          comment="Biography"
+          class="input-settings"
+          value={user.biography}
+          errors={errors}
         />
-        <br />
-        <button type="submit" class="btn-settings">
-          Save
-        </button>
-      </form>
+      </Form>
     </Layout>
   )
 }

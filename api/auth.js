@@ -65,13 +65,13 @@ GET.auth.discord = async ({ url }) => {
           ? `${user.login} (${user.name})`
           : user.login,
       access_token: auth.access_token,
-      roles: [rolesByKey.student.id, specialities[speciality].id],
+      roles: [rolesByKey.visitor.id, specialities[speciality].id],
     },
   })
 
   join.reply.ok || console.error('Unable to join discord:', join.reply)
-  user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'student'
-  const pendingUpdate = db.set(session.name, user)
+  user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'visitor'
+  await db.set(session.name, user)
   const location = `/?${new URLSearchParams(user)}`
   return new Response(null, { headers: { location }, status: 301 })
 }
@@ -79,6 +79,7 @@ GET.auth.discord = async ({ url }) => {
 GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   const state = searchParams.get('state')
   const code = searchParams.get('code')
+
   if (!state || !code) return new Response(null, BAD_REQUEST)
   const access = await db.get(`github:${state}`)
   if (!access) return new Response(null, UNAUTHORIZED)
