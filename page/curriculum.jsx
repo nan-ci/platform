@@ -15,7 +15,6 @@ css(`
 
 export const Curriculum = () => {
   const { name, speciality } = user
-  console.log(user)
   return (
     <Layout>
       <P class="username-curriculum">Welcome back 👋, {name}</P>
