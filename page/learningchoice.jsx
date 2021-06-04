@@ -14,6 +14,7 @@ css(`
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
+  white-space:pre;
 }
 .navlink-learning{
   margin: 5px 0px;
@@ -59,7 +60,7 @@ export const LearningChoice = () => {
   }
 
   return (
-    <Div class="div-learning">
+    <Div class="div-learning" >
       <Form
         submit="submit"
         style={{ textAlign: 'center' }}

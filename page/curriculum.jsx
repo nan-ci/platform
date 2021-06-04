@@ -21,8 +21,8 @@ export const Curriculum = () => {
       <P class="username-curriculum">Welcome back 👋, {name}</P>
       {courses
         .filter(({ name }) => name === speciality)
-        .map(({ curriculum }) =>
-          curriculum.map((props) => (
+        .map(({ modules }) =>
+          modules.map((props) => (
             <CurriculumCard {...props} key={props.id} />
           )),
         )}
