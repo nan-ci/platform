@@ -3,6 +3,7 @@ import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
 import { navigate, useURL } from '../lib/router.js'
 
+
 export const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
 
@@ -52,11 +53,7 @@ const Nav = ({ path }) => (
         Profile
       </LinkMatch>
       {' - '}
-      <LinkMatch path={path} href="/studentlist">
-        Student list
-      </LinkMatch>
-      {' - '}
-      {user && user.role === 'student' ? (
+      {user && user.role === 'student' && (
         <>
           <LinkMatch path={path} href="/challenges">
             Challenges
@@ -71,15 +68,7 @@ const Nav = ({ path }) => (
           </LinkMatch>
           {' - '}
         </>
-      ) : (
-        <>
-          <LinkMatch path={path} href="/challenges">
-            Buy formation
-          </LinkMatch>
-          {' - '}
-        </>
       )}
-
       <LogAction />
     </ul>
     {'\n'}
@@ -95,10 +84,6 @@ export const Header = ({ page, title, children }) => {
   return (
     <header>
       <Nav path={path} />
-      {'\n'}
-      <Title>Page</Title>
-      {'\n'}
-      <h1>{`  ${path}`} </h1>
       {'\n'}
       {children}
       {divider}

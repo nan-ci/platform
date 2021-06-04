@@ -27,7 +27,7 @@ export const Login = () => {
   if (user && !user.discordId) return navigate('/learningchoice')
 
   return (
-    <Div class="div-login">
+    <Div class="div-login" style={{ whiteSpace: 'pre' }}>
       <P fg="comment">{logo.split('#')}</P>
       <P>
         You should have a{' '}
