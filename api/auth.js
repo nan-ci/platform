@@ -1,5 +1,5 @@
 import { BAD_REQUEST, UNAUTHORIZED, TYPE_JSON, INTERNAL, rand } from './defs.js'
-import { roles } from '../data/discord.js'
+import { specialities, roles, rolesByKey } from '../data/discord.js'
 import { GET, withUser } from './router.js'
 import * as db from './db.js'
 
@@ -14,12 +14,15 @@ const gql = async (query) => {
 }
 
 const DISCORD = 'https://discordapp.com/api'
-const joinGuild = async (id, request) => {
-  const url = `${DISCORD}/guilds/${GUILD}/members/${id}`
-  const join = await fetch(url, request)
-  return join.status === 204
-    ? joinGuild(id, { ...request, method: 'PATCH' })
-    : join
+const joinGuild = async ({ discordId, request, body }) => {
+  const url = `${DISCORD}/guilds/${GUILD}/members/${discordId}`
+  const join = await fetch(url, { ...request, body: JSON.stringify(body) })
+  if (join.status !== 204) return { reply: join, roles: body.roles }
+  const user = await (await fetch(url)).json()
+  body.roles = [...new Set([...user.roles, ...body.roles])]
+  request.method = 'PATCH'
+  const reply = await fetch(url, { ...request, body: JSON.stringify(body) })
+  return { reply, roles: body.roles }
 }
 
 GET.auth.discord = async ({ url }) => {
@@ -48,21 +51,27 @@ GET.auth.discord = async ({ url }) => {
   const { speciality } = session
   const { id: discordId, email, avatar } = await userResponse.json()
   const user = { ...session.user, discordId, email, avatar, speciality }
-  const pendingUpdate = db.set(session.name, user)
 
   // join discord server
-  const join = await joinGuild(discordId, {
-    method: 'PUT',
-    headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
-    body: JSON.stringify({
-      nick: user.name ? `${user.login} (${user.name})` : user.login,
+  const join = await joinGuild({
+    discordId,
+    request: {
+      method: 'PUT',
+      headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+    },
+    body: {
+      nick:
+        user.name && user.name !== user.login
+          ? `${user.login} (${user.name})`
+          : user.login,
       access_token: auth.access_token,
-      roles: [ROLE, roles[speciality].id],
-    }),
+      roles: [rolesByKey.student.id, specialities[speciality].id],
+    },
   })
 
-  join.ok || console.error('Unable to join discord:', join.statusText)
-  await pendingUpdate
+  join.reply.ok || console.error('Unable to join discord:', join.reply)
+  user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'student'
+  const pendingUpdate = db.set(session.name, user)
   const location = `/?${new URLSearchParams(user)}`
   return new Response(null, { headers: { location }, status: 301 })
 }
@@ -110,13 +119,20 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   if (error) return new Response(error, INTERNAL)
 
   // create the user session
-  const { id, login, name } = data.viewer
-  const sid = Number(atob(id).slice(7)).toString(36)
-  const key = await db.find(`user:${sid}:`)
-  const session =
-    key?.name || `user:${sid}:${login}:${Date.now().toString(36)}:${rand()}`
-  const user = { sid, login, name }
-  await db.set(session, user)
+  const { id, name } = data.viewer
+  let { session } = (await db.get(`github-id:${id}`)) || {}
+  let user
+  if (session) {
+    user = await db.get(session)
+  } else {
+    const { login } = data.viewer
+    session = `user:${login}:${Date.now().toString(36)}:${rand()}`
+    user = { login, name }
+    await Promise.all([
+      db.set(`github-id:${id}`, { session }),
+      db.set(session, user),
+    ])
+  }
   return new Response(null, {
     status: 301,
     headers: {
@@ -137,7 +153,8 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
 const oauth2Url = (url, args) => `https://${url}?${new URLSearchParams(args)}`
 GET.link.discord = withUser(async ({ user, session, url }) => {
   const speciality = url.searchParams.get('speciality')
-  if (!roles[speciality]) return new Response('Missing Speciality', BAD_REQUEST)
+  if (!specialities[speciality])
+    return new Response('Missing Speciality', BAD_REQUEST)
   const state = `${rand()}-${rand()}`
   const metadata = { user, name: session, speciality }
   await db.put(`discord:${state}`, '', { expirationTtl: 3600, metadata })
