@@ -1,6 +1,6 @@
 import { Div } from '../component/elements.jsx'
 import { Input, Form, Select } from '../component/form.jsx'
-import { roles } from '../data/discord.js'
+import { roles, specialities } from '../data/discord.js'
 import { css } from '../lib/dom.js'
 import { API } from '../lib/env.js'
 import { useState } from 'preact/hooks'
@@ -57,7 +57,7 @@ export const LearningChoice = () => {
           errors={errors}
           value={Object.keys(specialities)[0]}
         >
-          {Object.entries(roles).map(([key, { name, color }]) => (
+          {Object.entries(specialities).map(([key, { name }]) => (
             <option value={key}>{name}</option>
           ))}
         </Select>

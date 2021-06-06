@@ -10,6 +10,30 @@ export const courses = [
       { id: 2, title: 'Data Analysis with Python', hours: 300 },
       { id: 3, title: 'Machine Learning with Python', hours: 300 },
     ],
+    challenges: [
+      {
+        id: 1,
+        title: 'Python Principles',
+        description:
+          'Practice your Python skills with these programming challenges. The tasks are\nmeant to be challenging for beginners. If you find them too difficult, try\ncompleting our lessons for beginners first',
+        kata: [
+          {
+            id: 1,
+            title: 'All equal',
+            description:
+              'Define a function that takes a list and checks whether all elements in the list are the same',
+            submited: false,
+          },
+          {
+            id: 2,
+            title: 'Capital indexes',
+            description:
+              'Write a function that takes a single parameter, which is a string. Your function should return a list of all the indexes in the string that have capital letters.',
+            submited: true,
+          },
+        ],
+      },
+    ],
   },
   {
     id: 2,
@@ -21,6 +45,29 @@ export const courses = [
       { id: 1, title: 'JavaScript Algorithms and Data Structures', hours: 300 },
       { id: 2, title: 'APIs and Microservices', hours: 200 },
     ],
+    challenges: [
+      {
+        id: 1,
+        title: 'Javascript basics',
+        description:
+          'This series of challenges covers the very basics of Javascript',
+        kata: [
+          {
+            id: 1,
+            title: 'Check if a number is even',
+            description:
+              'Write a function that takes a number as argument. If the number is even, return true',
+            submited: false,
+          },
+          {
+            id: 2,
+            title: 'Split a number into its digits',
+            description: '',
+            submited: true,
+          },
+        ],
+      },
+    ],
   },
   {
     id: 3,
@@ -30,6 +77,29 @@ export const courses = [
     curriculum: [
       { id: 1, title: 'Getting started with Flutter', hours: 300 },
       { id: 2, title: 'Advanced Flutter', hours: 300 },
+    ],
+    challenges: [
+      {
+        id: 1,
+        title: 'Flutter Repl Challenge',
+        description:
+          'Show your Flutter skills by building beautiful UIs on Repl.it',
+        kata: [
+          {
+            id: 1,
+            title: 'Login and Register page',
+            description:
+              'Try to create a beautiful login and register page on repl.it',
+            submited: false,
+          },
+          {
+            id: 1,
+            title: 'World Clock',
+            description: 'Try to create a beautiful world clock on repl.it',
+            submited: true,
+          },
+        ],
+      },
     ],
   },
   {
