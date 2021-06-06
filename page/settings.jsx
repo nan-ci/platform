@@ -1,10 +1,10 @@
 import { useState } from 'preact/hooks'
 import { Alert } from '../component/alert.jsx'
-import { Title } from '../component/elements.jsx'
-import { Layout } from '../component/Layout.jsx'
+import { DangerZone } from '../component/dangerzone.jsx'
+import { divider, Title } from '../component/elements.jsx'
+import { Layout } from '../component/layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
-
 css(`
 .input-settings{
   outline: none;
@@ -52,7 +52,7 @@ export const Settings = () => {
   return (
     <Layout>
       <center>Account settings for {user.name}</center>
-      <Alert alert={alert} message="Save with success" color="var(--green)"/>
+      <Alert alert={alert} message="Save with success" color="var(--green)" />
       <form onSubmit={submitAccount}>
         <Title>Username</Title>
         <input
@@ -86,14 +86,6 @@ export const Settings = () => {
           onChange={handleAccount}
         />
         <br />
-        <Title>Github</Title>
-        <input
-          class="input-settings"
-          name="github"
-          disabled
-          value={user.github}
-        />
-        <br />
         <Title>Biography</Title>
         <textarea
           class="input-settings"
@@ -103,10 +95,26 @@ export const Settings = () => {
           onChange={handleAccount}
         />
         <br />
-        <button type="submit" class="btn-settings">
-          Save
-        </button>
+        {divider}
+        <h1>Social Network</h1>
+        <br />
+        <Title>Github</Title>
+        <input
+          class="input-settings"
+          name="github"
+          disabled
+          value={user.github}
+        />
+        <br />
+        <Title>Twitter</Title>
+        <input
+          class="input-settings"
+          name="github"
+          disabled
+          value={user.github}
+        />
       </form>
+      <DangerZone discordId={user.discordId} userId={""}/>
     </Layout>
   )
 }
