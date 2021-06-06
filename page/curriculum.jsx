@@ -1,6 +1,6 @@
 import { CurriculumCard } from '../component/curriculum-card.jsx'
 import { P } from '../component/elements.jsx'
-import { Layout } from '../component/Layout.jsx'
+import { Layout } from '../component/layout.jsx'
 import { courses } from '../data/courses.js'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
@@ -15,7 +15,6 @@ css(`
 
 export const Curriculum = () => {
   const { name, speciality } = user
-  console.log(user)
   return (
     <Layout>
       <P class="username-curriculum">Welcome back 👋, {name}</P>
