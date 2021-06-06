@@ -3,6 +3,8 @@ import { Alert } from '../component/alert.jsx'
 import { DangerZone } from '../component/dangerzone.jsx'
 import { divider, Title } from '../component/elements.jsx'
 import { Layout } from '../component/layout.jsx'
+import { Title } from '../component/elements.jsx'
+import { Layout } from '../component/Layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 css(`

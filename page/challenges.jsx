@@ -2,6 +2,7 @@ import { ChallengeCard } from '../component/challenge-card.jsx'
 import { Layout } from '../component/layout.jsx'
 import { courses } from '../data/courses.js'
 import { user } from '../lib/auth.js'
+import { Layout } from '../component/Layout.jsx'
 
 export const Challenges = () => (
   <Layout>

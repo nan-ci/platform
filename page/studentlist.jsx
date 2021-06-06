@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'preact/hooks'
-import { Layout } from '../component/layout.jsx'
+import { Layout } from '../component/Layout.jsx'
 import { Table } from '../component/table.jsx'
 import { users } from '../data/users.js'
 
