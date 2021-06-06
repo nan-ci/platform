@@ -1,7 +1,6 @@
-import { Div, P } from '../component/elements.jsx'
+import { Div } from '../component/elements.jsx'
 import { Input, Form, Select } from '../component/form.jsx'
-import { NavLink, parseColor } from '../component/header.jsx'
-import { specialities } from '../data/discord.js'
+import { roles } from '../data/discord.js'
 import { css } from '../lib/dom.js'
 import { API } from '../lib/env.js'
 import { useState } from 'preact/hooks'
@@ -20,7 +19,7 @@ css(`
 
 export const LearningChoice = () => {
   let [errors, setErrors] = useState({})
-  if (!user){
+  if (!user) {
     return navigate('/login')
   }
   const send = (e) => {
@@ -58,10 +57,8 @@ export const LearningChoice = () => {
           errors={errors}
           value={Object.keys(specialities)[0]}
         >
-          {Object.entries(specialities).map(([key, { name, color }]) => (
-            <option value={key}>
-              {name}
-            </option>
+          {Object.entries(roles).map(([key, { name, color }]) => (
+            <option value={key}>{name}</option>
           ))}
         </Select>
       </Form>
