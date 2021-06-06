@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'preact/hooks'
 import { Div, divider, P } from '../component/elements.jsx'
 import { Img } from '../component/image.jsx'
-import { Layout } from '../component/Layout.jsx'
+import { Layout } from '../component/layout.jsx'
 import { TimelineTable } from '../component/timeline-table.jsx'
 import { timeline } from '../data/timeline.js'
 import { user } from '../lib/auth.js'
