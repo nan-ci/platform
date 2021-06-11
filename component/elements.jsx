@@ -30,14 +30,16 @@ export const Color = Object.fromEntries(
   ]),
 )
 
-export const divider = <Color.Comment># {'··'.repeat(38)} #</Color.Comment>
+export const divider = (
+  <Color.Comment style={{ whiteSpace: 'pre' }}>
+    # {'··'.repeat(38)} #
+  </Color.Comment>
+)
 export const equal = <Color.Pink> = </Color.Pink>
 
 export const Main = ({ children }) => (
   <main>
-    {toChildArray(children).map((child) => [
-      <section>{child}</section>,
-    ])}
+    {toChildArray(children).map((child) => [<section>{child}</section>])}
   </main>
 )
 

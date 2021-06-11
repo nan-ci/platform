@@ -139,8 +139,12 @@ export const Cours = ({ params: { moduleName, coursName } }) => {
                 {currentCours.ressources.map((res) => {
                   return (
                     <>
-                      {' '}
-                      <NavLink key={res.name} href={res.link} target="_blank">
+                      <NavLink
+                        key={res.name}
+                        href={res.link}
+                        style={{ color: 'black' }}
+                        target="_blank"
+                      >
                         {res.name}
                       </NavLink>
                       <br />

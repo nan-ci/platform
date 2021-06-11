@@ -38,8 +38,13 @@ export const courses = [
     name: 'javascript',
     description: '',
     modules: [
-      { id: 1, title: 'JavaScript Algorithms and Data Structures', hours: 300,project: null },
-      { id: 2, title: 'APIs and Microservices', hours: 200,project: null },
+      {
+        id: 1,
+        title: 'JavaScript Algorithms and Data Structures',
+        hours: 300,
+        project: null,
+      },
+      { id: 2, title: 'APIs and Microservices', hours: 200, project: null },
     ],
     cours: [
       {
@@ -49,16 +54,16 @@ export const courses = [
         description:
           'this cours is an introduction to variables , here you will learn how to declare variables ',
         videoLink: 'https://www.youtube.com/embed/1jT3EQVJOBA',
-        ressources:[
+        ressources: [
           {
-          name:"livre pdf",
-          link:""
-        },
-        {
-          name:"recherche mdn",
-          link:"https://djmjdfkjdf"
-        }
-      ],
+            name: 'livre pdf',
+            link: '',
+          },
+          {
+            name: 'recherche mdn',
+            link: 'https://djmjdfkjdf',
+          },
+        ],
         quizz: [],
         livecoding: [],
       },
@@ -67,15 +72,15 @@ export const courses = [
         idModule: 1,
         title: 'data types of variables',
         description: 'this cours talk about of data types in variables',
-        videoLink:  'https://www.youtube.com/embed/1jT3EQVJOBA',
-        ressources:[],
+        videoLink: 'https://www.youtube.com/embed/1jT3EQVJOBA',
+        ressources: [],
         quizzs: [{}],
         livecoding: null,
       },
       {
         id: 3,
         idModule: 1,
-        title: 'data types of variables',
+        title: 'let and const',
         description: 'this cours talk about of data types in variables',
         videoLink: 'https://qkdfmjqdflj',
         quizz: {},
@@ -84,7 +89,7 @@ export const courses = [
       {
         id: 4,
         idModule: 1,
-        title: 'data types of variables',
+        title: 'portées des variables',
         description: 'this cours talk about of data types in variables',
         videoLink: 'https://qkdfmjqdflj',
         quizz: {},
@@ -92,24 +97,6 @@ export const courses = [
       },
       {
         id: 5,
-        idModule: 1,
-        title: 'data types of variables',
-        description: 'this cours talk about of data types in variables',
-        videoLink: 'https://qkdfmjqdflj',
-        quizz: {},
-        livecoding: null,
-      },
-      {
-        id: 6,
-        idModule: 1,
-        title: 'data types of variables',
-        description: 'this cours talk about of data types in variables',
-        videoLink: null,
-        quizz: {},
-        livecoding: null,
-      },
-      {
-        id: 7,
         idModule: 2,
         title: 'Api',
         description: 'this cours talk about of Api in variables',
@@ -118,7 +105,7 @@ export const courses = [
         livecoding: null,
       },
       {
-        id: 8,
+        id: 6,
         idModule: 2,
         title: 'Micro services',
         description: 'this cours talk about micro services in variables',
