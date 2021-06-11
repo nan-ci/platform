@@ -42,6 +42,10 @@ createServer(async (req, res) => {
     return req.pipe(proxyReq, { end: true })
   }
 
+  if (path.startsWith('/assets')) {
+    return res.end(await readFile(join(rootDir, 'public', path)))
+  }
+
   // Handle the root index
   if (!url.pathname.startsWith('/api/')) return res.end(await generate('index'))
 
