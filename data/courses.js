@@ -73,7 +73,7 @@ export const courses = [
         livecoding: null,
       },
       {
-        id: 2,
+        id: 3,
         idModule: 1,
         title: 'data types of variables',
         description: 'this cours talk about of data types in variables',
@@ -82,7 +82,7 @@ export const courses = [
         livecoding: null,
       },
       {
-        id: 2,
+        id: 4,
         idModule: 1,
         title: 'data types of variables',
         description: 'this cours talk about of data types in variables',
@@ -91,7 +91,7 @@ export const courses = [
         livecoding: null,
       },
       {
-        id: 2,
+        id: 5,
         idModule: 1,
         title: 'data types of variables',
         description: 'this cours talk about of data types in variables',
@@ -100,7 +100,7 @@ export const courses = [
         livecoding: null,
       },
       {
-        id: 2,
+        id: 6,
         idModule: 1,
         title: 'data types of variables',
         description: 'this cours talk about of data types in variables',
@@ -109,7 +109,7 @@ export const courses = [
         livecoding: null,
       },
       {
-        id: 3,
+        id: 7,
         idModule: 2,
         title: 'Api',
         description: 'this cours talk about of Api in variables',
@@ -118,7 +118,7 @@ export const courses = [
         livecoding: null,
       },
       {
-        id: 4,
+        id: 8,
         idModule: 2,
         title: 'Micro services',
         description: 'this cours talk about micro services in variables',

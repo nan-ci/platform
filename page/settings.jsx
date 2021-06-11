@@ -43,18 +43,20 @@ export const Settings = () => {
   const [errors, setErrors] = useState({})
 
   const checkErrors = (data) => {
-    let found = false;
-    if(!data.biography) {
-      setErrors((d) => {return{...d,biography:"biography is required"}});
-      found = true;
+    let found = false
+    if (!data.biography) {
+      setErrors((d) => {
+        return { ...d, biography: 'biography is required' }
+      })
+      found = true
     }
-    return found;
+    return found
   }
 
   const submitAccount = (e) => {
     e.preventDefault()
     const data = Object.fromEntries(new FormData(e.target))
-    if(!checkErrors(data)){
+    if (!checkErrors(data)) {
       localStorage.user = JSON.stringify({ ...user, ...data })
       setAlert(!alert)
     }
