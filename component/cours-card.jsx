@@ -1,6 +1,6 @@
 import { css } from '../lib/dom'
 import { Div } from './elements'
-import { NavLink } from './header'
+import { getUserLevel } from '../lib/user.js'
 
 css(`
 .card {
@@ -109,30 +109,36 @@ css(`
 `)
 
 export const CoursCard = ({
-  data: { id, title, description },
-  index,
-  moduleName,
-}) => (
-  <Div class="card">
-    <Div class={`box ${index <= 0 && 'unlock'}`}>
-      <Div class="content">
-        <h2>#0{index + 1}</h2>
-        <h3 class="h3">{title}</h3>
-        <p>{description}</p>
-        <a
-          href={
-            index <= 0 && `/cours?moduleName=${moduleName}&coursName=${title}`
-          }
-          class={index > 0 ? 'locked' : 'unlocked'}
-        >
-          {index > 0 && (
-            <div class="tooltip">
-              you must pass the previous cours to unlocked this cours
-            </div>
-          )}
-          {index > 0 ? 'locked' : 'Go to cours'}
-        </a>
+  data: { id: idC, title, description },
+  module: { id, name },
+  userLevel,
+}) => {
+  const { level, step } = getUserLevel(userLevel)
+
+  const isLock = () => {
+    return level < id || (level === id && step < idC)
+  }
+
+  return (
+    <Div class="card">
+      <Div class={`box ${!isLock() && 'unlock'}`}>
+        <Div class="content">
+          <h2>#{idC < 10 ? '0' + idC : idC}</h2>
+          <h3 class="h3">{title}</h3>
+          <p>{description}</p>
+          <a
+            href={!isLock() && `/cours?moduleName=${name}&coursName=${title}`}
+            class={isLock() ? 'locked' : 'unlocked'}
+          >
+            {isLock() && (
+              <div class="tooltip">
+                you must pass the previous cours to unlocked this cours
+              </div>
+            )}
+            {isLock() ? 'locked' : 'Go to cours'}
+          </a>
+        </Div>
       </Div>
     </Div>
-  </Div>
-)
+  )
+}

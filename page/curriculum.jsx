@@ -23,7 +23,7 @@ export const Curriculum = () => {
         .filter(({ name }) => name === speciality)
         .map(({ modules }) =>
           modules.map((props) => (
-            <CurriculumCard {...props} key={props.id} />
+            <CurriculumCard {...props} key={props.id} userLevel={user.level} />
           )),
         )}
     </Layout>

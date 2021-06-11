@@ -33,10 +33,10 @@ export const Profile = () => {
     challenge: {
       size: '50%',
       type: '',
-      bgcolor: 'var(--orange-dark)'
+      bgcolor: 'var(--orange-dark)',
     },
     solution: { size: '25%', type: '', bgcolor: 'var(--pink-dark)', color: '' },
-    date: { size: '25%', type: '', bgcolor: 'var(--purple-lighter)' }
+    date: { size: '25%', type: '', bgcolor: 'var(--purple-lighter)' },
   })
 
   return (

@@ -1,5 +1,5 @@
 import { Div, P } from '../component/elements'
-import { Layout } from '../component/Layout.jsx'
+import { Layout } from '../component/layout.jsx'
 import { NavLink } from '../component/header'
 import { css } from '../lib/dom'
 import { courses } from '../data/courses.js'
@@ -106,7 +106,11 @@ export const Cours = ({ params: { moduleName, coursName } }) => {
       {currentModule && !currentCours && (
         <Div class="cours-container">
           {moduleCours.map((cour, index) => (
-            <CoursCard data={cour} index={index} moduleName={moduleName} />
+            <CoursCard
+              data={cour}
+              module={{ id: currentModule.id, name: currentModule.title }}
+              userLevel={user.level}
+            />
           ))}
         </Div>
       )}
@@ -132,15 +136,17 @@ export const Cours = ({ params: { moduleName, coursName } }) => {
               <Div class="block">
                 <header> ressources </header>
                 <br />
-                {currentCours.ressources.map((res) => (
-                  <>
-                    &nbsp;&nbsp;>
-                    <NavLink key={res.name} href={res.link} target="_blank">
-                      {res.name}
-                    </NavLink>
-                    <br />
-                  </>
-                ))}
+                {currentCours.ressources.map((res) => {
+                  return (
+                    <>
+                      {' '}
+                      <NavLink key={res.name} href={res.link} target="_blank">
+                        {res.name}
+                      </NavLink>
+                      <br />
+                    </>
+                  )
+                })}
               </Div>
               <Div class="block">
                 <header> quizz </header>
