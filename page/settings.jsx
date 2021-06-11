@@ -1,10 +1,12 @@
 import { useState } from 'preact/hooks'
 import { Alert } from '../component/alert.jsx'
+import { Form, Input } from '../component/form.jsx'
 import { DangerZone } from '../component/dangerzone.jsx'
-import { divider, Title } from '../component/elements.jsx'
+import { divider } from '../component/elements.jsx'
 import { Layout } from '../component/layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
+
 css(`
 .input-settings{
   outline: none;
@@ -28,17 +30,6 @@ css(`
 `)
 
 export const Settings = () => {
-
-  const [account, setAccount] = useState(
-    user || {
-      name: '',
-      username: '',
-      avatar: '',
-      biography: '',
-      location: '',
-      github: ''
-    },
-  )
   const [alert, setAlert] = useState(false)
   const [errors, setErrors] = useState({})
 
@@ -116,7 +107,31 @@ export const Settings = () => {
           value={user.biography}
           errors={errors}
         />
+        <br />
+        {divider}
+        <h1>Social Network</h1>
+        <br />
+        <Input
+          inputType="input"
+          name="github"
+          disabled
+          comment="Github"
+          class="input-settings"
+          value={user.github}
+          errors={errors}
+        />
+        <br />
+        <Input
+          inputType="input"
+          name="twitter"
+          disabled
+          comment="Twitter"
+          class="input-settings"
+          value={user.twitter}
+          errors={errors}
+        />
       </Form>
+      <DangerZone discordId={user.discordId} userId={''} />
     </Layout>
   )
 }
