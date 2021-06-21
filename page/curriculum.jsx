@@ -1,9 +1,10 @@
 import { CurriculumCard } from '../component/curriculum-card.jsx'
-import { P } from '../component/elements.jsx'
+import { useState } from 'preact/hooks'
 import { Layout } from '../component/layout.jsx'
 import { courses } from '../data/courses.js'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
+import { Lecteur } from '../component/lecteur.jsx'
 
 css(`
 .username-curriculum{
@@ -15,17 +16,42 @@ css(`
 
 export const Curriculum = () => {
   const { name, speciality } = user
-  console.log(user)
+  const [showLecteur, setShowLecteur] = useState(false)
+  const [currentCours, setCurrentCours] = useState({
+    link: null,
+    ressources: null,
+    description: null,
+  })
+
+  const config = (link, res, desc) => {
+    console.log('link', link, res)
+    setShowLecteur(true)
+    setCurrentCours({ link, ressources: res, description: desc })
+  }
+
   return (
     <Layout>
-      <P class="username-curriculum">Welcome back 👋, {name}</P>
+      <br />
       {courses
         .filter(({ name }) => name === speciality)
-        .map(({ modules }) =>
+        .map(({ modules, cours }) =>
           modules.map((props) => (
-            <CurriculumCard {...props} key={props.id} userLevel={user.level} />
+            <CurriculumCard
+              {...props}
+              key={props.id}
+              userLevel={user.level}
+              cours={cours.filter((c) => c.idModule === props.id)}
+              setCours={(l, r, d) => config(l, r, d)}
+            />
           )),
         )}
+      <Lecteur
+        showLecteur={showLecteur}
+        closeLecteur={() => setShowLecteur(false)}
+        link={currentCours.link}
+        ressources={currentCours.ressources}
+        description={currentCours.description}
+      />
     </Layout>
   )
 }

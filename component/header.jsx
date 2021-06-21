@@ -1,8 +1,45 @@
-import { Link, Div, Color, Title, divider } from './elements.jsx'
+import { Link, Div, Color, Title, divider, P } from './elements.jsx'
 import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
-import { navigate, useURL } from '../lib/router.js'
+import { useURL } from '../lib/router.js'
+import { useState } from 'preact/hooks'
+import { css } from '../lib/dom.js'
 
+css(`
+    .usercard-contain {
+      width: 180px;
+      text-align: center;
+      position: relative;
+      margin-top: -7px;
+    }
+    .header-div{
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      justify-content: space-between;
+    }
+    .sub-menu{
+      position: absolute;
+      top: 95%;
+      z-index:2;
+      height: auto;
+      border: 1px dashed white;
+      padding: 0.5rem;
+      width: 100%;
+      margin-top: 10px;
+      text-align: left;
+      background: white;
+    }
+    .us-link {
+      border: 2px dashed white;
+      padding: 0.5rem;
+      width: 100%;
+      cursor: pointer;
+    }
+
+
+
+`)
 
 export const parseColor = (c) =>
   `rgb(${(c >> 16) & 0xff},${(c >> 8) & 0xff},${c & 0xff})`
@@ -39,18 +76,14 @@ const Version = () => (
 
 const Nav = ({ path }) => (
   <nav>
-    <Version />
-    {'\n'}
-    <Title>Menu</Title>
-    {'\n'}
     <ul style={{ width: '100%' }}>
       {'  '}
       <LinkMatch path={path} href="/">
         Home
       </LinkMatch>
       {' - '}
-      <LinkMatch path={path} href="/profile">
-        Profile
+      <LinkMatch path={path} href="/curriculum">
+        Curriculum
       </LinkMatch>
       {' - '}
       {user && user.role === 'student' && (
@@ -59,33 +92,68 @@ const Nav = ({ path }) => (
             Challenges
           </LinkMatch>
           {' - '}
-          <LinkMatch path={path} href="/curriculum">
-            Curriculum
+          <LinkMatch path={path} href="/quizzes">
+            Quizzes
           </LinkMatch>
-          {' - '}
-          <LinkMatch path={path} href="/settings">
-            Settings
-          </LinkMatch>
-          {' - '}
         </>
       )}
-      <LogAction />
     </ul>
     {'\n'}
   </nav>
 )
 
-export const Header = ({ page, title, children }) => {
-  const { pathname: path } = useURL()
-
-  if (!user) return navigate('/login')
-  if (user && !user.discordId) return navigate('learningchoice')
+const UserCard = ({ user: { username, name }, path }) => {
+  const Links = [
+    { name: 'view profile', path: '/profile' },
+    { name: 'account settings', path: '/settings' },
+    { name: 'logout', path: `${API}/logout` },
+  ]
+  const [openSubMenu, setOpenSubMenu] = useState(false)
 
   return (
+    <Div class="usercard-contain">
+      <P onClick={() => setOpenSubMenu((v) => !v)} class="us-link">
+        😌 {username ? username : name} ▿
+      </P>
+
+      <Div
+        class="sub-menu"
+        style={{
+          display: openSubMenu ? 'block' : 'none',
+        }}
+      >
+        {Links.map((data) => {
+          return (
+            <>
+              <LinkMatch
+                path={path}
+                href={data.path}
+                key={data.name}
+                style={{ marginTop: '10px', color: ' black' }}
+                onClick={data.name === 'logout' && clearStorage}
+              >
+                {data.name}
+              </LinkMatch>
+              <br />
+            </>
+          )
+        })}
+      </Div>
+    </Div>
+  )
+}
+
+export const Header = ({ page, title, children }) => {
+  const { pathname: path } = useURL()
+  return (
     <header>
-      <Nav path={path} />
+      <Version />
       {'\n'}
-      {children}
+      <Div class="header-div">
+        <Nav path={path} />
+        <UserCard user={user} path={path} />
+      </Div>
+
       {divider}
     </header>
   )
