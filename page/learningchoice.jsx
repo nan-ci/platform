@@ -43,8 +43,6 @@ css(`
 export const LearningChoice = () => {
   let [errors, setErrors] = useState({})
   let [col, setCol] = useState('6585772')
-  if (!user) return navigate('/login')
-  if (user && user.discordId) return navigate('/')
 
   const send = (e) => {
     e.preventDefault()

@@ -8,18 +8,35 @@ import { Challenges } from './page/challenges.jsx'
 import { LearningChoice } from './page/learningchoice.jsx'
 import { Curriculum } from './page/curriculum.jsx'
 import { Cours } from './page/cours.jsx'
+import { Quizzes } from './page/quizzes.jsx'
+import { user } from './lib/auth.js'
+import { navigate, useURL } from './lib/router.js'
 
-const App = () => (
-  <Router>
-    <Profile path="/profile" />
-    <Login path="/login" />
-    <Settings path="/settings" />
-    <Challenges path="/challenges" />
-    <LearningChoice path="/learningchoice" />
-    <Curriculum path="/curriculum" />
-    <Cours path="/cours" />
-    <Home path="*" />
-  </Router>
-)
+const App = () => {
+  const { pathname } = useURL()
+  if (!user && pathname !== '/login') return navigate('/login')
+  if (user && !user.discordId && pathname !== '/learningchoice')
+    return navigate('/learningchoice')
+  if (
+    user &&
+    user.discordId &&
+    (pathname === '/login' || pathname === '/learningchoice')
+  )
+    return navigate('/')
+
+  return (
+    <Router>
+      <Profile path="/profile" />
+      <Login path="/login" />
+      <Settings path="/settings" />
+      <Challenges path="/challenges" />
+      <Quizzes path="/quizzes" />
+      <LearningChoice path="/learningchoice" />
+      <Curriculum path="/curriculum" />
+      <Cours path="/cours" />
+      <Home path="*" />
+    </Router>
+  )
+}
 
 render(h(App, {}), document.getElementById('root'))

@@ -38,55 +38,47 @@ css(`
       margin-bottom: 20px;
   }
 
-  .t-block div {
-    width:49%;
-    border-radius:0.75rem;
-    height:200px;
-  }
 
   .t-block .left-block {
     background:black;
-    display: flex;
-    flex-direction:column;
-    align-items:flex-start;
-    justify-content:space-around;
+    width: 40%;
+    border-radius:0.75rem;
+    height:200px;
+    position:relative;
   }
 
-.t-block .left-block p strong {
-    font-size: 1.5rem;
-    margin-left:20px;
+  .t-block .left-block p.title {
+     position:absolute;
+     top:10px;
+     right:10px;
+     font-weight:bolder;
   }
-.t-block .left-block p span{
-    font-size: 1.3rem;
-  font-weight:bolder;
-}
+
+  .t-block .left-block .block-co {
+    margin-top:60px;
+    width:100%;
+    text-align:left;
+  }
+
+  .t-block .left-block .block-co div {
+   padding:0 1rem;
+   margin: 7px;
+  }
+
+  .t-block .left-block button {
+    background: var(--comment-darker);
+    padding:0.4rem;
+    margin:4px;
+    margin-top: 10px;
+    cursor:pointer;
+  }
+
 
 .t-block .right-block {
   background:#575151;
-  text-align:left;
-  padding: 1rem;
-  display:flex;
-  flex-direction:row;
-  align-items:flex-start;
-  justify-content:flex-start;
-}
-
-.t-block .right-block div {
-  width:100%;
-  margin-left: 10px;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  justify-content:flex-start
-}
-
-.t-block .right-block div h1 {
-  font-size:2rem;
-}
-
-.t-block .right-block div p {
-  width: 100%;
-  margin: 7px;
+  width:58%;
+  border-radius:0.75rem;
+  height:200px;
 }
 
 `)
@@ -104,6 +96,7 @@ export const Home = () => {
   return (
     <Layout>
       <br />
+      <P class="username-curriculum">Welcome back 👋, {user.name}</P>
       <br />
       {user && (
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
@@ -122,50 +115,43 @@ export const Home = () => {
             <>
               <Div class="t-block">
                 <Div class="left-block">
-                  <P>
-                    <strong>Username : </strong>
-                    <span style={{ color: 'var(--orange-dark)' }}>
-                      {user.username || user.name}
-                    </span>
-                  </P>
-                  <P>
-                    <strong>Spéciality : </strong>
-                    <span style={{ color: 'var(--green-dark)' }}>
-                      {user.speciality}
-                    </span>
-                  </P>
-                  <P>
-                    <strong>Level : </strong>
-                    <span style={{ color: 'var(--cyan-dark)' }}>
-                      {user.level}
-                    </span>
-                  </P>
-                </Div>
-                <Div class="right-block">
-                  <Progress size={60} color="darkred" />
-                  <Div>
-                    <h1> Progress </h1>
-                    <br />
-                    <P>
-                      <strong> Challenges completed : </strong>
-                      <span> 5 </span>
-                    </P>
-                    <P>
-                      <strong> Quizzes completed : </strong>
-                      <span> 10 </span>
-                    </P>
-                    <P>
-                      <strong> Projects completed : </strong>
-                      <span> 20 </span>
-                    </P>
+                  <P class="title">Next step</P>
+                  <Div class="block-co">
+                    <Div>
+                      <strong>
+                        <i class="fab fa-buffer" aria-hidden="true"></i> quizz
+                        ==>
+                      </strong>{' '}
+                      <span>variables</span>
+                    </Div>
+                    <Div>
+                      <strong>
+                        {' '}
+                        <i class="fab fa-buffer" aria-hidden="true"></i>{' '}
+                        challenges ==>
+                      </strong>{' '}
+                      check if a number is a test value
+                    </Div>
+                    <button> Go to quizz </button>
+                    <button
+                      style={{
+                        background: 'transparent',
+                        color: 'var(--comment-darker)',
+                        border: '1px solid var(--comment-darker)',
+                      }}
+                    >
+                      Go to challenge
+                    </button>
                   </Div>
                 </Div>
+                <Div class="right-block">
+                  <Roadmap
+                    modules={myCours.modules}
+                    cours={myCours.cours}
+                    userLevel={user.level}
+                  />
+                </Div>
               </Div>
-              <Roadmap
-                modules={myCours.modules}
-                cours={myCours.cours}
-                userLevel={user.level}
-              />
             </>
           )}
         </div>

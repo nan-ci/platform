@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks'
+import { Div } from './elements.jsx'
 import { equal, Color, Title } from './elements.jsx'
 import { css } from '../lib/dom.js'
 
@@ -34,7 +35,27 @@ button:hover {
   text-shadow: 1px 1px 2px #000;
   outline: 1px dashed;
   outline-offset: 0.5ch;
-}`)
+}
+
+.row{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fieldset {
+      border: 1px solid var(--comment-dark);
+      padding: 1rem;
+      marginTop: 20px;
+      position:relative;
+  }
+  .fieldset legend {
+    background: var(--comment-darker);
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+  }
+`)
 
 const Comment = ({ children }) => (
   <Color.Comment>
@@ -94,6 +115,7 @@ export const Input = ({
   comment,
   errors,
   type,
+  divStyle,
   inputType,
   children,
   ...props
@@ -116,7 +138,7 @@ export const Input = ({
   )
 
   return (
-    <div>
+    <div style={divStyle}>
       {description}
       {'\n'}
       {inputType === 'input' && (
@@ -145,6 +167,19 @@ export const Input = ({
       )}
     </div>
   )
+}
+
+export const Fieldset = ({ legend, children, ...props }) => {
+  return (
+    <fieldset class="fieldset" {...props}>
+      <legend>{legend}</legend>
+      {children}
+    </fieldset>
+  )
+}
+
+export const Row = ({ children }) => {
+  return <Div class="row">{children}</Div>
 }
 
 export const Form = ({

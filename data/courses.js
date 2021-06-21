@@ -41,10 +41,28 @@ export const courses = [
       {
         id: 1,
         title: 'JavaScript Algorithms and Data Structures',
+        description: 'this a module that talk about the begining',
         hours: 300,
+        codeColor: '#dbb958',
         project: null,
       },
-      { id: 2, title: 'APIs and Microservices', hours: 200, project: null },
+      {
+        id: 2,
+        title: 'APIs and Microservices',
+        description: 'this a module that talk about the begining',
+        hours: 200,
+        codeColor: '#5886db',
+        project: null,
+      },
+      {
+        id: 3,
+        title: 'React js and Vue js',
+        description:
+          'this a module of react and vue a js framework for front-end',
+        hours: 200,
+        codeColor: '#90db58',
+        project: null,
+      },
     ],
     cours: [
       {
@@ -53,7 +71,7 @@ export const courses = [
         title: 'introduction to variables',
         description:
           'this cours is an introduction to variables , here you will learn how to declare variables ',
-        videoLink: 'https://www.youtube.com/embed/1jT3EQVJOBA',
+        videoLink: 'https://vjs.zencdn.net/v/oceans.mp4',
         ressources: [
           {
             name: 'livre pdf',
@@ -64,54 +82,42 @@ export const courses = [
             link: 'https://djmjdfkjdf',
           },
         ],
-        quizz: [],
-        livecoding: [],
       },
       {
         id: 2,
         idModule: 1,
         title: 'data types of variables',
         description: 'this cours talk about of data types in variables',
-        videoLink: 'https://www.youtube.com/embed/1jT3EQVJOBA',
+        videoLink: 'https://vjs.zencdn.net/v/oceans.mp4',
         ressources: [],
-        quizzs: [{}],
-        livecoding: null,
       },
       {
         id: 3,
         idModule: 1,
         title: 'let and const',
-        description: 'this cours talk about of data types in variables',
-        videoLink: 'https://qkdfmjqdflj',
-        quizz: {},
-        livecoding: null,
+        description: '',
+        videoLink: 'https://vjs.zencdn.net/v/oceans.mp4',
       },
       {
         id: 4,
         idModule: 1,
         title: 'portées des variables',
         description: 'this cours talk about of data types in variables',
-        videoLink: 'https://qkdfmjqdflj',
-        quizz: {},
-        livecoding: null,
+        videoLink: 'https://vjs.zencdn.net/v/oceans.mp4',
       },
       {
         id: 5,
         idModule: 2,
         title: 'Api',
         description: 'this cours talk about of Api in variables',
-        videoLink: 'https://www.youtube.com/embed/1jT3EQVJOBA',
-        quizz: {},
-        livecoding: null,
+        videoLink: 'https://vjs.zencdn.net/v/oceans.mp4',
       },
       {
         id: 6,
         idModule: 2,
         title: 'Micro services',
         description: 'this cours talk about micro services in variables',
-        videoLink: 'https://qkdfmjqdflj',
-        quizz: {},
-        livecoding: null,
+        videoLink: 'https://vjs.zencdn.net/v/oceans.mp4',
       },
     ],
     challenges: [
@@ -135,6 +141,30 @@ export const courses = [
             submited: true,
           },
         ],
+      },
+    ],
+    quizzes: [
+      {
+        id: 1,
+        name: 'variables',
+        questions: {},
+        beginDate:
+          'Mon Jun 21 2021 14:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        endDate:
+          'Thu Jun 24 2021 16:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        time: '00:15',
+        percentTopass: 60,
+      },
+      {
+        id: 2,
+        name: 'conditions',
+        questions: {},
+        beginDate:
+          'Tue Jun 22 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        endDate:
+          'Thu Jun 24 2021 16:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        time: '00:15',
+        percentTopass: 60,
       },
     ],
   },
