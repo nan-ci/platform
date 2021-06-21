@@ -34,11 +34,7 @@ export const CoursSvg = ({
   ...props
 }) => {
   const stepName = generateStepName(moduleId, coursId)
-  const [color, setColor] = useState(
-    lock
-      ? 'grey'
-      : 'var(--cyan-darker)',
-  )
+  const [color, setColor] = useState(lock ? 'grey' : 'var(--cyan-darker)')
   return (
     <div class="contain">
       {((!project && moduleId + coursId > 2) || project) && (
@@ -47,10 +43,7 @@ export const CoursSvg = ({
       <div
         onClick={() => !lock && navigate(link)}
         onMouseEnter={() => !lock && setColor('var(--green-light)')}
-        onMouseLeave={() =>
-          !lock &&
-          setColor( 'var(--cyan-darker)')
-        }
+        onMouseLeave={() => !lock && setColor('var(--cyan-darker)')}
         style={{
           cursor: !lock ? 'pointer' : 'not-allowed',
           position: 'relative',
