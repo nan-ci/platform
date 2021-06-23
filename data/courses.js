@@ -147,24 +147,67 @@ export const courses = [
       {
         id: 1,
         name: 'variables',
-        questions: {},
+        questions: {
+          'what is javascript': {
+            'a code': true,
+            'a language': true,
+            'a many': false,
+          },
+          'what is dom': {
+            'a javascript element': true,
+            'a code': false,
+            'a many': false,
+          },
+          'what is dom 2': {
+            'a javascript element': true,
+            'a code': false,
+            'a many': false,
+          },
+          'what is dom 3': {
+            'a javascript element': true,
+            'a code': false,
+            'a many': false,
+          },
+          'what is dom 4': {
+            'a javascript element': true,
+            'a code': false,
+            'a many': false,
+          },
+          'what is dom 5': {
+            'a javascript element': true,
+            'a code': false,
+            'a many': false,
+          },
+        },
         beginDate:
           'Mon Jun 21 2021 14:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Thu Jun 24 2021 16:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        time: '00:15',
-        percentTopass: 60,
+          'Fri Jun 25 2021 16:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        duration: '15:00',
+        percentOfValidation: 60,
       },
       {
         id: 2,
         name: 'conditions',
-        questions: {},
+        questions: {
+          'what is python': {
+            'a code': false,
+            'a language': true,
+            'a many': false,
+          },
+          'what is nodejs': {
+            'a framework': false,
+            'a language': false,
+            'a many': false,
+            'a javascript work environnement': true,
+          },
+        },
         beginDate:
           'Tue Jun 22 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
           'Thu Jun 24 2021 16:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        time: '00:15',
-        percentTopass: 60,
+        duration: '15:00',
+        percentOfValidation: 60,
       },
     ],
   },
