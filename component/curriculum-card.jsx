@@ -3,7 +3,6 @@ import { getUserLevel } from '../lib/user'
 import { Div, P } from './elements'
 import { NavLink } from './header'
 import { useState } from 'preact/hooks'
-import { Lecteur } from './lecteur.jsx'
 
 css(`
 
@@ -136,7 +135,7 @@ export const CurriculumCard = ({
               </>
             )}
           </strong>
-          <P class="header-info"> - 11 lessons - {hours} min</P>
+          <P class="header-info"> - {cours.length} lessons - {hours} min</P>
         </header>
         <Div class={`cur-div-contain ${showCard && 'show'}`}>
           <h1>{title}</h1>

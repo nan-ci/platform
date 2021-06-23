@@ -9,6 +9,7 @@ import { LearningChoice } from './page/learningchoice.jsx'
 import { Curriculum } from './page/curriculum.jsx'
 import { Cours } from './page/cours.jsx'
 import { Quizzes } from './page/quizzes.jsx'
+import {Quiz} from './page/quiz.jsx';
 import { user } from './lib/auth.js'
 import { navigate, useURL } from './lib/router.js'
 
@@ -31,6 +32,7 @@ const App = () => {
       <Settings path="/settings" />
       <Challenges path="/challenges" />
       <Quizzes path="/quizzes" />
+      <Quiz path="/quiz" />
       <LearningChoice path="/learningchoice" />
       <Curriculum path="/curriculum" />
       <Cours path="/cours" />
