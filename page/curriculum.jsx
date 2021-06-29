@@ -24,7 +24,6 @@ export const Curriculum = () => {
   })
 
   const config = (link, res, desc) => {
-    console.log('link', link, res)
     setShowLecteur(true)
     setCurrentCours({ link, ressources: res, description: desc })
   }
