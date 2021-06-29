@@ -58,7 +58,7 @@ export const LearningChoice = () => {
   }
 
   return (
-    <Div class="div-learning" >
+    <Div class="div-learning">
       <Form
         submit="submit"
         style={{ textAlign: 'center' }}

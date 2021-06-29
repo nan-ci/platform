@@ -9,17 +9,24 @@ import { LearningChoice } from './page/learningchoice.jsx'
 import { Curriculum } from './page/curriculum.jsx'
 import { Cours } from './page/cours.jsx'
 import { Quizzes } from './page/quizzes.jsx'
-import {Quiz} from './page/quiz.jsx';
+import { Quiz } from './page/quiz.jsx'
 import { user } from './lib/auth.js'
 import { navigate, useURL } from './lib/router.js'
 
 const App = () => {
   const { pathname } = useURL()
-  if (!user && pathname !== '/login') return navigate('/login')
-  if (user && !user.discordId && pathname !== '/learningchoice')
+  if (!user && !pathname.includes('api') && pathname !== '/login')
+    return navigate('/login')
+  if (
+    user &&
+    !pathname.includes('api') &&
+    !user.discordId &&
+    pathname !== '/learningchoice'
+  )
     return navigate('/learningchoice')
   if (
     user &&
+    !pathname.includes('api') &&
     user.discordId &&
     (pathname === '/login' || pathname === '/learningchoice')
   )
