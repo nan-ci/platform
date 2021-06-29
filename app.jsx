@@ -15,18 +15,11 @@ import { navigate, useURL } from './lib/router.js'
 
 const App = () => {
   const { pathname } = useURL()
-  if (!user && !pathname.includes('api') && pathname !== '/login')
-    return navigate('/login')
-  if (
-    user &&
-    !pathname.includes('api') &&
-    !user.discordId &&
-    pathname !== '/learningchoice'
-  )
+  if (!user && pathname !== '/login') return navigate('/login')
+  if (user && !user.discordId && pathname !== '/learningchoice')
     return navigate('/learningchoice')
   if (
     user &&
-    !pathname.includes('api') &&
     user.discordId &&
     (pathname === '/login' || pathname === '/learningchoice')
   )
