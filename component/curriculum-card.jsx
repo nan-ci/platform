@@ -3,6 +3,7 @@ import { getUserLevel } from '../lib/user'
 import { Div, P } from './elements'
 import { NavLink } from './header'
 import { useState } from 'preact/hooks'
+import { VideoPlay } from './icons'
 
 css(`
 
@@ -135,7 +136,10 @@ export const CurriculumCard = ({
               </>
             )}
           </strong>
-          <P class="header-info"> - {cours.length} lessons - {hours} min</P>
+          <P class="header-info">
+            {' '}
+            - {cours.length} lessons - {hours} min
+          </P>
         </header>
         <Div class={`cur-div-contain ${showCard && 'show'}`}>
           <h1>{title}</h1>
@@ -148,7 +152,7 @@ export const CurriculumCard = ({
                     userLevel && setCours(videoLink, ressources, description)
                   }
                 >
-                  <i class="fa fa-play-circle"></i>
+                  <VideoPlay size={40} color="black" />
                   <span class="title"> {title} </span>
                 </Div>
                 <span class="time">02:34</span>

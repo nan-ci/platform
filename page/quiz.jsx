@@ -9,6 +9,7 @@ import {
   getUser,
 } from '../lib/quiz.js'
 import { css } from '../lib/dom.js'
+import { Chrono, ArrowLeft, ArrowRight } from '../component/icons.jsx'
 import moment from 'moment'
 
 css(`
@@ -47,6 +48,10 @@ css(`
      text-align:center;
     font-size:1.4rem;
     padding: 1rem;
+    display:flex;
+    align-items:center;
+    flex-direction:row;
+    justify-content:center;
   }
 
   .quiz-container h2.chrono i {
@@ -421,7 +426,8 @@ export const Quiz = ({ params: { name } }) => {
       <Div class="quiz-container">
         <header>
           <h2 class="chrono">
-            <i class="fas fa-stopwatch"></i> {chrono ? chrono : ' ... '}
+            <Chrono size={25} color="red" style={{ marginRight: '10px' }} />{' '}
+            {chrono ? chrono : ' ... '}
           </h2>
           <Div class="progression-bar">
             <Div
@@ -470,7 +476,7 @@ export const Quiz = ({ params: { name } }) => {
                   changeQuestion(Object.keys(quiz.questions)[currentIndex - 1])
                 }
               >
-                <i class="fas fa-chevron-left" aria-hidden="true"></i>
+                <ArrowLeft size={15} color="white" />
               </button>
               <button
                 onClick={() =>
@@ -478,7 +484,7 @@ export const Quiz = ({ params: { name } }) => {
                   changeQuestion(Object.keys(quiz.questions)[currentIndex + 1])
                 }
               >
-                <i class="fas fa-chevron-right" aria-hidden></i>
+                <ArrowRight size={15} color="white" />
               </button>
             </Div>
           </section>
