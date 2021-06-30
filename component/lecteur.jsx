@@ -2,6 +2,7 @@ import { css } from '../lib/dom.js'
 import { Div, P } from './elements.jsx'
 import { NavLink } from './header.jsx'
 import { NaN } from './icons.jsx'
+import { Stack, Play, Pause, Expand, Reduce, Volume } from './icons.jsx'
 import { useEffect, useState, useRef } from 'preact/hooks'
 
 css(`
@@ -343,7 +344,7 @@ export const Lecteur = ({
             {ressources &&
               ressources.map((res) => (
                 <NavLink class="nlink" href={res.link} key={res.title}>
-                  <i class="fab  fa-buffer" aria-hidden="true"></i>
+                  <Stack size={20} color="orangered" />
                   <span> {res.name}</span>
                 </NavLink>
               ))}
@@ -409,7 +410,7 @@ export const Lecteur = ({
               <p class="completed-time">
                 {data.min}:{data.sec}
               </p>
-              <Div class="volume">
+              <Div class="volume" style={{ marginLeft: '20px' }}>
                 <Div style={{ display: showVolume ? 'block' : 'none' }}>
                   <input
                     type="range"
@@ -419,26 +420,37 @@ export const Lecteur = ({
                     onChange={({ target: { value } }) => toggleVolume(value)}
                   />
                 </Div>
-                <i
-                  class="fa fa-volume-up"
-                  aria-hidden="true"
+                <Volume
+                  size={20}
+                  color="white"
                   onClick={() => setShowVolume((v) => !v)}
-                ></i>
+                />
               </Div>
-              <i
-                class="fa fa-desktop"
-                aria-hidden="true"
-                style={{
-                  color: fullScreen ? 'var(--comment-darker)' : 'white',
-                }}
+              <Div
                 onClick={() => setFullScreen(!fullScreen)}
-              ></i>
+                style={{ cursor: 'pointer', marginLeft: '20px' }}
+              >
+                {fullScreen ? (
+                  <Reduce size={18} color="white" />
+                ) : (
+                  <Expand size={18} color="white" />
+                )}
+              </Div>
             </Div>
             <Div class="play" onClick={() => togglePlay()}>
-              <i
-                class={`fa fa-${play ? 'pause' : 'play'}`}
-                aria-hidden="true"
-              ></i>
+              {play ? (
+                <Pause
+                  size={20}
+                  color="white"
+                  style={{ transform: 'rotateZ(-45deg)' }}
+                />
+              ) : (
+                <Play
+                  size={20}
+                  color="white"
+                  style={{ transform: 'rotateZ(-45deg)' }}
+                />
+              )}
             </Div>
           </Div>
         </Div>
