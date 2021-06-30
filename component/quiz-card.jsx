@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import moment from 'moment'
 import { navigate } from '../lib/router.js'
 import { format, getUser } from '../lib/quiz.js'
+import { Chrono,Quiz } from '../component/icons.jsx'
 
 css(`
     .quizz-container {
@@ -24,11 +25,12 @@ css(`
     }
 
     .quizz-container .l {
-      width:auto;
+    
+      width:50%;
       display:flex;
       flex-direction:row;
       align-items:center;
-      justify-content:flex-start
+      justify-content:space-between;
     }
 
     .quizz-container h1,.quizz-container p{
@@ -102,20 +104,12 @@ export const QuizCard = ({
       }}
     >
       <Div class="l">
-        <i
-          class="fab fa-buffer"
-          aria-hidden="true"
-          style={{ color: 'orange' }}
-        ></i>
+        <Quiz size={30} color="orangered" style={{ fontWeight: 'bolder' }} />
         <h1>{name}</h1>
-        <P>
-          <i
-            class="fas fa-stopwatch"
-            aria-hidden="true"
-            style={{ color: 'red' }}
-          ></i>
+          <Chrono size={20} color="red" style={{ fontWeight: 'bolder' }} />
+        <span>
           {duration}
-        </P>
+        </span>
       </Div>
       <Div class="r">
         {!quizClose ? (
