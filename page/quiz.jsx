@@ -7,6 +7,7 @@ import {
   durationToSeconds,
   progressColor,
   getUser,
+  time,
 } from '../lib/quiz.js'
 import { css } from '../lib/dom.js'
 import { Chrono, ArrowLeft, ArrowRight } from '../component/icons.jsx'
@@ -322,6 +323,14 @@ export const Quiz = ({ params: { name } }) => {
   let chronoInterval = null
   let progressInterval = null
 
+  const submitQuiz = () => {
+    clearInterval(chronoInterval)
+    clearInterval(progressInterval)
+    user.quizzes[name].submit = true
+    localStorage.setItem('user', JSON.stringify({ ...user }))
+    location.href = '/quizzes'
+  }
+
   const changeQuestion = (name) => {
     setCurrentQuestion(name)
     setCurrentIndex(Object.keys(quiz.questions).findIndex((q) => q === name))
@@ -381,20 +390,22 @@ export const Quiz = ({ params: { name } }) => {
 
   useEffect(() => {
     chronoInterval = setInterval(() => {
-      const duration = moment.duration(
-        moment(getUser().quizzes[name].end).diff(moment()),
-      )
-      setChrono(
-        `${
-          duration.minutes() < 10
-            ? '0' + duration.minutes()
-            : duration.minutes()
-        }:${
-          duration.seconds() < 10
-            ? '0' + duration.seconds()
-            : duration.seconds()
-        }`,
-      )
+      const duration = time(name, 'all')
+      if (duration.asSeconds() > 0) {
+        setChrono(
+          `${
+            duration.minutes() < 10
+              ? '0' + duration.minutes()
+              : duration.minutes()
+          }:${
+            duration.seconds() < 10
+              ? '0' + duration.seconds()
+              : duration.seconds()
+          }`,
+        )
+      } else {
+        submitQuiz()
+      }
     }, 1000)
     return () => {
       clearInterval(chronoInterval)
@@ -403,14 +414,14 @@ export const Quiz = ({ params: { name } }) => {
 
   useEffect(() => {
     progressInterval = setInterval(() => {
-      setProgressPercent(
-        100 -
-          (moment
-            .duration(moment(getUser().quizzes[name].end).diff(moment()))
-            .asSeconds() *
-            100000) /
-            (durationToSeconds(quiz.duration) * 1000),
-      )
+      const seconds = time(name, 'asSeconds')
+      if (seconds >= 0) {
+        setProgressPercent(
+          100 - (seconds * 100000) / (durationToSeconds(quiz.duration) * 1000),
+        )
+      } else {
+        clearInterval(progressInterval)
+      }
     }, 100)
     return () => {
       clearInterval(progressInterval)
@@ -535,14 +546,7 @@ export const Quiz = ({ params: { name } }) => {
           &times;
         </button>
         <h1> Do you want really submit this quiz ??</h1>
-        <button
-          class="yes"
-          onClick={() => {
-            user.quizzes[name].submit = true
-            localStorage.setItem('user', JSON.stringify({ ...user }))
-            location.href = '/quizzes'
-          }}
-        >
+        <button class="yes" onClick={() => submitQuiz()}>
           {' '}
           Yes{' '}
         </button>
