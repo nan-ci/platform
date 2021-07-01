@@ -109,7 +109,8 @@ dist
 .DS_STORE
 
 # build
-public/
+public/*
+!public/assets/
 api/index.js
 
 # test data
