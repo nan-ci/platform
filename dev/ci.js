@@ -22,7 +22,7 @@ const read = async (stream) => {
 const handleRequest = async (req, res, again) => {
   const hash = req.url.split('/', 2)[1]
   const version = req.headers.referer?.match(
-    /https:\/\/([a-z0-9]{8})\.platform-au0l\.pages\.dev/,
+    /https:\/\/([a-z0-9]{8})\.platform-nan-dev-8sl\.pages\.dev/,
   )?.[1]
   if (!version || !hash || hash.length !== 40) {
     res.statusCode = 403
@@ -48,7 +48,7 @@ const handleRequest = async (req, res, again) => {
     return handleRequest(req, res, true)
   }
 
-  const env = { DOMAIN: `https://${version}.platform-au0l.pages.dev` }
+  const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
   const params = JSON.stringify({ url, hash, method, headers })
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
