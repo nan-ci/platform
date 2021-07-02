@@ -191,13 +191,13 @@ export const Profile = () => {
                 class={`${activeTab === 'challenges' && 'active'}`}
                 onClick={() => setActiveTab('challenges')}
               >
-                challenges
+                challenges - results
               </button>
               <button
                 class={`${activeTab === 'quizzes' && 'active'}`}
                 onClick={() => setActiveTab('quizzes')}
               >
-                quizzes
+                quizzes - results
               </button>
             </nav>
             <Div class="content">
@@ -224,13 +224,13 @@ export const Profile = () => {
                 class={`tab-pane ${activeTab === 'challenges' && 'active'}`}
                 id="challenges"
               >
-                <h1>challenges</h1>
+                <h1>challenges - results </h1>
               </Div>
               <Div
                 class={`tab-pane ${activeTab === 'quizzes' && 'active'}`}
                 id="quizzes"
               >
-                <h1>quizzes</h1>
+                <h1>quizzes - results </h1>
               </Div>
             </Div>
           </Div>

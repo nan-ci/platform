@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import moment from 'moment'
 import { navigate } from '../lib/router.js'
 import { format, getUser } from '../lib/quiz.js'
-import { Chrono,Quiz } from '../component/icons.jsx'
+import { Chrono, Quiz, Done, NotDone, Lock } from '../component/icons.jsx'
 
 css(`
     .quizz-container {
@@ -15,17 +15,28 @@ css(`
       width:100%;
       padding: 1.3rem;
       cursor:pointer;
-      background:#8080803b;
       transition:all 0.5s ease-in-out;
       margin:7px auto;
     }
 
-    .quizz-container:hover{
+    .canHover:hover{
       transform: scale(1.07);
     }
 
+    .quizz-container .r,.quizz-container .r p{
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .quizz-container .r  p span{
+      margin-left: 10px;
+  }
+
+
     .quizz-container .l {
-    
+
       width:50%;
       display:flex;
       flex-direction:row;
@@ -52,7 +63,7 @@ export const QuizCard = ({
   const timeRef = useRef(null)
 
   const [quizClose, setQuizClose] = useState(moment().isAfter(endDate))
-  const [ifStart, setIfStart] = useState(moment().isBefore(beginDate))
+  const [quizStart, setQuizStart] = useState(moment().isAfter(beginDate))
 
   const user = getUser()
 
@@ -66,7 +77,7 @@ export const QuizCard = ({
       minutes: diff.minutes(),
       seconds: diff.seconds(),
     }
-    setIfStart(moment().isBefore(start))
+    setQuizStart(moment().isAfter(start))
     setTime(
       (meth['days'] > 0 ? format(meth, 'days') : '') +
         ' ' +
@@ -91,34 +102,59 @@ export const QuizCard = ({
   return (
     <Div
       key={id}
-      class="quizz-container"
+      class={`quizz-container ${
+        !quizClose &&
+        (!user.quizzes || (user.quizzes && user.quizzes[name])) &&
+        'canHover'
+      }`}
+      style={{
+        background:
+          !quizClose && (!user.quizzes || (user.quizzes && user.quizzes[name]))
+            ? '#788bb061'
+            : '#4f4f4f',
+      }}
       onClick={() => {
         if (
+          !quizClose &&
           user.quizzes &&
           user.quizzes[name] &&
           !user.quizzes[name].submit &&
           moment().isBefore(user.quizzes[name].end)
         )
           navigate('/quiz?name=' + name)
-        selectQuiz({ name, duration, percentOfValidation, questions })
+        !quizClose &&
+          selectQuiz({ name, duration, percentOfValidation, questions })
       }}
     >
       <Div class="l">
-        <Quiz size={30} color="orangered" style={{ fontWeight: 'bolder' }} />
+        <Quiz size={20} color="orangered" style={{ fontWeight: 'bolder' }} />
         <h1>{name}</h1>
-          <Chrono size={20} color="red" style={{ fontWeight: 'bolder' }} />
-        <span>
-          {duration}
-        </span>
+        <Chrono size={20} color="red" style={{ fontWeight: 'bolder' }} />
+        <span>{duration}</span>
       </Div>
       <Div class="r">
-        {!quizClose ? (
+        {!quizClose && (
           <P>
-            <strong>{ifStart ? 'open' : 'close'} in :</strong>
-            {time}
+            <strong>{quizStart ? 'close' : 'open'} in :</strong>
+            <span>{time}</span>
           </P>
-        ) : (
-          <P> Closed </P>
+        )}
+        {quizClose && (
+          <P>
+            <Lock size={20} /> <span> Closed </span>
+          </P>
+        )}
+        {user.quizzes && user.quizzes[name] && (
+          <P>
+            <Done size={20} color="green" />
+            <span> Done </span>
+          </P>
+        )}
+        {quizClose && (!user.quizzes || (user.quizzes && !user.quizzes[name])) && (
+          <P>
+            <NotDone size={20} color={'red'} />
+            <span> Not Done </span>
+          </P>
         )}
       </Div>
     </Div>
