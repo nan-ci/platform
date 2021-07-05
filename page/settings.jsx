@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks'
 import { Alert } from '../component/alert.jsx'
 import { Form, Input, Row, Fieldset } from '../component/form.jsx'
 import { DangerZone } from '../component/dangerzone.jsx'
-import { divider } from '../component/elements.jsx'
+import { API } from '../lib/env.js'
 import { Layout } from '../component/layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
@@ -102,6 +102,7 @@ export const Settings = () => {
   const [alert, setAlert] = useState(false)
   const [errors, setErrors] = useState({})
   const months = ['October', 'November', 'December', 'January', 'February']
+
   const checkErrors = (data) => {
     let found = false
     if (!data.biography) {
@@ -113,12 +114,20 @@ export const Settings = () => {
     return found
   }
 
-  const submitAccount = (e) => {
+  const submitAccount = async (e) => {
     e.preventDefault()
     const data = Object.fromEntries(new FormData(e.target))
+    const json = JSON.stringify(data)
     if (!checkErrors(data)) {
-      localStorage.user = JSON.stringify({ ...user, ...data })
-      setAlert(!alert)
+      let resp = await fetch(`api/user/profile`, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: json,
+      })
+      if (resp.ok) {
+        localStorage.user = JSON.stringify({ ...user, ...data })
+        setAlert(!alert)
+      }
     }
   }
 

@@ -100,7 +100,11 @@ o['GET /auth/github with a proper state'] = {
 
     // expect a redirection
     eq({ body: res.body, status }, { body: null, status: 301 })
-    eq(headers.location, `/learningchoice?${new URLSearchParams(user)}`)
+    eq(
+      headers.location,
+      `/learningchoice?${new URLSearchParams(user)}` ||
+        `/?${new URLSearchParams(user)}`,
+    )
     const [session, ...parts] = headers['set-cookie'].split('; ')
     eq(session.startsWith('nan-session=user:tester:'), true)
     eq(

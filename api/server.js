@@ -1,4 +1,5 @@
 import './auth.js'
+import './user.js'
 import { INTERNAL } from './defs.js'
 import { handleRequest } from './router.js'
 
