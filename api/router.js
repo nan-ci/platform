@@ -1,4 +1,4 @@
-import { NOT_FOUND, UNAUTHORIZED } from './defs.js'
+import { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } from './defs.js'
 import * as db from './db.js'
 
 const handlers = {}
@@ -15,6 +15,12 @@ export const withUser = (fn) => async (params) => {
   if (!params.user) return new Response('Bad Session', UNAUTHORIZED)
   // ...maybe remove session cookie in that case
   return fn(params)
+}
+
+export const withBody = (fn) => async ({ request, session }) => {
+  //const body = await request.json()
+  if (!request.body) return new Response('Missing body', BAD_REQUEST)
+  return fn({ session, body: request.body })
 }
 
 export const getCookie = (request, key) => {

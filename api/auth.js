@@ -150,6 +150,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
 }
 
 const oauth2Url = (url, args) => `https://${url}?${new URLSearchParams(args)}`
+
 GET.link.discord = withUser(async ({ user, session, url }) => {
   const speciality = url.searchParams.get('speciality')
   if (!specialities[speciality])
