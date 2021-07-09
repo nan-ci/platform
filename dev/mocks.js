@@ -7,7 +7,7 @@ globalThis.addEventListener = () => {}
 
 await import('../api/server.js')
 
-export const avatar = 'a'
+export const avatar = ''
 export const login = 'tester'
 export const email = 'dev@nan.ci'
 export const name = 'Jean Patrick'

@@ -17,17 +17,19 @@ export const withUser = (fn) => async (params) => {
   return fn(params)
 }
 
-export const withBody = (fn) => async ({ request, session }) => {
-  //const body = await request.json()
-  if (!request.body) return new Response('Missing body', BAD_REQUEST)
-  return fn({ session, body: request.body })
-}
+export const withBody = (fn) =>
+  withUser(async ({ session, url, request }) => {
+    const body = await request.json()
+    console.log('body', body)
+    if (!body) return new Response('Missing body', BAD_REQUEST)
+    return fn({ url, session, body: body })
+  })
 
 export const getCookie = (request, key) => {
   const cookieStr = request.headers.get('cookie')
   if (!cookieStr) return undefined
   const x = cookieStr.indexOf(`${key}=`)
-  if (x < 0) return
+  if (x < 0) return0
   const y = cookieStr.indexOf('; ', x)
   return cookieStr.slice(x + key.length + 1, y < x ? cookieStr.length : y)
 }

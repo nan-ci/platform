@@ -3,15 +3,17 @@ import { courses } from '../data/courses.js'
 import { Div, P } from '../component/elements.jsx'
 import { Layout } from '../component/layout.jsx'
 import {
-  EndDate,
   durationToSeconds,
   progressColor,
-  getUser,
+  getQuiz,
   time,
+  getUser,
 } from '../lib/quiz.js'
 import { css } from '../lib/dom.js'
 import { Chrono, ArrowLeft, ArrowRight } from '../component/icons.jsx'
+import { API } from '../lib/env.js'
 import moment from 'moment'
+import { navigate } from '../lib/router.js'
 
 css(`
   .quiz-h1{
@@ -304,7 +306,7 @@ export const Quiz = ({ params: { name } }) => {
   const quiz = courses
     .find((c) => c.name === getUser().speciality)
     .quizzes.find((q) => q.name === name)
-  const user = getUser()
+  const QuiZ = getQuiz()
   const [chrono, setChrono] = useState(null)
   const [progressPercent, setProgressPercent] = useState(0)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -323,12 +325,19 @@ export const Quiz = ({ params: { name } }) => {
   let chronoInterval = null
   let progressInterval = null
 
-  const submitQuiz = () => {
+  const submitQuiz = async () => {
     clearInterval(chronoInterval)
     clearInterval(progressInterval)
-    user.quizzes[name].submit = true
-    localStorage.setItem('user', JSON.stringify({ ...user }))
-    location.href = '/quizzes'
+    const fetching = await fetch(`${API}/user/quiz?name=${name}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ submit: true }),
+    })
+    const resp = await fetching.json()
+    if (resp.status) {
+      localStorage.removeItem('quiz')
+      navigate('/quizzes')
+    }
   }
 
   const changeQuestion = (name) => {
@@ -340,7 +349,7 @@ export const Quiz = ({ params: { name } }) => {
     )
   }
 
-  const chooseResponse = (value) => {
+  const chooseResponse = async (value) => {
     if (manyResponse) {
       if (myResponses[currentQuestion]) {
         myResponses[currentQuestion].includes(value)
@@ -354,43 +363,33 @@ export const Quiz = ({ params: { name } }) => {
     } else {
       myResponses[currentQuestion] = value
     }
-
     setMyResponses((r) => {
       return { ...r, ...myResponses }
     })
+    await (
+      await fetch(`${API}/user/quiz?name=${name}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ responses }),
+      })
+    ).json()
 
-    const dat = {}
-    dat[name] = { ...getUser().quizzes[name], responses: { ...myResponses } }
     localStorage.setItem(
-      'user',
-      JSON.stringify({
-        ...getUser(),
-        quizzes: { ...getUser().quizzes, ...dat },
-      }),
+      'quiz',
+      JSON.stringify({ ...getQuiz(), responses: { ...myResponses } }),
     )
   }
 
-  useEffect(() => {
-    if (!user.quizzes || (user.quizzes && !user.quizzes[name])) {
-      // do this is a new quiz;
-      // set the end of a time in and responses in a session;
-      if (!user.quizzes) user.quizzes = {}
-      user.quizzes[name] = {
-        responses: {},
-        end: EndDate(quiz.duration),
-        submit: false,
-      }
-      localStorage.setItem('user', JSON.stringify({ ...user }))
-    }
+  useEffect(async () => {
     // check if  session on the page to get infos from localStorage (simulate database);
-    if (user.quizzes && user.quizzes[name]) {
-      setMyResponses(user.quizzes[name].responses)
+    if (QuiZ) {
+      setMyResponses(QuiZ.responses)
     }
   }, [])
 
   useEffect(() => {
     chronoInterval = setInterval(() => {
-      const duration = time(name, 'all')
+      const duration = time('all')
       if (duration.asSeconds() > 0) {
         setChrono(
           `${
@@ -414,7 +413,7 @@ export const Quiz = ({ params: { name } }) => {
 
   useEffect(() => {
     progressInterval = setInterval(() => {
-      const seconds = time(name, 'asSeconds')
+      const seconds = time('asSeconds')
       if (seconds >= 0) {
         setProgressPercent(
           100 - (seconds * 100000) / (durationToSeconds(quiz.duration) * 1000),
@@ -427,6 +426,8 @@ export const Quiz = ({ params: { name } }) => {
       clearInterval(progressInterval)
     }
   }, [])
+
+  if (!QuiZ) return navigate('/quizzes')
 
   return (
     <Layout>

@@ -3,7 +3,8 @@ import { Div, P } from './elements.jsx'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import moment from 'moment'
 import { navigate } from '../lib/router.js'
-import { format, getUser } from '../lib/quiz.js'
+import { format, getQuiz } from '../lib/quiz.js'
+import { API } from '../lib/env.js'
 import { Chrono, Quiz, Done, NotDone, Lock } from '../component/icons.jsx'
 
 css(`
@@ -58,6 +59,7 @@ export const QuizCard = ({
   questions,
   percentOfValidation,
   selectQuiz,
+  quizzes,
 }) => {
   const [time, setTime] = useState('00:00')
   const timeRef = useRef(null)
@@ -65,7 +67,7 @@ export const QuizCard = ({
   const [quizClose, setQuizClose] = useState(moment().isAfter(endDate))
   const [quizStart, setQuizStart] = useState(moment().isAfter(beginDate))
 
-  const user = getUser()
+  const quiz = getQuiz()
 
   const getDateInfos = (end, start) => {
     const currentDate = moment()
@@ -99,31 +101,42 @@ export const QuizCard = ({
     }
   }, [])
 
+  const findQuiz = async () => {
+    const resp = await (await fetch(`${API}/user/quiz?name=${name}`)).json()
+    console.log('quiz', resp)
+    if (
+      resp.status &&
+      !resp.data.submit &&
+      moment().isBefore(resp.data.end_date)
+    ) {
+      localStorage.setItem('quiz', JSON.stringify(resp.data))
+      return navigate('/quiz?name=' + name)
+    } else {
+      selectQuiz({ name, duration, percentOfValidation, questions })
+    }
+  }
+
   return (
     <Div
       key={id}
       class={`quizz-container ${
         !quizClose &&
-        (!user.quizzes || (user.quizzes && user.quizzes[name])) &&
+        (!quizzes ||
+          (quizzes &&
+            (!quizzes[name] || (quizzes[name] && !quizzes[name].submit)))) &&
         'canHover'
       }`}
       style={{
         background:
-          !quizClose && (!user.quizzes || (user.quizzes && user.quizzes[name]))
+          !quizClose &&
+          (!quizzes ||
+            (quizzes &&
+              (!quizzes[name] || (quizzes[name] && !quizzes[name].submit))))
             ? '#788bb061'
             : '#4f4f4f',
       }}
       onClick={() => {
-        if (
-          !quizClose &&
-          user.quizzes &&
-          user.quizzes[name] &&
-          !user.quizzes[name].submit &&
-          moment().isBefore(user.quizzes[name].end)
-        )
-          navigate('/quiz?name=' + name)
-        !quizClose &&
-          selectQuiz({ name, duration, percentOfValidation, questions })
+        !quizClose && findQuiz()
       }}
     >
       <Div class="l">
@@ -144,13 +157,13 @@ export const QuizCard = ({
             <Lock size={20} /> <span> Closed </span>
           </P>
         )}
-        {user.quizzes && user.quizzes[name] && (
+        {quizzes && quizzes[name] && (
           <P>
             <Done size={20} color="green" />
             <span> Done </span>
           </P>
         )}
-        {quizClose && (!user.quizzes || (user.quizzes && !user.quizzes[name])) && (
+        {quizClose && (!quizzes || (quizzes && !quizzes[name])) && (
           <P>
             <NotDone size={20} color={'red'} />
             <span> Not Done </span>
