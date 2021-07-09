@@ -113,7 +113,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
       'user-agent': 'nan-academy/nan-platform',
       ...TYPE_JSON,
     },
-    body: JSON.stringify({ query: '{ viewer { login id name }}' }),
+    body: JSON.stringify({ query: '{ viewer { login id name}}' }),
   })
 
   const { data, error } = await gql(query)
@@ -132,6 +132,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
       db.set(session, user),
     ])
   }
+
   return new Response(null, {
     status: 301,
     headers: {

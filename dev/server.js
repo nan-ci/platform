@@ -9,7 +9,7 @@ const { generate, serve } = await import('./build.js')
 const { host: hostname, port } = await serve()
 
 // Set domain before we run the tests
-const PORT = process.env.PORT || 8000
+const PORT = process.env.PORT || port + 1
 process.env.DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`
 
 // run tests
@@ -19,11 +19,11 @@ await (await import('./test-runner.js')).run()
 const { API, sendResponse } = await import('./mocks.js')
 
 // load KV data
+
 const db = join(rootDir, '.nan.kv.json')
 NAN.entries = await readFile(db, 'utf8')
   .then(JSON.parse)
   .catch(() => ({}))
-
 // Then start a proxy server on port 3000
 createServer(async (req, res) => {
   const { url: path, method } = req

@@ -118,10 +118,15 @@ export const Input = ({
   divStyle,
   inputType,
   children,
+  updateErrors,
   ...props
 }) => {
   const [val, setVal] = useState(value || '')
-  const onInput = ({ target }) => setVal(target.value)
+  const onInput = ({ target }) => {
+    setVal(target.value)
+    if (errors[target.name]) delete errors[target.name]
+    updateErrors({ ...errors })
+  }
   const onFocus = ({ target }) =>
     setTimeout(
       () =>

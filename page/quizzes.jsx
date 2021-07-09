@@ -1,4 +1,4 @@
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { Div, P } from '../component/elements.jsx'
 import { Layout } from '../component/layout.jsx'
 import { QuizCard } from '../component/quiz-card.jsx'
@@ -6,6 +6,8 @@ import { courses } from '../data/courses.js'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 import { navigate } from '../lib/router.js'
+import { API } from '../lib/env.js'
+import { EndDate } from '../lib/quiz.js'
 import moment from 'moment'
 
 css(`
@@ -115,6 +117,7 @@ const QuizInfos = ({ currentQuiz }) => (
 export const Quizzes = () => {
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const [showModal, setShowModal] = useState(false)
+  let myQuizzes = null
 
   const quizzes = courses.find((c) => c.name === user.speciality).quizzes
 
@@ -123,11 +126,43 @@ export const Quizzes = () => {
     setShowModal(true)
   }
 
+  useEffect(async () => {
+    const resp = await (await fetch(`${API}/user/quizzes`)).json()
+    if (resp.data) {
+      myQuizzes = resp.data
+    }
+  }, [])
+
+  const initQuiz = async ({ name, duration }) => {
+    const fetching = await fetch(`${API}/user/quiz`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        responses: {},
+        percent: 0,
+        end_date: EndDate(duration),
+        submit: false,
+      }),
+    })
+
+    const resp = await fetching.json()
+    console.log('data', resp)
+    if (resp.status) {
+      localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
+      navigate('/quiz?name=' + resp.data.name)
+    }
+  }
+
   return (
     <Layout>
       <Div>
         {quizzes.map((quiz) => (
-          <QuizCard {...quiz} selectQuiz={(quiz) => selectQuiz(quiz)} />
+          <QuizCard
+            {...quiz}
+            selectQuiz={(quiz) => selectQuiz(quiz)}
+            quizzes={myQuizzes}
+          />
         ))}
       </Div>
       <Div
@@ -162,9 +197,7 @@ export const Quizzes = () => {
                 (user.quizzes && !user.quizzes[currentQuiz.name])) && (
                 <button
                   class="go"
-                  onClick={() =>
-                    navigate('/quiz?name=' + (currentQuiz && currentQuiz.name))
-                  }
+                  onClick={() => currentQuiz && initQuiz(currentQuiz)}
                 >
                   Go to quiz
                 </button>

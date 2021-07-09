@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks'
 import { css } from '../lib/dom.js'
 import { Div, P } from './elements.jsx'
+import { NotDone } from './icons.jsx'
 
 css(`
 .alert-container{
