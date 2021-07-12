@@ -65,9 +65,8 @@ export const QuizCard = ({
   const timeRef = useRef(null)
 
   const [quizClose, setQuizClose] = useState(moment().isAfter(endDate))
+  const [ifQuizDone, setIfQuizDone] = useState(false)
   const [quizStart, setQuizStart] = useState(moment().isAfter(beginDate))
-
-  const quiz = getQuiz()
 
   const getDateInfos = (end, start) => {
     const currentDate = moment()
@@ -89,6 +88,7 @@ export const QuizCard = ({
         ' ' +
         (meth['seconds'] ? format(meth, 'seconds') : ''),
     )
+    setIfQuizDone(quizzes && quizzes[name] && quizzes[name].submit)
     setQuizClose(moment().isAfter(end))
   }
 
@@ -99,11 +99,10 @@ export const QuizCard = ({
     return () => {
       clearInterval(timeRef.current)
     }
-  }, [])
+  }, [quizzes])
 
   const findQuiz = async () => {
     const resp = await (await fetch(`${API}/user/quiz?name=${name}`)).json()
-    console.log('quiz', resp)
     if (
       resp.status &&
       !resp.data.submit &&
@@ -119,24 +118,12 @@ export const QuizCard = ({
   return (
     <Div
       key={id}
-      class={`quizz-container ${
-        !quizClose &&
-        (!quizzes ||
-          (quizzes &&
-            (!quizzes[name] || (quizzes[name] && !quizzes[name].submit)))) &&
-        'canHover'
-      }`}
+      class={`quizz-container ${!quizClose && !ifQuizDone && 'canHover'}`}
       style={{
-        background:
-          !quizClose &&
-          (!quizzes ||
-            (quizzes &&
-              (!quizzes[name] || (quizzes[name] && !quizzes[name].submit))))
-            ? '#788bb061'
-            : '#4f4f4f',
+        background: !quizClose && !ifQuizDone ? '#788bb061' : '#4f4f4f',
       }}
       onClick={() => {
-        !quizClose && findQuiz()
+        !quizClose && !ifQuizDone && findQuiz()
       }}
     >
       <Div class="l">
@@ -157,13 +144,13 @@ export const QuizCard = ({
             <Lock size={20} /> <span> Closed </span>
           </P>
         )}
-        {quizzes && quizzes[name] && (
+        {ifQuizDone && (
           <P>
             <Done size={20} color="green" />
             <span> Done </span>
           </P>
         )}
-        {quizClose && (!quizzes || (quizzes && !quizzes[name])) && (
+        {quizClose && !ifQuizDone && (
           <P>
             <NotDone size={20} color={'red'} />
             <span> Not Done </span>

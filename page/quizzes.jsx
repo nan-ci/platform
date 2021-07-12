@@ -117,7 +117,7 @@ const QuizInfos = ({ currentQuiz }) => (
 export const Quizzes = () => {
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  let myQuizzes = null
+  const [myQuizzes, setMyQuizzes] = useState(null)
 
   const quizzes = courses.find((c) => c.name === user.speciality).quizzes
 
@@ -129,7 +129,7 @@ export const Quizzes = () => {
   useEffect(async () => {
     const resp = await (await fetch(`${API}/user/quizzes`)).json()
     if (resp.data) {
-      myQuizzes = resp.data
+      setMyQuizzes(resp.data)
     }
   }, [])
 
