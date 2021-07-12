@@ -2,11 +2,16 @@ import { useState, useEffect } from 'preact/hooks'
 import { Div, divider, P } from '../component/elements.jsx'
 import { Img } from '../component/image.jsx'
 import { Layout } from '../component/layout.jsx'
+import { API } from '../lib/env.js'
 import { TimelineTable } from '../component/timeline-table.jsx'
 import { timeline } from '../data/timeline.js'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 import { Progress } from '../component/icons.jsx'
+import { courses } from '../data/courses.js'
+import { QuizCard } from '../component/result-quiz-card.jsx'
+
+import moment from 'moment'
 
 css(`
 .user-info{
@@ -121,11 +126,15 @@ border-radius:0px;
      margin-left: 10px;
    }
 
+
+
 `)
 
 export const Profile = () => {
   const [data, setData] = useState([])
   const getTimeline = (item) => item
+  const [userQuizzes, setUserQuizzes] = useState(null)
+  const [quizzes, setQuizzes] = useState(null)
 
   useEffect(() => setData(timeline), [])
 
@@ -140,6 +149,28 @@ export const Profile = () => {
   })
 
   const [activeTab, setActiveTab] = useState('stats')
+
+  useEffect(async () => {
+    if (!quizzes) {
+      setQuizzes(courses.find((c) => c.name === user.speciality).quizzes)
+    } else if (!userQuizzes) {
+      const resp = await (await fetch(`${API}/user/quizzes`)).json()
+      if (resp.data) {
+        for (let k in resp.data) {
+          if (
+            moment().isBefore(
+              (quizzes.find((q) => q.name === k) &&
+                quizzes.find((q) => q.name === k).endDate) ||
+                resp.data[k].end_date,
+            ) &&
+            !resp.data[k].submit
+          )
+            delete resp.data[k]
+        }
+        setUserQuizzes(resp.data)
+      }
+    }
+  }, [quizzes, userQuizzes])
 
   return (
     <Layout>
@@ -237,7 +268,19 @@ export const Profile = () => {
                 class={`tab-pane ${activeTab === 'quizzes' && 'active'}`}
                 id="quizzes"
               >
-                <h1>quizzes - results </h1>
+                {userQuizzes &&
+                  Object.keys(userQuizzes).map((key) => {
+                    return (
+                      quizzes.find((q) => q.name === key) && (
+                        <QuizCard
+                          key={key}
+                          name={key}
+                          responses={userQuizzes[key].responses}
+                          quiz={quizzes.find((q) => q.name === key)}
+                        />
+                      )
+                    )
+                  })}
               </Div>
             </Div>
           </Div>

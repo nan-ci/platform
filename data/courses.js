@@ -147,37 +147,39 @@ export const courses = [
     quizzes: [
       {
         id: 1,
-        name: 'variables',
+        name: 'javascript - quizz - 1',
         questions: {
           'what is javascript': {
-            'a code': true,
+            'a code': false,
             'a language': true,
             'a many': false,
           },
-          'what is dom': {
-            'a javascript element': true,
-            'a code': false,
-            'a many': false,
+          'what is mean DOM in javascript': {
+            'Document Object Manipuling': false,
+            'Document Object Module': false,
+            'Document Object Model': true,
           },
-          'what is dom 2': {
-            'a javascript element': true,
-            'a code': false,
-            'a many': false,
+          'what is the name of  the variable type taht give only one  result, either True or False': {
+            string: false,
+            boolean: true,
+            integer: false,
           },
-          'what is dom 3': {
-            'a javascript element': true,
-            'a code': false,
-            'a many': false,
+          'what mean NaN in javascript': {
+            'Not a Number': true,
+            'Not a Numeric': false,
+            'No a Noums': false,
           },
-          'what is dom 4': {
-            'a javascript element': true,
-            'a code': false,
-            'a many': false,
+          'when the javascirpt language was created': {
+            1997: false,
+            2016: false,
+            1995: true,
           },
-          'what is dom 5': {
-            'a javascript element': true,
-            'a code': false,
-            'a many': false,
+          'among these librairies, which are not javascript librairies': {
+            three: false,
+            PyQt: true,
+            vue: false,
+            jupyter: true,
+            meteor: false,
           },
         },
         beginDate:
@@ -189,7 +191,7 @@ export const courses = [
       },
       {
         id: 2,
-        name: 'conditions',
+        name: 'javascript - quizz - 2',
         questions: {
           'what is python': {
             'a code': false,

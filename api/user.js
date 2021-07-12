@@ -16,7 +16,7 @@ GET.user.quizzes = withUser(async ({ session }) => {
   console.log('session', session)
   const data = await db.get(session)
   if (data.quizzes) {
-    return new Response(JSON.stringify({ data: data.quizzes }))
+    return new Response(JSON.stringify({ data: data.quizzes }), { status: 200 })
   } else {
     return new Response(JSON.stringify({ data: null }), { status: 200 })
   }
@@ -37,7 +37,6 @@ GET.user.quiz = withUser(async ({ session, url }) => {
 
 POST.user.quiz = withBody(async ({ url, session, body }) => {
   const data = await db.get(session)
-  console.log(session, 'session', data)
   if (!data.quizzes) data.quizzes = {}
   if (!url.searchParams.get('name')) {
     data.quizzes[body.name] = { ...body, name: null }
