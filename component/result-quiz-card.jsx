@@ -2,7 +2,7 @@ import { useState, useEffect } from 'preact/hooks'
 import { css } from '../lib/dom.js'
 import { Div, P } from './elements.jsx'
 import { equals } from '../lib/quiz.js'
-import { Quiz } from './icons.jsx'
+import { navigate } from '../lib/router.js'
 
 css(`
 .result-quiz-card {
@@ -12,6 +12,11 @@ css(`
   position:relative;
   border-radius: 0.5rem;
   cursor:pointer;
+  transition:all 1s ease-in-out;
+}
+
+.result-quiz-card:hover {
+      transform:scale(0.99) rotateY(10deg) rotateX(10deg);
 }
 
 .result-quiz-card h1,.result-quiz-card h1 strong{
@@ -38,6 +43,7 @@ export const QuizCard = ({
   quiz: { questions, percentOfValidation },
 }) => {
   const [result, setResult] = useState({ percent: 0, foundQuestions: 0 })
+
   const calculResult = () => {
     let foundQuestions = 0
     for (let k in questions) {
@@ -68,6 +74,10 @@ export const QuizCard = ({
           result.percent >= percentOfValidation
             ? 'linear-gradient( 90deg,#5dd48e30 50%,#04b81978 100%)'
             : 'linear-gradient(90deg,#d45d5d30 50%,#b8040478 100%)',
+      }}
+      onClick={() => {
+        localStorage.setItem('quiz', JSON.stringify({ responses }))
+        navigate(`/quiz?name=${name}&relecture=true`)
       }}
     >
       <h1>

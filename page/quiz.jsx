@@ -10,10 +10,16 @@ import {
   getUser,
 } from '../lib/quiz.js'
 import { css } from '../lib/dom.js'
-import { Chrono, ArrowLeft, ArrowRight } from '../component/icons.jsx'
+import {
+  Chrono,
+  ArrowLeft,
+  ArrowRight,
+  Done,
+  NotDone,
+} from '../component/icons.jsx'
 import { API } from '../lib/env.js'
-import moment from 'moment'
 import { navigate } from '../lib/router.js'
+import { equals } from '../lib/quiz.js'
 
 css(`
   .quiz-h1{
@@ -215,8 +221,14 @@ css(`
   border:1px solid var(--green-darker);
 }
 
+.quiz-container section.questionNumber .content-card div.notfound{
+  background:var(--red-darker);
+  border:1px solid var(--red-darker);
+}
+
 .quiz-container section.questionNumber .content-card div.active{
   background:var(--comment-darker);
+  border: 1px solid var(--comment-darker);
 }
 
 .quiz-container .legend {
@@ -299,27 +311,72 @@ css(`
 }
 
 
+.circle {
+    border-radius:15px;
+   padding:0.07rem;
+    background: white;
+}
+
+.circle>div{
+  border-radius:15px;
+  height:10px;
+  width: 10px;
+}
+
+.square {
+  border-radius: 2px;
+  padding: 0.07rem;
+  background: white;
+}
+
+.square>div{
+  border-radius:2px;
+  height:10px;
+  width: 10px;
+}
 
 `)
 
-export const Quiz = ({ params: { name } }) => {
+export const InputExample = ({ type, checked }) => {
+  return (
+    <Div
+      class={type === 'radio' ? 'circle' : 'square'}
+      style={{
+        border: checked ? '1px solid var(--comment-darker)' : '1px solid white',
+      }}
+    >
+      <Div
+        style={{ background: checked ? 'var(--comment-darker)' : 'white' }}
+      ></Div>
+    </Div>
+  )
+}
+
+export const Quiz = ({ params: { name, relecture } }) => {
   const quiz = courses
     .find((c) => c.name === getUser().speciality)
     .quizzes.find((q) => q.name === name)
+
   const QuiZ = getQuiz()
+
   const [chrono, setChrono] = useState(null)
   const [progressPercent, setProgressPercent] = useState(0)
   const [currentIndex, setCurrentIndex] = useState(0)
+
   const [currentQuestion, setCurrentQuestion] = useState(
     Object.keys(quiz.questions)[currentIndex],
   )
+
   const [currentResponses, setCurrentResponses] = useState(
     quiz.questions[currentQuestion],
   )
+
   const [manyResponse, setManyResponse] = useState(
     Object.values(currentResponses).filter((f) => f).length > 1,
   )
+
   const [myResponses, setMyResponses] = useState({})
+
   const [showModal, setShowModal] = useState(false)
 
   let chronoInterval = null
@@ -373,11 +430,32 @@ export const Quiz = ({ params: { name } }) => {
         body: JSON.stringify({ responses: { ...myResponses } }),
       })
     ).json()
-
     localStorage.setItem(
       'quiz',
       JSON.stringify({ ...getQuiz(), responses: { ...myResponses } }),
     )
+  }
+
+  const checkIfFound = (key, resp = null) => {
+    const question = quiz.questions[key]
+    const { responses } = QuiZ
+    if (Object.values(question).filter((t) => t).length > 1) {
+      const resps = Object.entries(question)
+        .flatMap((val) => (val[1] ? val[0] : null))
+        .filter((f) => f)
+      if (
+        (!resp && equals(resps, responses[key])) ||
+        (resp && resps.includes(resp))
+      )
+        return true
+    } else if (
+      (!resp && question[responses[key]]) ||
+      (resp && question[resp])
+    ) {
+      return true
+    } else {
+      return false
+    }
   }
 
   useEffect(async () => {
@@ -388,68 +466,81 @@ export const Quiz = ({ params: { name } }) => {
   }, [])
 
   useEffect(() => {
-    chronoInterval = setInterval(() => {
-      const duration = time('all')
-      if (duration.asSeconds() > 0) {
-        setChrono(
-          `${
-            duration.minutes() < 10
-              ? '0' + duration.minutes()
-              : duration.minutes()
-          }:${
-            duration.seconds() < 10
-              ? '0' + duration.seconds()
-              : duration.seconds()
-          }`,
-        )
-      } else {
-        submitQuiz()
-      }
-    }, 1000)
+    if (!relecture) {
+      chronoInterval = setInterval(() => {
+        const duration = time('all')
+        if (duration.asSeconds() > 0) {
+          setChrono(
+            `${
+              duration.minutes() < 10
+                ? '0' + duration.minutes()
+                : duration.minutes()
+            }:${
+              duration.seconds() < 10
+                ? '0' + duration.seconds()
+                : duration.seconds()
+            }`,
+          )
+        } else {
+          submitQuiz()
+        }
+      }, 1000)
+    }
+
     return () => {
       clearInterval(chronoInterval)
     }
-  }, [])
+  }, [relecture])
 
   useEffect(() => {
-    progressInterval = setInterval(() => {
-      const seconds = time('asSeconds')
-      if (seconds >= 0) {
-        setProgressPercent(
-          100 - (seconds * 100000) / (durationToSeconds(quiz.duration) * 1000),
-        )
-      } else {
-        clearInterval(progressInterval)
-      }
-    }, 100)
+    if (!relecture) {
+      progressInterval = setInterval(() => {
+        const seconds = time('asSeconds')
+        if (seconds >= 0) {
+          setProgressPercent(
+            100 -
+              (seconds * 100000) / (durationToSeconds(quiz.duration) * 1000),
+          )
+        } else {
+          clearInterval(progressInterval)
+        }
+      }, 100)
+    }
     return () => {
       clearInterval(progressInterval)
     }
-  }, [])
+  }, [relecture])
 
   if (!QuiZ) return navigate('/quizzes')
 
   return (
     <Layout>
       <h1 class="quiz-h1">
-        <span>Quiz : </span>
+        <span>{!relecture ? 'Quiz' : 'Proofreading'} : </span>
         <span>{quiz.name}</span>
       </h1>
       <Div class="quiz-container">
-        <header>
-          <h2 class="chrono">
-            <Chrono size={25} color="red" style={{ marginRight: '10px' }} />{' '}
-            {chrono ? chrono : ' ... '}
-          </h2>
-          <Div class="progression-bar">
-            <Div
-              style={{
-                width: progressPercent + '%',
-                background: `${progressColor(parseInt(progressPercent))}`,
-              }}
-            />
-          </Div>
-        </header>
+        {!relecture ? (
+          <header>
+            <h2 class="chrono">
+              <Chrono size={25} color="red" style={{ marginRight: '10px' }} />{' '}
+              {chrono ? chrono : ' ... '}
+            </h2>
+            <Div class="progression-bar">
+              <Div
+                style={{
+                  width: progressPercent + '%',
+                  background: `${progressColor(parseInt(progressPercent))}`,
+                }}
+              />
+            </Div>
+          </header>
+        ) : (
+          <>
+            <br />
+            <br />
+          </>
+        )}
         <Div class="middle">
           <section class="question">
             <header>
@@ -457,28 +548,66 @@ export const Quiz = ({ params: { name } }) => {
                 <i class="far fa-question-circle" aria-hidden="true"></i>
                 <span>Question {currentIndex + 1}</span>
               </h1>
-              <P> {currentQuestion} ? </P>
+              <P style={{ width: '100%', whiteSpace: 'normal' }}>
+                {' '}
+                {currentQuestion} ?{' '}
+              </P>
             </header>
 
             <Div class="responses">
-              {Object.keys(currentResponses).map((val, index) => (
-                <P key={val}>
-                  <input
-                    checked={
-                      myResponses[currentQuestion] &&
+              {Object.keys(currentResponses).map((val, index) => {
+                return !relecture ? (
+                  <P key={val}>
+                    <input
+                      disabled={relecture}
+                      checked={
+                        myResponses[currentQuestion] &&
+                        (!manyResponse
+                          ? val === myResponses[currentQuestion]
+                          : myResponses[currentQuestion].includes(val))
+                      }
+                      type={manyResponse ? 'checkbox' : 'radio'}
+                      id={`check${index}`}
+                      name="resp"
+                      onChange={(e) => chooseResponse(e.target.value)}
+                      value={val}
+                    />
+                    <label for={`check${index}`}> {val}</label>
+                  </P>
+                ) : (
+                  <P key={val}>
+                    <InputExample
+                      type={manyResponse ? 'checkbox' : 'radio'}
+                      checked={
+                        myResponses[currentQuestion] &&
+                        (!manyResponse
+                          ? val === myResponses[currentQuestion]
+                          : myResponses[currentQuestion].includes(val))
+                      }
+                    />
+                    <label> {val}</label> &nbsp;
+                    {myResponses[currentQuestion] &&
                       (!manyResponse
                         ? val === myResponses[currentQuestion]
-                        : myResponses[currentQuestion].includes(val))
-                    }
-                    type={manyResponse ? 'checkbox' : 'radio'}
-                    id={`check${index}`}
-                    name="resp"
-                    onChange={(e) => chooseResponse(e.target.value)}
-                    value={val}
-                  />
-                  <label for={`check${index}`}> {val}</label>
-                </P>
-              ))}
+                        : myResponses[currentQuestion].includes(val)) && (
+                        <>
+                          {checkIfFound(currentQuestion, val) ? (
+                            <Done size={10} color="lime" />
+                          ) : (
+                            <NotDone size={10} color="red" />
+                          )}
+                        </>
+                      )}
+                    {checkIfFound(currentQuestion, val) &&
+                      !(
+                        myResponses[currentQuestion] &&
+                        (!manyResponse
+                          ? val === myResponses[currentQuestion]
+                          : myResponses[currentQuestion].includes(val))
+                      ) && <Done size={10} color="lime" />}
+                  </P>
+                )
+              })}
             </Div>
 
             <Div class="next-prev">
@@ -503,34 +632,63 @@ export const Quiz = ({ params: { name } }) => {
 
           <section class="questionNumber">
             <Div class="content-card">
-              {Object.keys(quiz.questions).map((val, index) => (
-                <Div
-                  key={val}
-                  class={`${val === currentQuestion && 'active'} ${
-                    val !== currentQuestion &&
-                    Object.keys(myResponses).includes(val) &&
-                    'respond'
-                  }`}
-                  onClick={() => changeQuestion(val)}
-                >
-                  {index + 1}
-                </Div>
-              ))}
+              {Object.keys(quiz.questions).map((val, index) => {
+                return !relecture ? (
+                  <Div
+                    key={val}
+                    class={`${val === currentQuestion && 'active'} ${
+                      !relecture &&
+                      val !== currentQuestion &&
+                      Object.keys(myResponses).includes(val) &&
+                      'respond'
+                    }`}
+                    onClick={() => changeQuestion(val)}
+                  >
+                    {index + 1}
+                  </Div>
+                ) : (
+                  <Div
+                    key={val}
+                    class={`${val === currentQuestion && 'active'} ${
+                      val !== currentQuestion && checkIfFound(val)
+                        ? 'respond'
+                        : 'notfound'
+                    }`}
+                    onClick={() => changeQuestion(val)}
+                  >
+                    {index + 1}
+                  </Div>
+                )
+              })}
             </Div>
-            <button onClick={() => setShowModal(true)}> submit </button>
+            <button
+              onClick={() =>
+                !relecture ? setShowModal(true) : navigate('/profile')
+              }
+            >
+              {!relecture ? 'submit' : 'cancel'}{' '}
+            </button>
           </section>
         </Div>
 
         <Div class="legend">
           <Div>
-            <span class="b no-answered"></span>
-            <span> no-answered</span>
+            <span
+              class="b no-answered"
+              style={{
+                background: relecture && 'red',
+                border: relecture && '1px solid red',
+              }}
+            ></span>
+            &nbsp;
+            <span> {!relecture ? 'no-answered' : 'not found'}</span>
           </Div>
           <Div>
-            <span class="b answered"></span> <span> answered</span>
+            <span class="b answered"></span>&nbsp;
+            <span> {!relecture ? 'answered' : 'found'}</span>
           </Div>
           <Div>
-            <span class="b active"></span>
+            <span class="b active"></span>&nbsp;
             <span> active</span>
           </Div>
         </Div>
@@ -548,8 +706,7 @@ export const Quiz = ({ params: { name } }) => {
         </button>
         <h1> Do you want really submit this quiz ??</h1>
         <button class="yes" onClick={() => submitQuiz()}>
-          {' '}
-          Yes{' '}
+          Yes
         </button>
       </Div>
     </Layout>

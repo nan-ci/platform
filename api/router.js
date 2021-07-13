@@ -11,6 +11,7 @@ export const POST = ROUTE('POST/api')
 
 export const withUser = (fn) => async (params) => {
   if (!params.session) return new Response('No Session', UNAUTHORIZED)
+  // console.log(' params session, session', params.session, params.url.href, await db.get(params.session))
   params.user = await db.get(params.session)
   if (!params.user) return new Response('Bad Session', UNAUTHORIZED)
   // ...maybe remove session cookie in that case
