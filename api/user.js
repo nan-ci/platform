@@ -13,7 +13,6 @@ POST.user.profile = withBody(async ({ session, body }) => {
 })
 
 GET.user.quizzes = withUser(async ({ session }) => {
-  console.log('session', session)
   const data = await db.get(session)
   if (data.quizzes) {
     return new Response(JSON.stringify({ data: data.quizzes }), { status: 200 })

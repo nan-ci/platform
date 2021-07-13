@@ -295,6 +295,8 @@ export const Lecteur = ({
     })
   }
 
+  useEffect(async () => {}, [])
+
   const decompt = () => {
     tt.current = setInterval(() => {
       setData({
@@ -380,7 +382,12 @@ export const Lecteur = ({
           &nbsp;<span>NaN-courses</span>
         </header>
         <video ref={video} preload="true" width="100%" height="100%">
-          <source src={'/assets/mov_bbb.mp4'} type="video/mp4" />
+          <source
+            src={
+              'https://cdn.videas.fr/v-medias/s2/a/50/26/50262f218f67454a8efd90326e68271f/35f2dc3516aa4c69bf8868d2cd34ec41/90b764a3-3d5f-45a6-8594-ad8aa05bd702.mp4'
+            }
+            type="video/mp4"
+          />
         </video>
         <Div
           class="mbre"

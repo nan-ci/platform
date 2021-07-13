@@ -2,6 +2,7 @@ import { STATUS_CODES } from 'http'
 
 import { handleRequest } from '../api/router.js'
 import { getWranglerConfig } from './utils.js'
+import { courses } from '../data/courses.js'
 
 globalThis.addEventListener = () => {}
 
@@ -12,6 +13,7 @@ export const login = 'tester'
 export const email = 'dev@nan.ci'
 export const name = 'Jean Patrick'
 export const user = { login, name }
+export const quizzes = courses.find((c) => c.name === 'javascript').quizzes
 export const config = await getWranglerConfig()
 export const DOMAIN =
   process.env.DOMAIN || new URL(`https://${config.route}`).origin

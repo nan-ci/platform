@@ -97,7 +97,7 @@ o['GET /auth/github with a proper state'] = {
     // init query
     const res = await GET('/auth/github?code=wesh&state=proper-state')
     const { status, headers } = res.options
-
+ 
     // expect a redirection
     eq({ body: res.body, status }, { body: null, status: 301 })
     eq(headers.location, `/learningchoice?${new URLSearchParams(user)}`)

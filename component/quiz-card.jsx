@@ -65,7 +65,9 @@ export const QuizCard = ({
   const timeRef = useRef(null)
 
   const [quizClose, setQuizClose] = useState(moment().isAfter(endDate))
-  const [ifQuizDone, setIfQuizDone] = useState(false)
+  const [ifQuizDone, setIfQuizDone] = useState(
+    quizzes && quizzes[name] && quizzes[name].submit,
+  )
   const [quizStart, setQuizStart] = useState(moment().isAfter(beginDate))
 
   const getDateInfos = (end, start) => {
@@ -88,7 +90,6 @@ export const QuizCard = ({
         ' ' +
         (meth['seconds'] ? format(meth, 'seconds') : ''),
     )
-    setIfQuizDone(quizzes && quizzes[name] && quizzes[name].submit)
     setQuizClose(moment().isAfter(end))
   }
 

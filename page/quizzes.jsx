@@ -117,7 +117,7 @@ const QuizInfos = ({ currentQuiz }) => (
 export const Quizzes = () => {
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  const [myQuizzes, setMyQuizzes] = useState(null)
+  const [myQuizzes, setMyQuizzes] = useState(undefined)
 
   const quizzes = courses.find((c) => c.name === user.speciality).quizzes
 
@@ -157,13 +157,15 @@ export const Quizzes = () => {
   return (
     <Layout>
       <Div>
-        {quizzes.map((quiz) => (
-          <QuizCard
-            {...quiz}
-            selectQuiz={(quiz) => selectQuiz(quiz)}
-            quizzes={myQuizzes}
-          />
-        ))}
+        {myQuizzes !== undefined &&
+          quizzes.map((quiz) => (
+            <QuizCard
+              {...quiz}
+              selectQuiz={(quiz) => selectQuiz(quiz)}
+              quizzes={myQuizzes}
+            />
+          ))}
+        {!myQuizzes && <h1>Loading ....</h1>}
       </Div>
       <Div
         class="quizz-modal"
