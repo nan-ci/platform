@@ -1,11 +1,9 @@
-import { Fragment } from 'preact'
 import { Div, P } from '../component/elements.jsx'
 import { Layout } from '../component/layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 import { courses } from '../data/courses.js'
 import { Roadmap } from '../component/roadmap/index.jsx'
-import { Progress } from '../component/icons.jsx'
 css(`
 .container {
   display:flex;
