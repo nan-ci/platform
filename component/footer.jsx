@@ -1,5 +1,5 @@
-import { center } from "../data/ascii";
-import { divider, P } from "./elements";
+import { center } from '../data/ascii'
+import { divider, P } from './elements'
 
 export const Footer = () => (
   <footer>

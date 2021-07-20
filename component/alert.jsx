@@ -22,9 +22,13 @@ css(`
 `)
 
 export const Alert = ({ alert, message, color }) => {
-  const onClose = () => document.getElementById('co').style.display='none'
+  const onClose = () => (document.getElementById('co').style.display = 'none')
   return alert ? (
-    <Div id="co" style={{ backgroundColor: `${color}` }} class="alert-container">
+    <Div
+      id="co"
+      style={{ backgroundColor: `${color}` }}
+      class="alert-container"
+    >
       <button onClick={onClose} class="dismiss-btn">
         <i class="fa fa-close"></i>
       </button>

@@ -1,0 +1,17 @@
+# node dependencies
+node_modules
+
+# lock files and json files
+yarn.lock
+package.json
+package-lock.json
+
+# script and github folder
+script
+
+# template folder
+templates
+public
+
+# markdown file
+README.md

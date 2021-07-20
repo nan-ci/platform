@@ -5,7 +5,7 @@ export const users = [
       sid: '4ytg',
       login: 'kigiri',
       name: 'Clément',
-      avatar: '🌟'
+      avatar: '🌟',
     },
   },
   {

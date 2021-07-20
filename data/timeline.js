@@ -3,7 +3,7 @@ export const timeline = [
     id: 1,
     challenge: 'Build markdown preview',
     solution: '',
-    date: null
+    date: null,
   },
   {
     id: 2,
@@ -12,7 +12,7 @@ export const timeline = [
     date: new Date().toLocaleString('en-US', {
       day: 'numeric',
       month: 'short',
-      year: 'numeric'
-    })
-  }
+      year: 'numeric',
+    }),
+  },
 ]

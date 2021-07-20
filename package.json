@@ -7,12 +7,16 @@
     "test": "./script/test.sh",
     "start": "./script/start.sh",
     "build": "./script/build.sh",
-    "deploy": "./script/deploy.sh"
+    "deploy": "./script/deploy.sh",
+    "format": "./script/format.sh"
   },
   "dependencies": {
     "esbuild": "^0.11.2",
     "fast-toml": "^0.5.4",
     "moment": "^2.29.1",
     "preact": "^10.5.13"
+  },
+  "devDependencies": {
+    "prettier": "2.3.2"
   }
 }
