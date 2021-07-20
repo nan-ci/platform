@@ -150,21 +150,25 @@ export const Quizzes = () => {
               />
             )}
 
-          {currentQuiz &&  (!user.quizzes || (user.quizzes && !user.quizzes[currentQuiz.name])) && (
-            <QuizInfos currentQuiz={currentQuiz} />
-          )}
+          {currentQuiz &&
+            (!user.quizzes ||
+              (user.quizzes && !user.quizzes[currentQuiz.name])) && (
+              <QuizInfos currentQuiz={currentQuiz} />
+            )}
 
           <Div class="button-group">
-            {currentQuiz &&  (!user.quizzes || (user.quizzes && !user.quizzes[currentQuiz.name])) && (
-              <button
-                class="go"
-                onClick={() =>
-                  navigate('/quiz?name=' + (currentQuiz && currentQuiz.name))
-                }
-              >
-                Go to quiz
-              </button>
-            )}
+            {currentQuiz &&
+              (!user.quizzes ||
+                (user.quizzes && !user.quizzes[currentQuiz.name])) && (
+                <button
+                  class="go"
+                  onClick={() =>
+                    navigate('/quiz?name=' + (currentQuiz && currentQuiz.name))
+                  }
+                >
+                  Go to quiz
+                </button>
+              )}
             <button class="cancel" onClick={() => setShowModal(false)}>
               {' '}
               Cancel{' '}

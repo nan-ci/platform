@@ -97,7 +97,7 @@ o['.once is called with prev and next values'] = {
   it: () => {
     const { once, set } = eve('hello')
     let last
-    once((next, prev) => last = { next, prev })
+    once((next, prev) => (last = { next, prev }))
     times(3, set)
     return last
   },
@@ -123,13 +123,13 @@ o['only triggers if the value changed'] = {
     set('wesh')
     return count
   },
-  is: 2
+  is: 2,
 }
 
 o['.map create a new event as a function of the original'] = {
   it: () => {
     const num = eve(0)
-    const odd = num.map(n => n % 2 === 1)
+    const odd = num.map((n) => n % 2 === 1)
     eq(odd.get(), false)
     num.set(num.get() + 1)
     eq(odd.get(), true)
@@ -141,7 +141,7 @@ o['.map create a new event as a function of the original'] = {
 o['mapped event only trigger if its value changed (not the source event)'] = {
   it: () => {
     const num = eve(0)
-    const odd = num.map(n => n % 2 === 1)
+    const odd = num.map((n) => n % 2 === 1)
     let oddCount = 0
     let numCount = 0
     odd.on(() => oddCount++)

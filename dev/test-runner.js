@@ -46,9 +46,9 @@ const getFiles = () => {
   const files = readdirSync(testDir).filter((f) => f.startsWith('test_'))
   const importTests = async (f) => [
     basename(f),
-    Object.entries(
-      (await import(join(testDir, f))).o || {},
-    ).map(([description, t]) => ({ description, ...t })),
+    Object.entries((await import(join(testDir, f))).o || {}).map(
+      ([description, t]) => ({ description, ...t }),
+    ),
   ]
   return Promise.all(files.map(importTests))
 }

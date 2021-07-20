@@ -1,5 +1,5 @@
-import { css } from "../lib/dom"
-import { Div, P } from "./elements"
+import { css } from '../lib/dom'
+import { Div, P } from './elements'
 
 css(`
 .panel{
@@ -32,7 +32,7 @@ css(`
   margin-bottom: 20px;
 }
 `)
-export const DangerZone = ({ discordId, userId}) => {
+export const DangerZone = ({ discordId, userId }) => {
   const onCloseAccount = () => {}
   return (
     <Div class="panel">

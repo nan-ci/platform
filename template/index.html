@@ -1,180 +1,194 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Not a Number</title>
-  <meta charset="utf-8">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'%3E%3Cdefs%3E%3CradialGradient id='g' fy='0'%3E%3Cstop stop-color='%23F7AEF8'/%3E%3Cstop offset='100%25' stop-color='%23777FFF'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M25 0L0 25l5 5 20-20 20 20 5-5M25 40l-5 5 5 5 5-5M25 20L10 35l5 5 10-10 10 10 5-5'/%3E%3C/svg%3E%0A">
-<script>(() => {
-  const x5 = ['-darker', '-dark', '', '-light', '-lighter']
-  const colors = [
-    ['background', 231, 15, 18],
-    ['selection', 232, 14, 31],
-    ['foreground', 60, 30, 96],
-    ['comment', 225, 27, 51],
-    ['cyan', 191, 97, 77],
-    ['green', 135, 94, 65],
-    ['orange', 31, 100, 71],
-    ['pink', 326, 100, 74],
-    ['purple', 265, 89, 78],
-    ['red', 0, 100, 67],
-    ['yellow', 65, 92, 76],
-    ['white', 0, 0, 100],
-    ['grey', 0, 0, 50]
-  ]
+  <head>
+    <title>Not a Number</title>
+    <meta charset="utf-8" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'%3E%3Cdefs%3E%3CradialGradient id='g' fy='0'%3E%3Cstop stop-color='%23F7AEF8'/%3E%3Cstop offset='100%25' stop-color='%23777FFF'/%3E%3C/radialGradient%3E%3C/defs%3E%3Cpath fill='url(%23g)' d='M25 0L0 25l5 5 20-20 20 20 5-5M25 40l-5 5 5 5 5-5M25 20L10 35l5 5 10-10 10 10 5-5'/%3E%3C/svg%3E%0A"
+    />
+    <script>
+      ;(() => {
+        const x5 = ['-darker', '-dark', '', '-light', '-lighter']
+        const colors = [
+          ['background', 231, 15, 18],
+          ['selection', 232, 14, 31],
+          ['foreground', 60, 30, 96],
+          ['comment', 225, 27, 51],
+          ['cyan', 191, 97, 77],
+          ['green', 135, 94, 65],
+          ['orange', 31, 100, 71],
+          ['pink', 326, 100, 74],
+          ['purple', 265, 89, 78],
+          ['red', 0, 100, 67],
+          ['yellow', 65, 92, 76],
+          ['white', 0, 0, 100],
+          ['grey', 0, 0, 50],
+        ]
 
-  const parts = colors.flatMap(([name, h, s, l]) => x5.map((suffix, i) =>
-    [`${name}${suffix}`, `hsl(${h},${s}%,${l+((i-2)*4)}%)`]
-  ))
+        const parts = colors.flatMap(([name, h, s, l]) =>
+          x5.map((suffix, i) => [
+            `${name}${suffix}`,
+            `hsl(${h},${s}%,${l + (i - 2) * 4}%)`,
+          ]),
+        )
 
-  const style = document.createElement('style')
-  style.innerHTML = `:root {
-    ${parts.map(([ name, value ]) => `--${name}: ${value}`).join(';\n')}
+        const style = document.createElement('style')
+        style.innerHTML = `:root {
+    ${parts.map(([name, value]) => `--${name}: ${value}`).join(';\n')}
   }
   `
-  document.head.appendChild(style)
-  window.colors = Object.fromEntries(parts)
-})()</script>
-<style>
-:root {
-  --font-family: monospace, monospace;
-  --hover-brightness: 1.2;
-  --justify-important: center;
-  --justify-normal: left;
-  --line-height: 1.25;
-  /* colors TODO: make light theme alternatives */
-}
+        document.head.appendChild(style)
+        window.colors = Object.fromEntries(parts)
+      })()
+    </script>
+    <style>
+      :root {
+        --font-family: monospace, monospace;
+        --hover-brightness: 1.2;
+        --justify-important: center;
+        --justify-normal: left;
+        --line-height: 1.25;
+        /* colors TODO: make light theme alternatives */
+      }
 
-@media (prefers-color-scheme: dark) {}
+      @media (prefers-color-scheme: dark) {
+      }
 
-/* Box sizing rules */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
+      /* Box sizing rules */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
 
-/* Remove default padding */
-ul[class],
-ol[class] {
-  padding: 0;
-}
+      /* Remove default padding */
+      ul[class],
+      ol[class] {
+        padding: 0;
+      }
 
-/* Remove default margin */
-body,
-h1,
-h2,
-h3,
-h4,
-p,
-ul[class],
-ol[class],
-li,
-figure,
-figcaption,
-blockquote,
-dl,
-dd {
-  margin: 0;
-}
+      /* Remove default margin */
+      body,
+      h1,
+      h2,
+      h3,
+      h4,
+      p,
+      ul[class],
+      ol[class],
+      li,
+      figure,
+      figcaption,
+      blockquote,
+      dl,
+      dd {
+        margin: 0;
+      }
 
-/* Set core body defaults */
-body {
-  min-height: 100vh;
-  scroll-behavior: smooth;
-  text-rendering: optimizeSpeed;
-}
+      /* Set core body defaults */
+      body {
+        min-height: 100vh;
+        scroll-behavior: smooth;
+        text-rendering: optimizeSpeed;
+      }
 
-/* Remove list styles on ul, ol elements with a class attribute */
-ul[class],
-ol[class] {
-  list-style: none;
-}
+      /* Remove list styles on ul, ol elements with a class attribute */
+      ul[class],
+      ol[class] {
+        list-style: none;
+      }
 
-/* A elements that don't have a class get default styles */
-a:not([class]) {
-  text-decoration-skip-ink: auto;
-}
+      /* A elements that don't have a class get default styles */
+      a:not([class]) {
+        text-decoration-skip-ink: auto;
+      }
 
-/* Make images easier to work with */
-img {
-  max-width: 100%;
-  display: block;
-}
+      /* Make images easier to work with */
+      img {
+        max-width: 100%;
+        display: block;
+      }
 
-/* Natural flow and rhythm in articles by default */
-article > * + * {
-  margin-top: 1ch;
-}
+      /* Natural flow and rhythm in articles by default */
+      article > * + * {
+        margin-top: 1ch;
+      }
 
-/* Inherit fonts for inputs and buttons */
-input,
-button,
-textarea,
-select {
-  font: inherit;
-}
+      /* Inherit fonts for inputs and buttons */
+      input,
+      button,
+      textarea,
+      select {
+        font: inherit;
+      }
 
-/* Layout */
-*, #root {
-  background: transparent;
-  color: var(--foreground);
-  font-size: 15px;
-  font-family: var(--font-family);
-  border: 0;
-  padding: 0;
-  margin: 0;
-}
+      /* Layout */
+      *,
+      #root {
+        background: transparent;
+        color: var(--foreground);
+        font-size: 15px;
+        font-family: var(--font-family);
+        border: 0;
+        padding: 0;
+        margin: 0;
+      }
 
-html, body {
-  padding: 0;
-  margin: 0;
-  background: var(--background-dark);
-  white-space: normal;
-}
+      html,
+      body {
+        padding: 0;
+        margin: 0;
+        background: var(--background-dark);
+        white-space: normal;
+      }
 
-ul {
-  list-style: none;
-  padding: 0;
-}
+      ul {
+        list-style: none;
+        padding: 0;
+      }
 
-li { display: inline }
+      li {
+        display: inline;
+      }
 
-#root {
-  width:80ch;
-  margin: 0 auto;
-  background: var(--background);
-  line-height: var(--line-height);
-  min-height: 100vh;
-  box-shadow: 0 0 0 1.5ch var(--background);
-  display: flex;
-  flex-direction: column;
-}
+      #root {
+        width: 80ch;
+        margin: 0 auto;
+        background: var(--background);
+        line-height: var(--line-height);
+        min-height: 100vh;
+        box-shadow: 0 0 0 1.5ch var(--background);
+        display: flex;
+        flex-direction: column;
+      }
 
-header ,footer{
-  white-space: pre;
-}
+      header,
+      footer {
+        white-space: pre;
+      }
 
-main {
-  flex-grow: 1;
-}
+      main {
+        flex-grow: 1;
+      }
 
-a:focus {
-  outline-style: solid;
-  outline-offset: 0.25ch;
-  outline-width: 0.1px;
-}
-a:hover {
-  text-shadow: 1px 1px 2px #000;
-  outline: 1px dashed;
-  outline-offset: 0.5ch;
-}
+      a:focus {
+        outline-style: solid;
+        outline-offset: 0.25ch;
+        outline-width: 0.1px;
+      }
+      a:hover {
+        text-shadow: 1px 1px 2px #000;
+        outline: 1px dashed;
+        outline-offset: 0.5ch;
+      }
 
-::placeholder {
-  color: var(--comment);
-  opacity: 1;
-}
+      ::placeholder {
+        color: var(--comment);
+        opacity: 1;
+      }
 
-/* Remove all animations and transitions for people that prefer not to see them
+      /* Remove all animations and transitions for people that prefer not to see them
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.01ms !important;
@@ -183,9 +197,10 @@ a:hover {
     scroll-behavior: auto !important;
   }
 }*/
-</style>
-</head>
-<body><div id="root"></div>
-  <script type="module" src="/js/app.js"></script>
-</body>
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/js/app.js"></script>
+  </body>
 </html>
