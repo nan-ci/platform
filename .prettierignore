@@ -10,8 +10,5 @@ package-lock.json
 script
 
 # template folder
-templates
+template
 public
-
-# markdown file
-README.md
