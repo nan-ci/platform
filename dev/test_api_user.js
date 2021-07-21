@@ -12,13 +12,26 @@ const _404 = new Response(null, { status: 404, statusText: 'Not Found' })
 const { hostname } = new URL(DOMAIN)
 const body = { username: 'ramseycoder' }
 
-// o['get all quizzes'] = {
-//   it: async () => {
-//     const session = `user:tester:${Date.now().toString(36)}:${rand()}`
-//     NAN.put(session, '', { metadata: { quizzes: {} } })
-//     const { body, options } = await GET('/user/quizzes', {
-//       headers: { cookie: 'nan-session=' + session },
-//     })
-//     eq({ status: options.status }, { status: 200 })
-//   },
-// }
+o['get on quiz with name query'] = {
+  it: async () => {
+    const session = `user:tester:${Date.now().toString(36)}:${rand()}`
+    NAN.put(session, '', {
+      metadata: { quizzes: { javascript: { responses: {} } } },
+    })
+    const { body, options } = await GET('/user/quiz?name=javascript', {
+      headers: { cookie: 'nan-session=' + session },
+    })
+    eq({ status: options.status }, { status: 200 })
+  },
+}
+
+o['get all quizzes'] = {
+  it: async () => {
+    const session = `user:tester:${Date.now().toString(36)}:${rand()}`
+    NAN.put(session, '', { metadata: { quizzes: {} } })
+    const { body, options } = await GET('/user/quizzes', {
+      headers: { cookie: 'nan-session=' + session },
+    })
+    eq({ status: options.status }, { status: 200 })
+  },
+}
