@@ -23,14 +23,17 @@ css(`
    width: 70%;
 }
 .infos header {
-  background:black;
-  width: 500px;
-  padding: 0.5rem
+  background:var(--red-dark);
+  width: 100%;
+  padding: 0.5rem;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 10px;
 }
  .infos-section {
    display:flex;
-   flex-direction: row;
-   flex-wrap: wrap;
+   flex-flow:row wrap;
    align-items:center;
    justify-content: space-between;
 }
@@ -147,31 +150,35 @@ export const Profile = () => {
           className="user-img"
         />
         <Div class="infos">
-          <header>informations</header>
+          <header>Profile</header>
           <Div class="infos-section">
             <P>
-              <strong> Username : </strong>{' '}
-              <span>{user.username ? user.username : user.name}</span>
+              <strong>Username: </strong>{' '}
+              <span>{user.username ?? user.name}</span>
             </P>
             <P>
-              <strong> Name : </strong> <span>{user.name}</span>
+              <strong>Name: </strong><span>{user.name}</span>
             </P>
             <P>
-              <strong> Email : </strong> <span>{user.email}</span>
+              <strong>Email: </strong><span>{user.email}</span>
             </P>
             <P>
-              <strong> Speciality : </strong> <span>{user.speciality}</span>
+              <strong>Speciality: </strong><span>{user.speciality}</span>
             </P>
             <P>
-              <strong> Level : </strong>{' '}
-              <span>{user.level || 'aucun niveau'}</span>
+              <strong>Level: </strong>{' '}
+              <span>{user.level ?? 'No level'}</span>
             </P>
             <P>
-              <strong> Member since : </strong>{' '}
-              <span> {new Date().toGMTString()}</span>
+              <strong> Member since: </strong>{' '}
+              <span> {new Date().toLocaleString('fr-FR', {
+                year: 'numeric',
+                month: "2-digit",
+                day: "2-digit"
+              })}</span>
             </P>
             <P>
-              <strong> Role : </strong> <span>{user.role}</span>
+              <strong>Role: </strong> <span>{user.role}</span>
             </P>
           </Div>
         </Div>

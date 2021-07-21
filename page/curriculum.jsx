@@ -30,7 +30,6 @@ export const Curriculum = () => {
 
   return (
     <Layout>
-      <br />
       {courses
         .filter(({ name }) => name === speciality)
         .map(({ modules, cours }) =>
