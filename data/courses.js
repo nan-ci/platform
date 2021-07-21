@@ -41,7 +41,8 @@ export const courses = [
       {
         id: 1,
         title: 'JavaScript Algorithms and Data Structures',
-        description: 'this a module that talk about the begining',
+        description:
+          'Learn fundamentals and advanced data structure in Javascript ',
         hours: 300,
         codeColor: '#dbb958',
         project: null,
@@ -49,7 +50,7 @@ export const courses = [
       {
         id: 2,
         title: 'APIs and Microservices',
-        description: 'this a module that talk about the begining',
+        description: 'Learn to build APIs and Microservice ',
         hours: 200,
         codeColor: '#5886db',
         project: null,
@@ -58,9 +59,9 @@ export const courses = [
         id: 3,
         title: 'React js and Vue js',
         description:
-          'this a module of react and vue a js framework for front-end',
+          'The complete guide of ReactJS and VueJS for the frontend developers',
         hours: 200,
-        codeColor: '#90db58',
+        codeColor: 'var(--comment-light)',
         project: null,
       },
     ],

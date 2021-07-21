@@ -1,4 +1,4 @@
-import { Link, Div, Color, Title, divider, P } from './elements.jsx'
+import { Link, Div, Color, divider, P } from './elements.jsx'
 import { user } from '../lib/auth.js'
 import { HASH, API } from '../lib/env.js'
 import { useURL } from '../lib/router.js'
@@ -23,22 +23,19 @@ css(`
       top: 95%;
       z-index:2;
       height: auto;
-      border: 1px dashed white;
+      border: 1px dashed var(--white-lighter);
       padding: 0.5rem;
       width: 100%;
       margin-top: 10px;
       text-align: left;
-      background: white;
+      background: var(--white-lighter);
     }
     .us-link {
-      border: 2px dashed white;
+      border: 2px dashed var(--white-lighter);
       padding: 0.5rem;
       width: 100%;
       cursor: pointer;
     }
-
-
-
 `)
 
 export const parseColor = (c) =>
@@ -59,17 +56,6 @@ const clearStorage = () => localStorage.clear()
 // prettier-ignore
 export const NavLink = (props) => <li> <Link {...props} /></li>
 
-const LogAction = () => {
-  return (
-    user &&
-    user.discordId && (
-      <NavLink href={`${API}/logout`} onclick={clearStorage}>
-        Logout
-      </NavLink>
-    )
-  )
-}
-
 const Version = () => (
   <Div fg="comment">#/bin/nan --hash={HASH.slice(0, 80 - 17)}</Div>
 )
@@ -85,9 +71,9 @@ const Nav = ({ path }) => (
       <LinkMatch path={path} href="/curriculum">
         Curriculum
       </LinkMatch>
-      {' - '}
       {user && user.role === 'student' && (
         <>
+          {' - '}
           <LinkMatch path={path} href="/challenges">
             Challenges
           </LinkMatch>
@@ -104,16 +90,16 @@ const Nav = ({ path }) => (
 
 const UserCard = ({ user: { username, name }, path }) => {
   const Links = [
-    { name: 'view profile', path: '/profile' },
-    { name: 'account settings', path: '/settings' },
-    { name: 'logout', path: `${API}/logout` },
+    { name: 'Profile', path: '/profile' },
+    { name: 'Settings', path: '/settings' },
+    { name: 'Logout', path: `${API}/logout` },
   ]
   const [openSubMenu, setOpenSubMenu] = useState(false)
 
   return (
     <Div class="usercard-contain">
       <P onClick={() => setOpenSubMenu((v) => !v)} class="us-link">
-        😌 {username ? username : name} ▿
+        {username ?? name} ▿
       </P>
 
       <Div
@@ -130,7 +116,7 @@ const UserCard = ({ user: { username, name }, path }) => {
                 href={data.path}
                 key={data.name}
                 style={{ marginTop: '10px', color: ' black' }}
-                onClick={data.name === 'logout' && clearStorage}
+                onClick={data.name === 'Logout' && clearStorage}
               >
                 {data.name}
               </LinkMatch>
@@ -153,7 +139,6 @@ export const Header = ({ page, title, children }) => {
         <Nav path={path} />
         <UserCard user={user} path={path} />
       </Div>
-
       {divider}
     </header>
   )

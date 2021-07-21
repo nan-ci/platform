@@ -92,7 +92,7 @@ const getStudentStatus = () => {
 }
 
 export const Home = () => {
-  const myCours = user && courses.find((c) => c.name === user.speciality)
+  const course = user && courses.find((c) => c.name === user.speciality)
   return (
     <Layout>
       <br />
@@ -101,7 +101,7 @@ export const Home = () => {
       {user && (
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           {user.role === 'visitor' ? (
-            <>
+            <Fragment>
               <h1>
                 you are enregistred like a visitor , please get the student
                 status
@@ -110,9 +110,9 @@ export const Home = () => {
               <button class="buyFormation" onClick={getStudentStatus}>
                 Get student status
               </button>
-            </>
+            </Fragment>
           ) : (
-            <>
+            <Fragment>
               <Div class="t-block">
                 <Div class="left-block">
                   <P class="title">Next step</P>
@@ -120,7 +120,6 @@ export const Home = () => {
                     <Div>
                       <strong>
                         <i class="fab fa-buffer" aria-hidden="true"></i> quizz
-                        ==>
                       </strong>{' '}
                       <span>variables</span>
                     </Div>
@@ -128,7 +127,7 @@ export const Home = () => {
                       <strong>
                         {' '}
                         <i class="fab fa-buffer" aria-hidden="true"></i>{' '}
-                        challenges ==>
+                        challenges
                       </strong>{' '}
                       check if a number is a test value
                     </Div>
@@ -146,13 +145,13 @@ export const Home = () => {
                 </Div>
                 <Div class="right-block">
                   <Roadmap
-                    modules={myCours.modules}
-                    cours={myCours.cours}
+                    modules={course.modules}
+                    cours={course.cours}
                     userLevel={user.level}
                   />
                 </Div>
               </Div>
-            </>
+            </Fragment>
           )}
         </div>
       )}
