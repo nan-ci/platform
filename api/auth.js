@@ -123,6 +123,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
   const { id, name } = data.viewer
   let { session } = (await db.get(`github-id:${id}`)) || {}
   let user = session && (await db.get(session))
+
   if (!user?.login) {
     const { login } = data.viewer
     session = `user:${login}:${Date.now().toString(36)}:${rand()}`
