@@ -1,6 +1,8 @@
 import { specialities, roles, rolesByKey } from '../data/discord.js'
+import { TYPE_JSON } from './defs.js'
 import { GET, POST, withBody, withUser } from './router.js'
 import * as db from './db.js'
+
 
 POST.user.profile = withBody(async ({ session, body }) => {
   await db.update(session, body)

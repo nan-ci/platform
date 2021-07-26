@@ -35,3 +35,20 @@ o['get all quizzes'] = {
     eq({ status: options.status }, { status: 200 })
   },
 }
+
+o['update role to student'] = {
+  it: async () => {
+    const session = `user:tester:${Date.now().toString(36)}:${rand()}`
+    NAN.put(session, '', {
+      metadata: {
+        discordId: '13381338',
+        ...user,
+        speciality: 'javascript',
+        role: 'visitor',
+      },
+    })
+    const resp = await GET('/user/updateRoleToStudent', {
+      headers: { cookie: `nan-session=` + session },
+    })
+  },
+}
