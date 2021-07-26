@@ -1,9 +1,12 @@
 import { Div, P } from '../component/elements.jsx'
+import { API } from '../lib/env.js'
+import { navigate } from '../lib/router.js'
 import { Layout } from '../component/layout.jsx'
 import { user } from '../lib/auth.js'
 import { css } from '../lib/dom.js'
 import { courses } from '../data/courses.js'
 import { Roadmap } from '../component/roadmap/index.jsx'
+import { get } from '../api/db.js'
 css(`
 .container {
   display:flex;
@@ -26,6 +29,7 @@ css(`
      margin:0 auto;
      margin-top:20px;
      border-radius:0.4rem;
+     text-decoration:none;
    }
 
    .t-block{
@@ -80,7 +84,7 @@ css(`
 }
 
 `)
-const getStudentStatus = () => {
+const getStudentStatus = async () => {
   localStorage.user = JSON.stringify({
     ...JSON.parse(localStorage.user),
     role: 'student',
@@ -105,7 +109,13 @@ export const Home = () => {
                 status
                 {'\n'} if you want to have full access
               </h1>
-              <button class="buyFormation" onClick={getStudentStatus}>
+              <button
+                class="buyFormation"
+                onClick={
+                  () => getStudentStatus()
+                  //   (location.href = `${API}/user/updateRoleToStudent`)
+                }
+              >
                 Get student status
               </button>
             </Fragment>

@@ -76,7 +76,6 @@ const FinishedQuizInfos = ({ questions, name }) => {
         point += 1
       }
     }
-    console.log('point', point)
   }
 
   d()
@@ -147,7 +146,6 @@ export const Quizzes = () => {
     })
 
     const resp = await fetching.json()
-    console.log('data', resp)
     if (resp.status) {
       localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
       navigate('/quiz?name=' + resp.data.name)
