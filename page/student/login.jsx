@@ -1,10 +1,10 @@
-import { Div, P } from '../component/elements'
-import { NavLink } from '../component/header'
-import { logo } from '../data/ascii'
-import { css } from '../lib/dom'
-import { API } from '../lib/env'
-import { user } from '../lib/auth.js'
-import { navigate } from '../lib/router'
+import { Div, P } from '../../component/elements'
+import { NavLink } from '../../component/header'
+import { logo } from '../../data/ascii'
+import { css } from '../../lib/dom'
+import { API } from '../../lib/env'
+import { user } from '../../lib/auth.js'
+import { navigate } from '../../lib/router'
 
 css(`
 .div-login {

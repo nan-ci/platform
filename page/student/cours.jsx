@@ -1,10 +1,10 @@
-import { Div, P } from '../component/elements'
-import { Layout } from '../component/layout.jsx'
-import { NavLink } from '../component/header'
-import { css } from '../lib/dom'
-import { courses } from '../data/courses.js'
-import { user } from '../lib/auth.js'
-import { CoursCard } from '../component/cours-card.jsx'
+import { Div, P } from '../../component/elements'
+import { Layout } from '../../component/layout.jsx'
+import { NavLink } from '../../component/header'
+import { css } from '../../lib/dom'
+import { courses } from '../../data/courses.js'
+import { user } from '../../lib/auth.js'
+import { CoursCard } from '../../component/student/cours-card.jsx'
 
 css(`
  .cours-heading{

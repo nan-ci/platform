@@ -64,21 +64,21 @@ const Nav = ({ path }) => (
   <nav>
     <ul style={{ width: '100%' }}>
       {'  '}
-      <LinkMatch path={path} href="/">
+      <LinkMatch path={path} href="/student/dashboard">
         Home
       </LinkMatch>
       {' - '}
-      <LinkMatch path={path} href="/curriculum">
+      <LinkMatch path={path} href="/student/curriculum">
         Curriculum
       </LinkMatch>
       {user && user.role === 'student' && (
         <>
           {' - '}
-          <LinkMatch path={path} href="/challenges">
+          <LinkMatch path={path} href="/student/challenges">
             Challenges
           </LinkMatch>
           {' - '}
-          <LinkMatch path={path} href="/quizzes">
+          <LinkMatch path={path} href="/student/quizzes">
             Quizzes
           </LinkMatch>
         </>
@@ -90,8 +90,8 @@ const Nav = ({ path }) => (
 
 const UserCard = ({ user: { username, name }, path }) => {
   const Links = [
-    { name: 'Profile', path: '/profile' },
-    { name: 'Settings', path: '/settings' },
+    { name: 'Profile', path: '/student/profile' },
+    { name: 'Settings', path: '/student/settings' },
     { name: 'Logout', path: `${API}/logout` },
   ]
   const [openSubMenu, setOpenSubMenu] = useState(false)

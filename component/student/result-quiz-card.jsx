@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'preact/hooks'
-import { css } from '../lib/dom.js'
-import { Div, P } from './elements.jsx'
-import { equals } from '../lib/quiz.js'
-import { navigate } from '../lib/router.js'
+import { css } from '../../lib/dom.js'
+import { Div, P } from '../elements.jsx'
+import { equals } from '../../lib/quiz.js'
+import { navigate } from '../../lib/router.js'
 
 css(`
 .result-quiz-card {
@@ -77,7 +77,7 @@ export const QuizCard = ({
       }}
       onClick={() => {
         localStorage.setItem('quiz', JSON.stringify({ responses }))
-        navigate(`/quiz?name=${name}&relecture=true`)
+        navigate(`/student/quiz?name=${name}&relecture=true`)
       }}
     >
       <h1>

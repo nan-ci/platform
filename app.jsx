@@ -1,15 +1,15 @@
 import { render } from 'preact'
 import { Router } from './lib/router.js'
-import { Profile } from './page/profile.jsx'
-import { Home } from './page/home.jsx'
-import { Settings } from './page/settings.jsx'
-import { Login } from './page/login.jsx'
-import { Challenges } from './page/challenges.jsx'
-import { LearningChoice } from './page/learningchoice.jsx'
-import { Curriculum } from './page/curriculum.jsx'
-import { Cours } from './page/cours.jsx'
-import { Quizzes } from './page/quizzes.jsx'
-import { Quiz } from './page/quiz.jsx'
+import { Profile } from './page/student/profile.jsx'
+import { Home } from './page/student/home.jsx'
+import { Settings } from './page/student/settings.jsx'
+import { Login } from './page/student/login.jsx'
+import { Challenges } from './page/student/challenges.jsx'
+import { LearningChoice } from './page/student/learningchoice.jsx'
+import { Curriculum } from './page/student/curriculum.jsx'
+import { Cours } from './page/student/cours.jsx'
+import { Quizzes } from './page/student/quizzes.jsx'
+import { Quiz } from './page/student/quiz.jsx'
 import { user } from './lib/auth.js'
 import { navigate, useURL } from './lib/router.js'
 
@@ -23,20 +23,20 @@ const App = () => {
     user.discordId &&
     (pathname === '/login' || pathname === '/learningchoice')
   )
-    return navigate('/')
+    return navigate('/student/dashboard')
 
   return (
     <Router>
-      <Profile path="/profile" />
+      <Profile path="/student/profile" />
       <Login path="/login" />
-      <Settings path="/settings" />
-      <Challenges path="/challenges" />
-      <Quizzes path="/quizzes" />
-      <Quiz path="/quiz" />
+      <Settings path="/student/settings" />
+      <Challenges path="/student/challenges" />
+      <Quizzes path="/student/quizzes" />
+      <Quiz path="/student/quiz" />
       <LearningChoice path="/learningchoice" />
-      <Curriculum path="/curriculum" />
-      <Cours path="/cours" />
-      <Home path="*" />
+      <Curriculum path="/student/curriculum" />
+      <Cours path="/student/cours" />
+      <Home path="/student/dashboard" />
     </Router>
   )
 }

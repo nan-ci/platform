@@ -174,7 +174,7 @@ o['GET /auth/discord with a proper state'] = {
     // location should include user own discordId
     const discordId = '13371337'
     const discordUser = { ...user, discordId, email, avatar, speciality }
-    eq(headers.location, `/?${new URLSearchParams(discordUser)}`)
+    eq(headers.location, `/student/dashboard?${new URLSearchParams(discordUser)}`)
 
     // the user session is set in the database
     eq(NAN.entries[name]?.metadata, discordUser)
@@ -254,7 +254,7 @@ o['GET /auth/discord with a proper state'] = {
     const role = 'visitor'
     const discordId = '13381338'
     const discordUser = { ...user, discordId, email, avatar, speciality, role }
-    eq(headers.location, `/?${new URLSearchParams(discordUser)}`)
+    eq(headers.location, `/student/dashboard?${new URLSearchParams(discordUser)}`)
 
     // if user already exists in discord we expect to have
     // another PATCH request made to discord servers

@@ -1,10 +1,9 @@
 import { useState } from 'preact/hooks'
-import { navigate } from '../../lib/router.js'
+import { navigate } from '../../../lib/router.js'
 import { TiretSvg } from './tiret.jsx'
-import { generateStepName } from '../../lib/user.js'
-import { Location } from '../icons.jsx'
-import { Point } from '../icons.jsx'
-import { css } from '../../lib/dom.js'
+import { generateStepName } from '../../../lib/user.js'
+import { Location ,Point } from '../../icons.jsx'
+import { css } from '../../../lib/dom.js'
 
 css(`
 .contain {
