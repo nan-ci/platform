@@ -1,8 +1,7 @@
-import { css } from '../lib/dom.js'
-import { Div, P } from './elements.jsx'
-import { NavLink } from './header.jsx'
-import { NaN } from './icons.jsx'
-import { Stack, Play, Pause, Expand, Reduce, Volume } from './icons.jsx'
+import { css } from '../../lib/dom.js'
+import { Div, P } from '../elements.jsx'
+import { NavLink } from '../header.jsx'
+import { Stack, Play, Pause, Expand, Reduce, Volume, NaN } from '../icons.jsx'
 import { useEffect, useState, useRef } from 'preact/hooks'
 
 css(`

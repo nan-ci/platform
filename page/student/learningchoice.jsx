@@ -1,11 +1,11 @@
-import { Div, P } from '../component/elements.jsx'
-import { Input, Form } from '../component/form.jsx'
-import { specialities } from '../data/discord.js'
-import { css } from '../lib/dom.js'
-import { API } from '../lib/env.js'
+import { Div, P } from '../../component/elements.jsx'
+import { Input, Form } from '../../component/form.jsx'
+import { specialities } from '../../data/discord.js'
+import { css } from '../../lib/dom.js'
+import { API } from '../../lib/env.js'
 import { useState } from 'preact/hooks'
-import { user } from '../lib/auth.js'
-import { navigate } from '../lib/router.js'
+import { user } from '../../lib/auth.js'
+import { navigate } from '../../lib/router.js'
 
 css(`
 .div-learning {

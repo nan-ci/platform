@@ -1,9 +1,9 @@
-import { css } from '../lib/dom'
-import { getUserLevel } from '../lib/user'
-import { Div, P } from './elements'
-import { NavLink } from './header'
+import { css } from '../../lib/dom'
+import { getUserLevel } from '../../lib/user'
+import { Div, P } from '../elements.jsx'
+import { NavLink } from '../header.jsx'
 import { useState } from 'preact/hooks'
-import { VideoPlay } from './icons'
+import { VideoPlay } from '../icons.jsx'
 
 css(`
 .cur-content {

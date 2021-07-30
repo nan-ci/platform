@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'preact/hooks'
-import { Layout } from '../component/layout.jsx'
-import { Table } from '../component/table.jsx'
-import { users } from '../data/users.js'
+import { Layout } from '../../component/layout.jsx'
+import { Table } from '../../component/table.jsx'
+import { users } from '../../data/users.js'
 
 export const StudentList = () => {
   const [data, setData] = useState([])

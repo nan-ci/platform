@@ -1,25 +1,25 @@
 import { useState, useEffect, useRef } from 'preact/hooks'
-import { courses } from '../data/courses.js'
-import { Div, P } from '../component/elements.jsx'
-import { Layout } from '../component/layout.jsx'
+import { courses } from '../../data/courses.js'
+import { Div, P } from '../../component/elements.jsx'
+import { Layout } from '../../component/layout.jsx'
 import {
   durationToSeconds,
   progressColor,
   getQuiz,
   time,
   getUser,
-} from '../lib/quiz.js'
-import { css } from '../lib/dom.js'
+} from '../../lib/quiz.js'
+import { css } from '../../lib/dom.js'
 import {
   Chrono,
   ArrowLeft,
   ArrowRight,
   Done,
   NotDone,
-} from '../component/icons.jsx'
-import { API } from '../lib/env.js'
-import { navigate } from '../lib/router.js'
-import { equals } from '../lib/quiz.js'
+} from '../../component/icons.jsx'
+import { API } from '../../lib/env.js'
+import { navigate } from '../../lib/router.js'
+import { equals } from '../../lib/quiz.js'
 
 css(`
   .quiz-h1{

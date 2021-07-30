@@ -1,11 +1,11 @@
 import { useState } from 'preact/hooks'
-import { Alert } from '../component/alert.jsx'
-import { Form, Input, Row, Fieldset } from '../component/form.jsx'
-import { DangerZone } from '../component/dangerzone.jsx'
-import { API } from '../lib/env.js'
-import { Layout } from '../component/layout.jsx'
-import { user } from '../lib/auth.js'
-import { css } from '../lib/dom.js'
+import { Alert } from '../../component/alert.jsx'
+import { Form, Input, Row, Fieldset } from '../../component/form.jsx'
+import { DangerZone } from '../../component/dangerzone.jsx'
+import { API } from '../../lib/env.js'
+import { Layout } from '../../component/layout.jsx'
+import { user } from '../../lib/auth.js'
+import { css } from '../../lib/dom.js'
 
 css(`
 .input-settings{

@@ -72,7 +72,7 @@ GET.auth.discord = async ({ url }) => {
   join.reply.ok || console.error('Unable to join discord:', join.reply)
   user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'visitor'
   await db.set(session.name, user)
-  const location = `/?${new URLSearchParams(user)}`
+  const location = `/student/dashboard?${new URLSearchParams(user)}`
   return new Response(null, { headers: { location }, status: 301 })
 }
 

@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'preact/hooks'
-import { Div, P } from '../component/elements.jsx'
-import { Layout } from '../component/layout.jsx'
-import { QuizCard } from '../component/quiz-card.jsx'
-import { courses } from '../data/courses.js'
-import { user } from '../lib/auth.js'
-import { css } from '../lib/dom.js'
-import { navigate } from '../lib/router.js'
-import { API } from '../lib/env.js'
-import { EndDate } from '../lib/quiz.js'
+import { Div, P } from '../../component/elements.jsx'
+import { Layout } from '../../component/layout.jsx'
+import { QuizCard } from '../../component/student/quiz-card.jsx'
+import { courses } from '../../data/courses.js'
+import { user } from '../../lib/auth.js'
+import { css } from '../../lib/dom.js'
+import { navigate } from '../../lib/router.js'
+import { API } from '../../lib/env.js'
+import { EndDate } from '../../lib/quiz.js'
 import moment from 'moment'
 
 css(`
@@ -148,7 +148,7 @@ export const Quizzes = () => {
     const resp = await fetching.json()
     if (resp.status) {
       localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
-      navigate('/quiz?name=' + resp.data.name)
+      navigate('/student/quiz?name=' + resp.data.name)
     }
   }
 

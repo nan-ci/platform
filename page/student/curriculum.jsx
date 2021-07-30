@@ -1,10 +1,10 @@
-import { CurriculumCard } from '../component/curriculum-card.jsx'
+import { CurriculumCard } from '../../component/student/curriculum-card.jsx'
 import { useState } from 'preact/hooks'
-import { Layout } from '../component/layout.jsx'
-import { courses } from '../data/courses.js'
-import { user } from '../lib/auth.js'
-import { css } from '../lib/dom.js'
-import { Lecteur } from '../component/lecteur.jsx'
+import { Layout } from '../../component/layout.jsx'
+import { courses } from '../../data/courses.js'
+import { user } from '../../lib/auth.js'
+import { css } from '../../lib/dom.js'
+import { Lecteur } from '../../component/student/lecteur.jsx'
 
 css(`
 .username-curriculum{

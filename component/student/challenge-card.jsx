@@ -1,5 +1,5 @@
-import { css } from '../lib/dom'
-import { Div, P, Span } from './elements'
+import { css } from '../../lib/dom'
+import { Div, P, Span } from '../elements'
 
 css(`
 .block{

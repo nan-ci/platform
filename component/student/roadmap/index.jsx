@@ -1,9 +1,9 @@
 import { Fragment } from 'preact'
 import { useState } from 'preact/hooks'
-import { Div } from '../../component/elements.jsx'
-import { css } from '../../lib/dom.js'
+import { Div } from '../../elements.jsx'
+import { css } from '../../../lib/dom.js'
 import { CoursSvg } from './cours.jsx'
-import { getUserLevel } from '../../lib/user.js'
+import { getUserLevel } from '../../../lib/user.js'
 
 css(`
 .roadmap {

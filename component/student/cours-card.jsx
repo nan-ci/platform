@@ -1,6 +1,6 @@
-import { css } from '../lib/dom'
-import { Div } from './elements'
-import { getUserLevel } from '../lib/user.js'
+import { css } from '../../lib/dom'
+import { Div } from '../elements'
+import { getUserLevel } from '../../lib/user.js'
 
 css(`
 .card {

@@ -1,11 +1,11 @@
-import { css } from '../lib/dom.js'
-import { Div, P } from './elements.jsx'
+import { css } from '../../lib/dom.js'
+import { Div, P } from '../elements.jsx'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import moment from 'moment'
-import { navigate } from '../lib/router.js'
-import { format, getQuiz } from '../lib/quiz.js'
-import { API } from '../lib/env.js'
-import { Chrono, Quiz, Done, NotDone, Lock } from '../component/icons.jsx'
+import { navigate } from '../../lib/router.js'
+import { format, getQuiz } from '../../lib/quiz.js'
+import { API } from '../../lib/env.js'
+import { Chrono, Quiz, Done, NotDone, Lock } from '../icons.jsx'
 
 css(`
     .quizz-container {
@@ -110,7 +110,7 @@ export const QuizCard = ({
       moment().isBefore(resp.data.end_date)
     ) {
       localStorage.setItem('quiz', JSON.stringify(resp.data))
-      return navigate('/quiz?name=' + name)
+      return navigate('/student/quiz?name=' + name)
     } else {
       selectQuiz({ name, duration, percentOfValidation, questions })
     }
