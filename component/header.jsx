@@ -62,36 +62,84 @@ const Version = () => (
 
 const Nav = ({ path }) => (
   <nav>
-    <ul style={{ width: '100%' }}>
-      {'  '}
-      <LinkMatch path={path} href="/student/dashboard">
-        Home
-      </LinkMatch>
-      {' - '}
-      <LinkMatch path={path} href="/student/curriculum">
-        Curriculum
-      </LinkMatch>
-      {user && user.role === 'student' && (
-        <>
-          {' - '}
-          <LinkMatch path={path} href="/student/challenges">
-            Challenges
-          </LinkMatch>
-          {' - '}
-          <LinkMatch path={path} href="/student/quizzes">
-            Quizzes
-          </LinkMatch>
-        </>
-      )}
-    </ul>
+    {/* links student */}
+
+    {user.role !== 'professor' && user.role !== 'admin' && (
+      <ul style={{ width: '100%' }}>
+        {'  '}
+        <LinkMatch path={path} href="/student/dashboard">
+          Home
+        </LinkMatch>
+        {' - '}
+        <LinkMatch path={path} href="/student/curriculum">
+          Curriculum
+        </LinkMatch>
+        {user && user.role === 'student' && (
+          <>
+            {' - '}
+            <LinkMatch path={path} href="/student/challenges">
+              Challenges
+            </LinkMatch>
+            {' - '}
+            <LinkMatch path={path} href="/student/quizzes">
+              Quizzes
+            </LinkMatch>
+          </>
+        )}
+      </ul>
+    )}
+
+    {/* links professor */}
+
+    {user.role === 'professor' && (
+      <ul style={{ width: '100%' }}>
+        {'  '}
+        <LinkMatch path={path} href="/professor/dashboard">
+          Home
+        </LinkMatch>
+        {' - '}
+        <LinkMatch path={path} href="/professor/cours">
+          Cours
+        </LinkMatch>
+        {' - '}
+        <LinkMatch path={path} href="/professor/quizzes">
+          Quizzes
+        </LinkMatch>
+        {' - '}
+        <LinkMatch path={path} href="/professor/students">
+          students
+        </LinkMatch>
+        {' - '}
+        <LinkMatch path={path} href="/professor/students-projects">
+          students-projects
+        </LinkMatch>
+      </ul>
+    )}
+
     {'\n'}
   </nav>
 )
 
 const UserCard = ({ user: { username, name }, path }) => {
   const Links = [
-    { name: 'Profile', path: '/student/profile' },
-    { name: 'Settings', path: '/student/settings' },
+    {
+      name: 'Profile',
+      path:
+        user.role === 'student'
+          ? '/student/profile'
+          : user.role === 'professor'
+          ? '/professor/profile'
+          : '/admin/profile',
+    },
+    {
+      name: 'Settings',
+      path:
+        user.role === 'student'
+          ? '/student/settings'
+          : user.role === 'professor'
+          ? '/professor/settings'
+          : '/admin/settings',
+    },
     { name: 'Logout', path: `${API}/logout` },
   ]
   const [openSubMenu, setOpenSubMenu] = useState(false)

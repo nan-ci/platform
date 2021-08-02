@@ -13,20 +13,57 @@ import { Quiz } from './page/student/quiz.jsx'
 import { user } from './lib/auth.js'
 import { navigate, useURL } from './lib/router.js'
 
+// profs route
+import { Login as LoginProf } from './page/professor/login.jsx'
+import { Home as HomeProf } from './page/professor/home.jsx'
+import { Cours as CoursProf } from './page/professor/cours.jsx'
+
+const Redirection = (pathname) => {
+  const tab = pathname.split('/')
+  if (user && user.role === 'student' && !tab.includes('student'))
+    return (location.href = '/student/dashboard')
+  if (user && user.role === 'professor' && !tab.includes('professor'))
+    return (location.href = '/professor/dashboard')
+  if (user && user.role === 'admin' && !tab.includes('admin'))
+    return (location.href = '/admin/dashboard')
+
+  if (tab.includes('professor')) {
+    // redirection for prof
+    if (
+      !user &&
+      pathname !== '/professor/auth' &&
+      pathname !== '/professor/dashboard'
+    )
+      return navigate('/professor/auth')
+
+    if (user && pathname === '/professor/auth')
+      return navigate('/professor/dashboard')
+  } else if (tab.includes('admin')) {
+    // redirection for admin
+  } else {
+    // redirection for student
+    if (!user && pathname !== '/login') return navigate('/login')
+
+    if (user && !user.discordId && pathname !== '/learningchoice')
+      return navigate('/learningchoice')
+
+    if (
+      user &&
+      user.discordId &&
+      (pathname === '/login' || pathname === '/learningchoice')
+    )
+      return navigate('/student/dashboard')
+  }
+}
+
 const App = () => {
   const { pathname } = useURL()
-  if (!user && pathname !== '/login') return navigate('/login')
-  if (user && !user.discordId && pathname !== '/learningchoice')
-    return navigate('/learningchoice')
-  if (
-    user &&
-    user.discordId &&
-    (pathname === '/login' || pathname === '/learningchoice')
-  )
-    return navigate('/student/dashboard')
+
+  Redirection(pathname)
 
   return (
     <Router>
+      <Home path="/student/dashboard" />
       <Profile path="/student/profile" />
       <Login path="/login" />
       <Settings path="/student/settings" />
@@ -36,7 +73,10 @@ const App = () => {
       <LearningChoice path="/learningchoice" />
       <Curriculum path="/student/curriculum" />
       <Cours path="/student/cours" />
-      <Home path="/student/dashboard" />
+
+      <LoginProf path="/professor/auth" />
+      <HomeProf path="/professor/dashboard" />
+      <CoursProf path="/professor/cours" />
     </Router>
   )
 }
