@@ -1,6 +1,6 @@
 import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
-import { useState } from 'preact/hooks'
+import { useState, useRef, useEffect } from 'preact/hooks'
 import { Form, Input } from '../form.jsx'
 
 css(`
@@ -9,13 +9,13 @@ css(`
      background: black;
      position:absolute;
      top:20%;
-     left:35%;
-     right:35%;
+     left:40%;
+     right:40%;
      transform:translate(-50%,-50%);
      border:2px solid blue;
      border-radius:0.5rem;
      transform:scale(0);
-     transition: all .5s ease-in-out;
+     transition: all .2s ease-in-out;
    }
 
    .prof-cours-modalModule button.close {
@@ -67,32 +67,55 @@ css(`
 
 `)
 
-export const ModalModule = ({ show, close, addModule }) => {
+export const ModalModule = ({
+  show,
+  close,
+  modulesLength,
+  module,
+  setModule,
+}) => {
   const [errors, setErrors] = useState({
     name: null,
     description: null,
+    hours: null,
   })
 
-  const AddModule = (e) => {
+  useEffect(() => {
+    if (show) {
+      document.querySelector('.prof-cours-modalModule').style.transform =
+        'scale(1)'
+    }
+  }, [show])
+
+  const submit = (e) => {
     e.preventDefault()
     const data = Object.fromEntries(new FormData(e.target))
-    addModule(data)
-    close()
+    !module
+      ? setModule({ id: modulesLength + 1, ...data }, 'add')
+      : setModule({ ...module, ...data }, 'update')
+    document.querySelector('.prof-cours-modalModule').style.transform =
+      'scale(0)'
+    setTimeout(() => close(), 200)
   }
 
   return (
-    <Div
-      class="prof-cours-modalModule"
-      style={{ transform: show ? 'scale(1)' : 'scale(0)' }}
-    >
-      <button class="close" onClick={() => close()}>
+    <Div class="prof-cours-modalModule">
+      <button
+        class="close"
+        onClick={() => {
+          document.querySelector('.prof-cours-modalModule').style.transform =
+            'scale(0)'
+          setTimeout(() => close(), 200)
+        }}
+      >
         &times;
       </button>
       <Form
-        submit="add module"
+        class="prof-cours-modalModule-form"
+        submit={!module ? 'add module' : 'update module'}
         buttonClassName="prof-cours-modalModule-submit"
         style={{ whiteSpace: 'pre', padding: '01rem' }}
-        onSubmit={AddModule}
+        onSubmit={submit}
       >
         <Input
           class="prof-cours-modalModule-input"
@@ -100,6 +123,8 @@ export const ModalModule = ({ show, close, addModule }) => {
           inputType="input"
           name="name"
           comment="Enter the module Name"
+          value={module ? module.name : ''}
+          required
           errors={errors}
           updateErrors={setErrors}
         />
@@ -109,7 +134,21 @@ export const ModalModule = ({ show, close, addModule }) => {
           rows="5"
           inputType="textarea"
           name="description"
+          required
           comment="Enter the module Description"
+          value={module ? module.description : ''}
+          errors={errors}
+          updateErrors={setErrors}
+        />
+        <Input
+          class="prof-cours-modalModule-input"
+          type="number"
+          rows="5"
+          inputType="input"
+          name="hours"
+          comment="How many hours to learn the module"
+          required
+          value={module ? module.hours : 0}
           errors={errors}
           updateErrors={setErrors}
         />
