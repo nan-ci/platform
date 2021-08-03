@@ -124,8 +124,10 @@ export const Input = ({
   const [val, setVal] = useState(value || '')
   const onInput = ({ target }) => {
     setVal(target.value)
-    if (errors[target.name]) delete errors[target.name]
-    updateErrors({ ...errors })
+    if (errors[target.name]) {
+      delete errors[target.name]
+      updateErrors({ ...errors })
+    }
   }
   const onFocus = ({ target }) =>
     setTimeout(

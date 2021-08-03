@@ -51,7 +51,10 @@ const LinkMatch = ({ match, children, path, ...props }) => (
   </li>
 )
 
-const clearStorage = () => localStorage.clear()
+const clearStorage = () => {
+  localStorage.clear()
+  sessionStorage.clear()
+}
 
 // prettier-ignore
 export const NavLink = (props) => <li> <Link {...props} /></li>
@@ -98,8 +101,8 @@ const Nav = ({ path }) => (
           Home
         </LinkMatch>
         {' - '}
-        <LinkMatch path={path} href="/professor/cours">
-          Cours
+        <LinkMatch path={path} href="/professor/modules">
+          modules
         </LinkMatch>
         {' - '}
         <LinkMatch path={path} href="/professor/quizzes">
