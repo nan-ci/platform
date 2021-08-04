@@ -15,12 +15,9 @@ css(`
       align-items:center;
       justify-content:flex-start;
       border-radius: 0.5rem;
-      cursor:pointer;
       transition: all .2s ease-in-out;
    }
-   .prof-cours-courseCard:hover{
-     border: 2px solid #444;
-   }
+
 
 
    .prof-cours-courseCard svg {

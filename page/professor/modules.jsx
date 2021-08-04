@@ -3,9 +3,9 @@ import { Layout } from '../../component/layout.jsx'
 import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
 import { useState } from 'preact/hooks'
-import { ModuleCard } from '../../component/professor/ModuleCard'
-import { ModalModule } from '../../component/professor/ModalModule'
-import { DeleteModuleModal } from '../../component/professor/DeleteModuleModal'
+import { ModuleCard } from '../../component/professor/ModuleCard.jsx'
+import { ModalModule } from '../../component/professor/ModalModule.jsx'
+import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
 css(`
     .prof-cours-header{
@@ -120,10 +120,12 @@ export const Modules = () => {
         />
       )}
       {showDeleteModal && (
-        <DeleteModuleModal
+        <DeleteModal
+          type="modules"
           show={showDeleteModal}
-          name={module.name}
-          updateModules={setModules}
+          message={`Do you want really delete  the module ${module.name} ??`}
+          id={module.id}
+          update={setModules}
           close={() => {
             setShowDeleteModal(false)
             setModule(null)

@@ -55,6 +55,10 @@ css(`
     overflow:auto;
 }
 
+.prof-cours-modalCourse form  .block_right .ressources::-webkit-scrollbar{
+   width: 4px;
+}
+
 .prof-cours-modalCourse form  .block_right button.ressource{
     padding:0.5rem;
     outline:none;
