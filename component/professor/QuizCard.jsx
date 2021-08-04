@@ -1,10 +1,9 @@
 import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
 import { Module } from '../icons'
-import { navigate } from '../../lib/router.js'
 
 css(`
-   .prof-cours-moduleCard {
+   .prof-quizzes-moduleCard {
       width: 100%;
       height: auto;
       padding: 0.5rem;
@@ -21,34 +20,34 @@ css(`
    }
 
 
-   .prof-cours-moduleCard svg {
+   .prof-quizzes-moduleCard svg {
      width:20%;
    }
 
-   .prof-cours-moduleCard .left_block{
+   .prof-quizzes-moduleCard .left_block{
      position: relative;
      width: 80%;
      padding: 0 0.6rem;
    }
 
-   .prof-cours-moduleCard .left_block h1{
+   .prof-quizzes-moduleCard .left_block h1{
       font-size: 2rem;
       font-weight:bolder;
   }
 
-  .prof-cours-moduleCard .left_block p{
+  .prof-quizzes-moduleCard .left_block p{
     margin-top: 6px;
     white-space:normal
   }
 
-  .prof-cours-moduleCard .left_block .buttons_group{
+  .prof-quizzes-moduleCard .left_block .buttons_group{
     float: right;
     margin-top: 20px;
     bottom: 5px;
     font-weight:bolder;
   }
 
-  .prof-cours-moduleCard .left_block .buttons_group button{
+  .prof-quizzes-moduleCard .left_block .buttons_group button{
     padding: 0.5rem;
     margin: 5px;
     cursor:pointer;
@@ -58,41 +57,25 @@ css(`
 
 `)
 
-export const ModuleCard = ({
-  data: { id, name, description, hours },
-  setModuleToUpdate,
+export const QuizCard = ({
+  data: { id, name, questions, beginDate, endDate, time },
+  setQuizToUpdate,
 }) => {
-  const courses = sessionStorage.getItem('courses')
-    ? JSON.parse(sessionStorage.getItem('courses'))
-    : []
   return (
-    <Div
-      class="prof-cours-moduleCard"
-      onClick={() => navigate('/professor/module-cours/' + name)}
-    >
+    <Div class="prof-quizzes-moduleCard">
       <Module size={90} color="white" />
       <Div class="left_block">
         <h1>{name}</h1>
         <P>
-          <span style={{ color: 'grey' }}>Description : </span>
-          {description.length > 110
-            ? description.slice(0, 110) + '...'
-            : description}
-        </P>
-        <P>
-          <span style={{ color: 'grey' }}>Hours to learn : </span>
-          {hours}
-        </P>
-        <P>
-          <span style={{ color: 'grey' }}> courses : </span>{' '}
-          {courses.filter((c) => c.idModule === id).length}
+          <span style={{ color: 'grey' }}> Time : </span>
+          {time}
         </P>
         <Div class="buttons_group">
           <button
             style={{ background: 'dodgerblue' }}
             onClick={(e) => {
               e.stopPropagation()
-              setModuleToUpdate(id)
+              setQuizToUpdate(id)
             }}
           >
             {' '}
@@ -102,7 +85,7 @@ export const ModuleCard = ({
             style={{ background: 'var(--red-darker)' }}
             onClick={(e) => {
               e.stopPropagation()
-              setModuleToUpdate(id, 'delete')
+              setQuizToUpdate(id, 'delete')
             }}
           >
             {' '}

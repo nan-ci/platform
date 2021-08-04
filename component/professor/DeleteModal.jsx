@@ -2,7 +2,7 @@ import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
 import { useEffect } from 'preact/hooks'
 css(`
-   .prof-cours-deleteModuleModal {
+   .prof-cours-deleteModal {
      width: 400px;
      background: black;
      position:absolute;
@@ -18,7 +18,7 @@ css(`
      transition: all .2s ease-in-out;
    }
 
-   .prof-cours-deleteModuleModal button.close {
+   .prof-cours-deleteModal button.close {
     width: 40px;
     padding: 0.5rem;
     font-size: 20px;
@@ -32,12 +32,12 @@ css(`
    cursor:pointer;
   }
 
-  .prof-cours-deleteModuleModal h1 {
+  .prof-cours-deleteModal h1 {
      font-size: 1.5rem;
      font-weight:bolder;
   }
 
-  .prof-cours-deleteModuleModal button.delete {
+  .prof-cours-deleteModal button.delete {
     margin-top: 20px;
     padding: 0.5rem;
     font-size: 20px;
@@ -51,45 +51,43 @@ css(`
 
 `)
 
-export const DeleteModuleModal = ({ show, name, close, updateModules }) => {
+export const DeleteModal = ({ show, id, message, type, close, update }) => {
   useEffect(() => {
     if (show) {
-      document.querySelector('.prof-cours-deleteModuleModal').style.transform =
+      document.querySelector('.prof-cours-deleteModal').style.transform =
         'scale(1)'
     }
   }, [show])
 
   const Delete = () => {
-    updateModules((modles) => {
+    update((modles) => {
       modles.splice(
-        modles.findIndex((m) => m.name === name),
+        modles.findIndex((m) => m.id === id),
         1,
       )
-      sessionStorage.setItem('modules', JSON.stringify(modles))
+      sessionStorage.setItem(type, JSON.stringify(modles))
       return { ...modles }
     })
-    document.querySelector('.prof-cours-deleteModuleModal').style.transform =
+    document.querySelector('.prof-cours-deleteModal').style.transform =
       'scale(0)'
     setTimeout(() => close(), 200)
   }
 
   return (
-    <Div class="prof-cours-deleteModuleModal">
+    <Div class="prof-cours-deleteModal">
       <button
         class="close"
         onClick={() => {
-          document.querySelector(
-            '.prof-cours-deleteModuleModal',
-          ).style.transform = 'scale(0)'
+          document.querySelector('.prof-cours-deleteModal').style.transform =
+            'scale(0)'
           setTimeout(() => close(), 200)
         }}
       >
         &times;
       </button>
-      <h1>Do you want really delete the module {name} ??</h1>
+      <h1> {message} </h1>
       <button onClick={() => Delete()} class="delete">
-        {' '}
-        yes{' '}
+        yes
       </button>
     </Div>
   )

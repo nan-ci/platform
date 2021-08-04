@@ -8,7 +8,7 @@ import { navigate } from '../../lib/router'
 import { useState } from 'preact/hooks'
 import { CourseCard } from '../../component/professor/CourseCard.jsx'
 import { ModalCourse } from '../../component/professor/ModalCourse.jsx'
-import { DeleteCourseModal } from '../../component/professor/DeleteCourseModal'
+import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
 css(`
     .prof-modulecourse-h1{
@@ -146,14 +146,16 @@ export const ModuleCours = ({ moduleName }) => {
         />
       )}
       {showDeleteModal && (
-        <DeleteCourseModal
+        <DeleteModal
+         type="courses"
           show={showDeleteModal}
-          name={currentCourse.name}
+          message={`Do you want really delete  the course ${currentCourse.name} ??`}
+          id={currentCourse.id}
+          update={setCourses}
           close={() => {
             setShowDeleteModal(false)
             setCurrentCourse(null)
           }}
-          updateCourses={setCourses}
         />
       )}
     </Layout>
