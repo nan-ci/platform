@@ -91,7 +91,7 @@ export const ModalModule = ({
     e.preventDefault()
     const data = Object.fromEntries(new FormData(e.target))
     !module
-      ? setModule({ id: modulesLength + 1, ...data }, 'add')
+      ? setModule({ id: modulesLength + 1, ...data, projects: [] }, 'add')
       : setModule({ ...module, ...data }, 'update')
     document.querySelector('.prof-cours-modalModule').style.transform =
       'scale(0)'

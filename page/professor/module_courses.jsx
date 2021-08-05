@@ -1,49 +1,33 @@
 import { Div, P } from '../../component/elements'
-import { Layout } from '../../component/layout.jsx'
-import { logo } from '../../data/ascii'
 import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
-import { user } from '../../lib/auth.js'
-import { navigate } from '../../lib/router'
 import { useState } from 'preact/hooks'
 import { CourseCard } from '../../component/professor/CourseCard.jsx'
 import { ModalCourse } from '../../component/professor/ModalCourse.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
 css(`
-    .prof-modulecourse-h1{
-      font-weight: bolder;
-      font-size: 1.7rem;
-      margin-bottom: 27px;
-    }
 
-    .prof-modulecourse-h1>strong{
-      font-weight: bolder;
-      font-size: 1.7rem;
-      color: var(--comment-lighter);
-    }
     .prof-modulecourse-header{
        display:flex;
        flex-direction: row;
        align-items:center;
-       justify-content: space-between;
+       justify-content: flex-end;
     }
 
-    .prof-modulecourse-header>div{
-      display: flex;
-      flex-direction: row;
-      align-items: center;
+    .prof-module-choice-buttons{
+       text-align:center;
+       width:100%;
     }
 
-    .prof-modulecourse-header>div span{
-       font-size: 1.7rem;
-       font-weight:bolder;
-    }
+    .prof-module-choice-buttons button{
+        padding:  0.5rem;
+        outline:none;
+        cursor:pointer;
+        border-radius:0.4rem;
+        margin: 5px;
+   }
 
-    .prof-modulecourse-header h1{
-       font-size: 1.7rem;
-       text-decoration: underline
-    }
 
     .prof-modulecourse-addCourseButton {
       padding: 0.6rem;
@@ -57,7 +41,7 @@ css(`
 
 `)
 
-export const ModuleCours = ({ moduleName }) => {
+export const ModuleCourses = ({ moduleName }) => {
   const { id: moduleId } = JSON.parse(sessionStorage.getItem('modules')).find(
     (m) => m.name === moduleName,
   )
@@ -78,16 +62,8 @@ export const ModuleCours = ({ moduleName }) => {
   }
 
   return (
-    <Layout>
-      <h1 class="prof-modulecourse-h1">
-        <strong>Module : </strong>
-        {moduleName}
-      </h1>
+    <Div>
       <section class="prof-modulecourse-header">
-        <Div>
-          <h1>courses</h1>
-          <span>({courses.length})</span>
-        </Div>
         <button
           class="prof-modulecourse-addCourseButton"
           onClick={() => setShowModal(true)}
@@ -147,7 +123,7 @@ export const ModuleCours = ({ moduleName }) => {
       )}
       {showDeleteModal && (
         <DeleteModal
-         type="courses"
+          type="courses"
           show={showDeleteModal}
           message={`Do you want really delete  the course ${currentCourse.name} ??`}
           id={currentCourse.id}
@@ -158,6 +134,6 @@ export const ModuleCours = ({ moduleName }) => {
           }}
         />
       )}
-    </Layout>
+    </Div>
   )
 }

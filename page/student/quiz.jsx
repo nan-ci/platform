@@ -468,7 +468,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
   useEffect(() => {
     if (!relecture) {
       chronoInterval = setInterval(() => {
-        const duration = time('all')
+        const duration = time('all', quiz.endDate)
         if (duration.asSeconds() > 0) {
           setChrono(
             `${
@@ -495,7 +495,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
   useEffect(() => {
     if (!relecture) {
       progressInterval = setInterval(() => {
-        const seconds = time('asSeconds')
+        const seconds = time('asSeconds', quiz.endDate)
         if (seconds >= 0) {
           setProgressPercent(
             100 -

@@ -51,7 +51,15 @@ css(`
 
 `)
 
-export const DeleteModal = ({ show, id, message, type, close, update }) => {
+export const DeleteModal = ({
+  show,
+  moduleId,
+  id,
+  message,
+  type,
+  close,
+  update,
+}) => {
   useEffect(() => {
     if (show) {
       document.querySelector('.prof-cours-deleteModal').style.transform =
@@ -65,7 +73,13 @@ export const DeleteModal = ({ show, id, message, type, close, update }) => {
         modles.findIndex((m) => m.id === id),
         1,
       )
-      sessionStorage.setItem(type, JSON.stringify(modles))
+      if (type === 'projects') {
+        const modules = JSON.parse(sessionStorage.getItem('modules'))
+        let index = modules.findIndex((m) => m.id === moduleId)
+        let indexp = modules[index].projects.findIndex((p) => p.id === id)
+        modules[index].projects.splice(indexp, 1)
+        sessionStorage.setItem('modules', JSON.stringify(modules))
+      } else sessionStorage.setItem(type, JSON.stringify(modles))
       return { ...modles }
     })
     document.querySelector('.prof-cours-deleteModal').style.transform =

@@ -1,12 +1,12 @@
 import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
 import { useState, useEffect } from 'preact/hooks'
-import { Quiz } from '../../component/icons.jsx'
+import { Stack } from '../../component/icons.jsx'
 import { format, time as Time } from '../../lib/quiz.js'
 import moment from 'moment'
 
 css(`
-   .prof-quizzes-moduleCard {
+   .prof-module-projectCard {
       width: 100%;
       height: auto;
       padding: 0.5rem;
@@ -17,7 +17,7 @@ css(`
       transition: all .2s ease-in-out;
    }
 
-   .prof-quizzes-moduleCard .container {
+   .prof-module-projectCard .container {
       display:flex;
       flex-direction:row;
       align-items:center;
@@ -25,28 +25,28 @@ css(`
    }
 
 
-   .prof-quizzes-moduleCard svg {
+   .prof-module-projectCard svg {
      width:20%;
    }
 
-   .prof-quizzes-moduleCard .left_block{
+   .prof-module-projectCard .left_block{
      position: relative;
      width: 80%;
      padding: 0 0.6rem;
    }
 
-   .prof-quizzes-moduleCard .left_block h1{
+   .prof-module-projectCard .left_block h1{
       font-size: 2rem;
       font-weight:bolder;
   }
 
-  .prof-quizzes-moduleCard .left_block p{
+  .prof-module-projectCard .left_block p{
     margin-top: 6px;
     white-space:normal
   }
 
 
-  .prof-quizzes-moduleCard  .buttons_group{
+  .prof-module-projectCard  .buttons_group{
       display:flex;
       width: 100%;
       flex-direction:row;
@@ -54,41 +54,32 @@ css(`
       justify-content: space-between;
   }
 
-  .prof-quizzes-moduleCard  .buttons_group  span{
+  .prof-module-projectCard  .buttons_group  span{
         font-weight:bolder;
         color:grey;
   }
 
 
 
-  .prof-quizzes-moduleCard  .buttons_group div button{
+  .prof-module-projectCard  .buttons_group div button{
     padding: 0.5rem;
     margin: 5px;
     cursor:pointer;
-    font-weight:normal;
     border-radius:0.4rem;
     outline:none;
   }
 
 `)
 
-export const QuizCard = ({
-  data: {
-    id,
-    name,
-    questions,
-    beginDate,
-    endDate,
-    duration,
-    percentOfValidation,
-  },
-  setQuizToUpdate,
+export const ProjectCard = ({
+  data: { id, name, description, beginDate, endDate },
+  setProjectToUpdate,
 }) => {
-  let [quizStart, setQuizStart] = useState(
+  let [projectStart, setProjectStart] = useState(
     moment(new Date()).isAfter(moment(beginDate)),
   )
 
-  let [quizClose, setQuizClose] = useState(
+  let [projectClose, setProjectClose] = useState(
     moment(new Date()).isAfter(moment(endDate)),
   )
 
@@ -115,8 +106,8 @@ export const QuizCard = ({
           ' ' +
           (meth['seconds'] ? format(meth, 'seconds') : ''),
       )
-      setQuizStart(moment().isAfter(beginDate))
-      setQuizClose(moment(new Date()).isAfter(endDate))
+      setProjectStart(moment().isAfter(beginDate))
+      setProjectClose(moment(new Date()).isAfter(endDate))
     }, 1000)
 
     return () => {
@@ -125,27 +116,22 @@ export const QuizCard = ({
   }, [id, endDate, beginDate])
 
   return (
-    <Div class="prof-quizzes-moduleCard">
+    <Div class="prof-module-projectCard">
       <Div class="container">
-        <Quiz size={90} color="white" />
+        <Stack size={90} color="white" />
         <Div class="left_block">
           <h1>{name}</h1>
           <P>
-            <span style={{ color: 'grey' }}> duration : </span>
-            {duration}
+            <span style={{ color: 'grey' }}> description : </span>
+            {description.length > 110
+              ? description.slice(0, 110) + '...'
+              : description}
           </P>
-          <P>
-            <span style={{ color: 'grey' }}> questions : </span>
-            {Object.keys(questions).length}
-          </P>
-          <P>
-            <span style={{ color: 'grey' }}> percent for validation : </span>
-            {percentOfValidation}
-          </P>
+
           <P>
             <span style={{ fontWeight: 'bolder', color: 'darkgrey' }}>
-              {!quizClose
-                ? quizStart
+              {!projectClose
+                ? projectStart
                   ? `close in ${time}`
                   : `open in ${time}`
                 : `closed`}
@@ -157,29 +143,31 @@ export const QuizCard = ({
         class="buttons_group"
         style={{
           justifyContent:
-            (quizStart && !quizClose) || quizClose
+            (projectStart && !projectClose) || projectClose
               ? 'space-between'
               : 'flex-end',
         }}
       >
-        {quizStart && !quizClose && <span> 2 students have finished</span>}
+        {projectStart && !projectClose && (
+          <span> 2 students have finished</span>
+        )}
         <Div>
           <button
             style={{ background: 'dodgerblue' }}
             onClick={(e) => {
               e.stopPropagation()
-              setQuizToUpdate(id, quizStart && !quizClose)
+              setProjectToUpdate(id, projectStart && !projectClose)
             }}
           >
             {' '}
             Modify{' '}
           </button>
-          {!quizStart && !quizClose && (
+          {!projectStart && !projectClose && (
             <button
               style={{ background: 'var(--red-darker)' }}
               onClick={(e) => {
                 e.stopPropagation()
-                setQuizToUpdate(id, 'delete')
+                setProjectToUpdate(id, 'delete')
               }}
             >
               {' '}

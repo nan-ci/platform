@@ -52,8 +52,11 @@ export const Quizzes = () => {
   const [quiz, setQuiz] = useState(null)
 
   const setQuizToUpdate = (quizId, state) => {
-    setQuiz(quizzes.find((m) => m.id === quizId))
-    state === 'update' ? setShowModal(true) : setShowDeleteModal(true)
+    setQuiz({
+      ...quizzes.find((m) => m.id === quizId),
+      ifQuizStart: state !== 'delete' && state,
+    })
+    state === 'delete' ? setShowDeleteModal(true) : setShowModal(true)
   }
 
   return (
@@ -77,9 +80,7 @@ export const Quizzes = () => {
             <QuizCard
               key={quiz.name}
               data={quiz}
-              setQuizToUpdate={(id, state = 'update') =>
-                setQuizToUpdate(id, state)
-              }
+              setQuizToUpdate={(id, state) => setQuizToUpdate(id, state)}
             />
           ))
         ) : (
