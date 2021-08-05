@@ -52,6 +52,7 @@ css(`
     padding: 0.5rem;
     margin: 5px;
     cursor:pointer;
+    font-weight:normal;
     border-radius:0.4rem;
     outline:none;
   }
@@ -59,7 +60,7 @@ css(`
 `)
 
 export const ModuleCard = ({
-  data: { id, name, description, hours },
+  data: { id, name, description, hours, projects },
   setModuleToUpdate,
 }) => {
   const courses = sessionStorage.getItem('courses')
@@ -86,6 +87,9 @@ export const ModuleCard = ({
         <P>
           <span style={{ color: 'grey' }}> courses : </span>{' '}
           {courses.filter((c) => c.idModule === id).length}
+        </P>
+        <P>
+          <span style={{ color: 'grey' }}> projects : </span> {projects.length}
         </P>
         <Div class="buttons_group">
           <button

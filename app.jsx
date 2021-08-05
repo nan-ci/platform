@@ -17,7 +17,7 @@ import { navigate, useURL } from './lib/router.js'
 import { Login as LoginProf } from './page/professor/login.jsx'
 import { Home as HomeProf } from './page/professor/home.jsx'
 import { Modules as ModulesProf } from './page/professor/modules.jsx'
-import { ModuleCours as ModuleCoursProf } from './page/professor/module_cours.jsx'
+import { Module as ModuleProf } from './page/professor/module.jsx'
 import { Quizzes as QuizzesProf } from './page/professor/quizzes.jsx'
 
 const Redirection = (pathname) => {
@@ -79,7 +79,7 @@ const App = () => {
       <LoginProf path="/professor/auth" />
       <HomeProf path="/professor/dashboard" />
       <ModulesProf path="/professor/modules" />
-      <ModuleCoursProf path="/professor/module-cours/:moduleName" />
+      <ModuleProf path="/professor/module-cours/:moduleName" />
       <QuizzesProf path="/professor/quizzes" />
     </Router>
   )

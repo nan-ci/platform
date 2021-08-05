@@ -51,6 +51,7 @@ css(`
     padding: 0.5rem;
     margin: 5px;
     cursor:pointer;
+    font-weight:normal;
     border-radius:0.4rem;
     outline:none;
   }

@@ -1,14 +1,14 @@
 import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
-import { useState, useRef, useEffect } from 'preact/hooks'
-import { Form, Input, Row } from '../form.jsx'
+import { useState, useEffect } from 'preact/hooks'
+import { Form, Input } from '../form.jsx'
 
 css(`
    .prof-quizzes-modalQuiz {
      width: 900px;
      background: black;
      position:absolute;
-     top:5%;
+     top:20%;
      left:20%;
      right:20%;
      transform:translate(-50%,-50%);
@@ -155,7 +155,7 @@ css(`
 
 .prof-quizzes-modalQuiz-question-component .responses{
   width: 100%;
-  height: 175px;
+  height: 170px;
   overflow:auto;
 }
 
@@ -168,8 +168,9 @@ css(`
   display:flex;
   flex-direction:row;
   align-items:flex-end;
-  padding-top: -5px;
+  padding: 0.5rem;
   justify-content:space-between;
+
 }
 
 .prof-quizzes-modalQuiz-question-responses-component input[type="text"]{
@@ -257,101 +258,100 @@ const ResponseQuestionComponent = ({
   qind,
   ind,
   responses,
-  updateCountQuestion,
+  updateResponses,
   errors,
   updateErrors,
 }) => {
   const sup = (index) => {
-    updateCountQuestion((count) => {
-      count[qind].splice(index, 1)
+    updateResponses((count) => {
+      count[qind].responses.splice(index, 1)
       return [...count]
     })
   }
 
   return (
     <Div class="prof-quizzes-modalQuiz-question-responses-component">
-      <Input
-        inputType="input"
+      <input
         type="text"
-        name={`question${qind}-response${ind}`}
-        value={responses ? Object.keys(responses)[ind] : ''}
-        errors={errors}
-        updateErrors={updateErrors}
+        onKeyUp={(e) => {
+          updateResponses((count) => {
+            count[qind].responses[ind].value = e.target.value
+            return [...count]
+          })
+        }}
+        value={responses[ind].value}
       />
       <label class="container">
         isTrue
-        <input type="checkbox" name={`question${qind}-isTrue${ind}`} />
+        <input
+          type="checkbox"
+          onChange={(e) => {
+            updateResponses((count) => {
+              count[qind].responses[ind].isTrue = e.target.checked
+              return [...count]
+            })
+          }}
+          checked={responses[ind].isTrue}
+        />
         <span class="check-box"></span>
       </label>
 
-      <button
-        onClick={(e) => {
-          e.preventDefault()
-          sup(ind)
-        }}
-      >
-        x
-      </button>
+      {responses.length > 1 && (
+        <button
+          onClick={(e) => {
+            e.preventDefault()
+            sup(ind)
+          }}
+        >
+          x
+        </button>
+      )}
     </Div>
   )
 }
 
 const QuestionComponent = ({
-  ind,
   currentInd,
-  responses,
   questions,
   updateCurrentQuestion,
-  updateCountQuestions,
+  updateQuestions,
   errors,
   updateErrors,
 }) => {
   return (
-    <Div
-      class="prof-quizzes-modalQuiz-question-component"
-      style={{ display: ind === currentInd ? 'block' : 'none' }}
-    >
-      <Input
+    <Div class="prof-quizzes-modalQuiz-question-component">
+      <input
         class="prof-quizzes-modalQuiz-input"
-        inputType="input"
         type="text"
-        name={`question${ind}`}
-        value={questions ? Object.keys(questions)[ind] : ''}
-        errors={errors}
-        updateErrors={updateErrors}
+        onKeyUp={(e) =>
+          updateQuestions((quests) => {
+            quests[currentInd].question = e.target.value
+            return [...quests]
+          })
+        }
+        value={questions[currentInd].question}
       />
-      <span>responses ({responses.length})</span>
+      <br />
+      <span>responses ({questions[currentInd].responses.length})</span>
       <Div class="responses">
-        {responses.map((r, index) => (
+        {questions[currentInd].responses.map((r, index) => (
           <ResponseQuestionComponent
-            qind={ind}
-            responses={questions && questions[Object.keys(questions)[ind]]}
+            qind={currentInd}
             ind={index}
+            responses={questions[currentInd].responses}
             errors={errors}
-            updateCountQuestion={updateCountQuestions}
+            updateResponses={updateQuestions}
             updateErrors={updateErrors}
           />
         ))}
       </Div>
       <Div class="group_buttons">
         <button
-          onClick={(e) => {
-            e.preventDefault()
-            updateCountQuestions((count) => {
-              if (ind === count.length - 1) updateCurrentQuestion(ind - 1)
-              count.splice(ind, 1)
-              return [...count]
-            })
-          }}
-        >
-          remove question
-        </button>
-        <button
           style={{ background: 'purple' }}
           onClick={(e) => {
             e.preventDefault()
-            updateCountQuestions((count) => {
-              count[ind].push(responses.length)
+            updateQuestions((count) => {
+              count[currentInd].responses.push({ value: '', isTrue: false })
               return [...count]
             })
           }}
@@ -359,6 +359,21 @@ const QuestionComponent = ({
           {' '}
           + response
         </button>
+        {questions.length > 1 && (
+          <button
+            onClick={(e) => {
+              e.preventDefault()
+              updateQuestions((count) => {
+                if (currentInd === count.length - 1)
+                  updateCurrentQuestion(currentInd - 1)
+                count.splice(currentInd, 1)
+                return [...count]
+              })
+            }}
+          >
+            remove question
+          </button>
+        )}
       </Div>
     </Div>
   )
@@ -373,12 +388,17 @@ export const ModalQuiz = ({ show, close, quizzesLength, quiz, setQuiz }) => {
     endDate: null,
   })
 
-  const [countQuestions, setCountQuestions] = useState(
+  const [questions, setQuestions] = useState(
     quiz
-      ? Object.keys(quiz.questions).map((v, i) =>
-          Object.keys(quiz.questions[v]).map((v2, i2) => i2),
-        )
-      : [[0]],
+      ? Object.keys(quiz.questions).map((q) => {
+          return {
+            question: q,
+            responses: Object.keys(quiz.questions[q]).map((b) => {
+              return { value: b, isTrue: quiz.questions[q][b] }
+            }),
+          }
+        })
+      : [{ question: '', responses: [{ value: '', isTrue: false }] }],
   )
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
@@ -393,6 +413,13 @@ export const ModalQuiz = ({ show, close, quizzesLength, quiz, setQuiz }) => {
   const submit = (e) => {
     e.preventDefault()
     const data = Object.fromEntries(new FormData(e.target))
+    data.questions = {}
+    for (let q of questions) {
+      data.questions[q.question] = {}
+      for (let r of q.responses) {
+        data.questions[q.question][r.value] = r.isTrue
+      }
+    }
     !quiz
       ? setQuiz({ id: quizzesLength + 1, ...data }, 'add')
       : setQuiz({ ...quiz, ...data }, 'update')
@@ -402,7 +429,14 @@ export const ModalQuiz = ({ show, close, quizzesLength, quiz, setQuiz }) => {
   }
 
   return (
-    <Div class="prof-quizzes-modalQuiz">
+    <Div
+      class="prof-quizzes-modalQuiz"
+      style={{
+        width: quiz && quiz.ifQuizStart ? '300px' : '900px',
+        left: quiz && quiz.ifQuizStart ? '40%' : '20%',
+        right: quiz && quiz.ifQuizStart ? '40%' : '20%',
+      }}
+    >
       <button
         class="close"
         onClick={() => {
@@ -420,47 +454,115 @@ export const ModalQuiz = ({ show, close, quizzesLength, quiz, setQuiz }) => {
         style={{ whiteSpace: 'pre', padding: '01rem' }}
         onSubmit={submit}
       >
-        <Div class="left_block">
-          <Input
-            class="prof-quizzes-modalQuiz-input"
-            inputType="input"
-            type="text"
-            name="name"
-            value={quiz ? quiz.name : ''}
-            comment="quiz name"
-            errors={errors}
-            updateErrors={setErrors}
-          />
-          <Input
-            class="prof-quizzes-modalQuiz-input"
-            inputType="input"
-            type="text"
-            name="duration"
-            value={quiz ? quiz.durationi : ''}
-            comment="quiz duration (00:00:00)"
-            errors={errors}
-            updateErrors={setErrors}
-          />
-          <Input
-            class="prof-quizzes-modalQuiz-input"
-            inputType="input"
-            type="number"
-            name="percentOfValidation"
-            comment="percent to  pass the quiz"
-            value={quiz ? quiz.percentOfValidation : ''}
-            errors={errors}
-            updateErrors={setErrors}
-          />
-          <Input
-            class="prof-quizzes-modalQuiz-input"
-            inputType="input"
-            type="datetime-local"
-            name="beginDate"
-            comment="begin date of the quiz"
-            value={quiz ? quiz.beginDate : ''}
-            errors={errors}
-            updateErrors={setErrors}
-          />
+        {!quiz || !quiz?.ifQuizStart ? (
+          <>
+            <Div class="left_block">
+              <Input
+                class="prof-quizzes-modalQuiz-input"
+                inputType="input"
+                type="text"
+                name="name"
+                value={quiz ? quiz.name : ''}
+                comment="quiz name"
+                required
+                errors={errors}
+                updateErrors={setErrors}
+              />
+              <Input
+                class="prof-quizzes-modalQuiz-input"
+                inputType="input"
+                type="text"
+                name="duration"
+                value={quiz ? quiz.duration : ''}
+                required
+                comment="quiz duration (00:00:00)"
+                errors={errors}
+                updateErrors={setErrors}
+              />
+              <Input
+                class="prof-quizzes-modalQuiz-input"
+                inputType="input"
+                type="number"
+                name="percentOfValidation"
+                comment="percent to  pass the quiz"
+                value={quiz ? quiz.percentOfValidation : ''}
+                required
+                errors={errors}
+                updateErrors={setErrors}
+              />
+              <Input
+                class="prof-quizzes-modalQuiz-input"
+                inputType="input"
+                type="datetime-local"
+                name="beginDate"
+                comment="begin date of the quiz"
+                value={quiz ? quiz.beginDate : ''}
+                required
+                errors={errors}
+                updateErrors={setErrors}
+              />
+              <Input
+                class="prof-quizzes-modalQuiz-input"
+                inputType="input"
+                type="datetime-local"
+                name="endDate"
+                comment="end date of the quiz"
+                value={quiz ? quiz.endDate : ''}
+                required
+                errors={errors}
+                updateErrors={setErrors}
+              />
+            </Div>
+            <Div class="right_block">
+              <Div class="questions">
+                <span>Question N°{currentQuestionIndex + 1}</span>
+                <QuestionComponent
+                  currentInd={currentQuestionIndex}
+                  questions={questions}
+                  updateQuestions={setQuestions}
+                  updateCurrentQuestion={setCurrentQuestionIndex}
+                  errors={errors}
+                  updateErrors={setErrors}
+                />
+              </Div>
+              <Div class="questions_length">
+                {questions.map((question, index) => (
+                  <button
+                    key={index}
+                    class={`question_button ${
+                      index === currentQuestionIndex && 'active'
+                    }`}
+                    onClick={(e) => {
+                      e.preventDefault()
+                      setCurrentQuestionIndex(index)
+                    }}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+                <butto
+                  class="question_add"
+                  onClick={(e) => {
+                    e.preventDefault()
+                    setQuestions((count) => {
+                      setCurrentQuestionIndex(count.length)
+                      return [
+                        ...count,
+                        {
+                          question: '',
+                          responses: [{ value: '', isTrue: false }],
+                        },
+                      ]
+                    })
+                  }}
+                >
+                  {' '}
+                  +{' '}
+                </butto>
+              </Div>
+            </Div>
+          </>
+        ) : (
           <Input
             class="prof-quizzes-modalQuiz-input"
             inputType="input"
@@ -468,56 +570,11 @@ export const ModalQuiz = ({ show, close, quizzesLength, quiz, setQuiz }) => {
             name="endDate"
             comment="end date of the quiz"
             value={quiz ? quiz.endDate : ''}
+            required
             errors={errors}
             updateErrors={setErrors}
           />
-        </Div>
-        <Div class="right_block">
-          <Div class="questions">
-            <span>Question N°{currentQuestionIndex + 1}</span>
-            {countQuestions.map((responses, index) => (
-              <QuestionComponent
-                key={index}
-                ind={index}
-                currentInd={currentQuestionIndex}
-                responses={responses}
-                questions={quiz && quiz.questions}
-                updateCurrentQuestion={setCurrentQuestionIndex}
-                updateCountQuestions={setCountQuestions}
-                errors={errors}
-                updateErrors={setErrors}
-              />
-            ))}
-          </Div>
-          <Div class="questions_length">
-            {countQuestions.map((question, index) => (
-              <button
-                key={index}
-                class={`question_button ${
-                  index === currentQuestionIndex && 'active'
-                }`}
-                onClick={(e) => {
-                  e.preventDefault()
-                  setCurrentQuestionIndex(index)
-                }}
-              >
-                {index + 1}
-              </button>
-            ))}
-            <butto
-              class="question_add"
-              onClick={(e) => {
-                e.preventDefault()
-                setCountQuestions((count) => {
-                  return [...count, [[0]]]
-                })
-              }}
-            >
-              {' '}
-              +{' '}
-            </butto>
-          </Div>
-        </Div>
+        )}
       </Form>
     </Div>
   )
