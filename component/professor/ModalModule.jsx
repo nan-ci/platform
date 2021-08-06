@@ -78,6 +78,7 @@ export const ModalModule = ({
     name: null,
     description: null,
     hours: null,
+    codeColor: null,
   })
 
   useEffect(() => {
@@ -151,6 +152,17 @@ export const ModalModule = ({
           value={module ? module.hours : 0}
           errors={errors}
           updateErrors={setErrors}
+        />
+        <Input
+          class="prof-cours-modalModule-input"
+          type="color"
+          inputType="input"
+          name="codeColor"
+          comment="select the module code color"
+          value={module ? module.codeColor : ''}
+          errors={errors}
+          updateErrors={setErrors}
+          opacity
         />
       </Form>
     </Div>

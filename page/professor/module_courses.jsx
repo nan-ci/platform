@@ -72,7 +72,7 @@ export const ModuleCourses = ({ moduleName }) => {
           + course
         </button>
       </section>
-      <section style={{ marginTop: '50px' }}>
+      <section style={{ marginTop: '20px' }}>
         {courses.length > 0 ? (
           courses.map((course) => (
             <CourseCard

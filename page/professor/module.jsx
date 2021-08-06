@@ -13,7 +13,7 @@ css(`
     .prof-module-h1{
       font-weight: bolder;
       font-size: 1.7rem;
-      margin-bottom: 27px;
+      margin-bottom: 20px;
     }
 
     .prof-module-h1>strong{

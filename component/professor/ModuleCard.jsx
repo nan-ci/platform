@@ -5,19 +5,25 @@ import { navigate } from '../../lib/router.js'
 
 css(`
    .prof-cours-moduleCard {
+     position:relative;
       width: 100%;
       height: auto;
       padding: 0.5rem;
+      padding-bottom: 1rem;
       border: 1px solid #444;
+      border-radius: 0.7rem;
       background:#7675530d;
       margin: 20px 0px;
-      display:flex;
-      flex-direction:row;
-      align-items:center;
-      justify-content:flex-start;
-      border-radius: 0.5rem;
       cursor:pointer;
       transition: all .2s ease-in-out;
+   }
+
+   prof-cours-moduleCard .container{
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
+    border-radius: 0.5rem;
    }
 
 
@@ -41,14 +47,19 @@ css(`
     white-space:normal
   }
 
-  .prof-cours-moduleCard .left_block .buttons_group{
-    float: right;
-    margin-top: 20px;
+
+  .prof-cours-moduleCard .left_block p span{
+     color: white;
+  }
+
+  .prof-cours-moduleCard  .buttons_group{
+    position: absolute;
     bottom: 5px;
+    right: 5px;
     font-weight:bolder;
   }
 
-  .prof-cours-moduleCard .left_block .buttons_group button{
+  .prof-cours-moduleCard  .buttons_group button{
     padding: 0.5rem;
     margin: 5px;
     cursor:pointer;
@@ -60,7 +71,7 @@ css(`
 `)
 
 export const ModuleCard = ({
-  data: { id, name, description, hours, projects },
+  data: { id, name, description, hours, codeColor, projects },
   setModuleToUpdate,
 }) => {
   const courses = sessionStorage.getItem('courses')
@@ -69,50 +80,53 @@ export const ModuleCard = ({
   return (
     <Div
       class="prof-cours-moduleCard"
+      style={{ background: codeColor }}
       onClick={() => navigate('/professor/module-cours/' + name)}
     >
-      <Module size={90} color="white" />
-      <Div class="left_block">
-        <h1>{name}</h1>
-        <P>
-          <span style={{ color: 'grey' }}>Description : </span>
-          {description.length > 110
-            ? description.slice(0, 110) + '...'
-            : description}
-        </P>
-        <P>
-          <span style={{ color: 'grey' }}>Hours to learn : </span>
-          {hours}
-        </P>
-        <P>
-          <span style={{ color: 'grey' }}> courses : </span>{' '}
-          {courses.filter((c) => c.idModule === id).length}
-        </P>
-        <P>
-          <span style={{ color: 'grey' }}> projects : </span> {projects.length}
-        </P>
-        <Div class="buttons_group">
-          <button
-            style={{ background: 'dodgerblue' }}
-            onClick={(e) => {
-              e.stopPropagation()
-              setModuleToUpdate(id)
-            }}
-          >
-            {' '}
-            Modify{' '}
-          </button>
-          <button
-            style={{ background: 'var(--red-darker)' }}
-            onClick={(e) => {
-              e.stopPropagation()
-              setModuleToUpdate(id, 'delete')
-            }}
-          >
-            {' '}
-            Delete{' '}
-          </button>
+      <Div class="container">
+        <Module size={90} color="white" />
+        <Div class="left_block">
+          <h1>{name}</h1>
+          <P>
+            <span>Description : </span>
+            {description.length > 110
+              ? description.slice(0, 110) + '...'
+              : description}
+          </P>
+          <P>
+            <span>Hours to learn : </span>
+            {hours}
+          </P>
+          <P>
+            <span> courses : </span>{' '}
+            {courses.filter((c) => c.idModule === id).length}
+          </P>
+          <P>
+            <span> projects : </span> {projects.length}
+          </P>
         </Div>
+      </Div>
+      <Div class="buttons_group">
+        <button
+          style={{ background: 'dodgerblue' }}
+          onClick={(e) => {
+            e.stopPropagation()
+            setModuleToUpdate(id)
+          }}
+        >
+          {' '}
+          Modify{' '}
+        </button>
+        <button
+          style={{ background: 'var(--red-darker)' }}
+          onClick={(e) => {
+            e.stopPropagation()
+            setModuleToUpdate(id, 'delete')
+          }}
+        >
+          {' '}
+          Delete{' '}
+        </button>
       </Div>
     </Div>
   )

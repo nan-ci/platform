@@ -67,7 +67,7 @@ export const ModuleProjects = ({ moduleName }) => {
           + project
         </button>
       </section>
-      <section style={{ marginTop: '50px' }}>
+      <section style={{ marginTop: '20px' }}>
         {Projects.length > 0 ? (
           Projects.map((project) => (
             <ProjectCard

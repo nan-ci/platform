@@ -4,18 +4,23 @@ import { Course } from '../icons'
 
 css(`
    .prof-cours-courseCard {
+     position:relative;
       width: 100%;
       height: auto;
       padding: 0.5rem;
+      padding-bottom:1rem;
+      border-radius: 0.7rem;
       border: 1px solid #444;
       background:#7675530d;
       margin: 20px 0px;
-      display:flex;
-      flex-direction:row;
-      align-items:center;
-      justify-content:flex-start;
-      border-radius: 0.5rem;
       transition: all .2s ease-in-out;
+   }
+
+   .prof-cours-courseCard  .container {
+    display:flex;
+    flex-direction:row;
+    align-items:center;
+    justify-content:flex-start;
    }
 
 
@@ -40,14 +45,14 @@ css(`
     white-space:normal
   }
 
-  .prof-cours-courseCard .left_block .buttons_group{
-    float: right;
-    margin-top: 20px;
+  .prof-cours-courseCard  .buttons_group{
     bottom: 5px;
+    position:absolute;
+    right: 5px;
     font-weight:bolder;
   }
 
-  .prof-cours-courseCard .left_block .buttons_group button{
+  .prof-cours-courseCard  .buttons_group button{
     padding: 0.5rem;
     margin: 5px;
     cursor:pointer;
@@ -64,39 +69,41 @@ export const CourseCard = ({
 }) => {
   return (
     <Div class="prof-cours-courseCard">
-      <Course size={90} color="white" />
-      <Div class="left_block">
-        <h1>{name}</h1>
-        <P>
-          <span style={{ color: 'grey' }}>Description : </span>
-          {description.length > 110
-            ? description.slice(0, 110) + '...'
-            : description}
-        </P>
-        <P>
-          <span style={{ color: 'grey' }}>link: </span>
-          {link}
-        </P>
-        <P>
-          <span style={{ color: 'grey' }}>ressources:</span>
-          {ressources.length}
-        </P>
-        <Div class="buttons_group">
-          <button
-            style={{ background: 'dodgerblue' }}
-            onClick={() => setCourseToUpdate(id)}
-          >
-            {' '}
-            Modify{' '}
-          </button>
-          <button
-            style={{ background: 'var(--red-darker)' }}
-            onClick={() => setCourseToUpdate(id, 'delete')}
-          >
-            {' '}
-            Delete{' '}
-          </button>
+      <Div class="container">
+        <Course size={90} color="white" />
+        <Div class="left_block">
+          <h1>{name}</h1>
+          <P>
+            <span style={{ color: 'grey' }}>Description : </span>
+            {description.length > 110
+              ? description.slice(0, 110) + '...'
+              : description}
+          </P>
+          <P>
+            <span style={{ color: 'grey' }}>link: </span>
+            {link}
+          </P>
+          <P>
+            <span style={{ color: 'grey' }}>ressources:</span>
+            {ressources.length}
+          </P>
         </Div>
+      </Div>
+      <Div class="buttons_group">
+        <button
+          style={{ background: 'dodgerblue' }}
+          onClick={() => setCourseToUpdate(id)}
+        >
+          {' '}
+          Modify{' '}
+        </button>
+        <button
+          style={{ background: 'var(--red-darker)' }}
+          onClick={() => setCourseToUpdate(id, 'delete')}
+        >
+          {' '}
+          Delete{' '}
+        </button>
       </Div>
     </Div>
   )
