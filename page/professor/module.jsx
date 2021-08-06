@@ -50,7 +50,7 @@ css(`
 export const Module = ({ moduleName }) => {
   const [show, setShow] = useState('courses')
   const currentModule = JSON.parse(sessionStorage.getItem('modules')).find(
-    (m) => m.name === moduleName,
+    (m) => m.name === decodeURI(moduleName),
   )
   const courses = sessionStorage.getItem('courses')
     ? JSON.parse(sessionStorage.getItem('courses'))
@@ -59,7 +59,7 @@ export const Module = ({ moduleName }) => {
     <Layout>
       <h1 class="prof-module-h1">
         <strong>Module : </strong>
-        {moduleName}
+        {decodeURI(moduleName)}
       </h1>
       <Div class="prof-module-choice-buttons">
         <button

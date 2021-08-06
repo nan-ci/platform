@@ -43,7 +43,7 @@ css(`
 
 export const ModuleCourses = ({ moduleName }) => {
   const { id: moduleId } = JSON.parse(sessionStorage.getItem('modules')).find(
-    (m) => m.name === moduleName,
+    (m) => m.name === decodeURI(moduleName),
   )
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
