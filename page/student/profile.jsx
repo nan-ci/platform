@@ -188,25 +188,30 @@ export const Profile = () => {
               <span>{user.username ?? user.name}</span>
             </P>
             <P>
-              <strong>Name: </strong><span>{user.name}</span>
+              <strong>Name: </strong>
+              <span>{user.name}</span>
             </P>
             <P>
-              <strong>Email: </strong><span>{user.email}</span>
+              <strong>Email: </strong>
+              <span>{user.email}</span>
             </P>
             <P>
-              <strong>Speciality: </strong><span>{user.speciality}</span>
+              <strong>Speciality: </strong>
+              <span>{user.speciality}</span>
             </P>
             <P>
-              <strong>Level: </strong>{' '}
-              <span>{user.level ?? 'No level'}</span>
+              <strong>Level: </strong> <span>{user.level ?? 'No level'}</span>
             </P>
             <P>
               <strong> Member since: </strong>{' '}
-              <span> {new Date().toLocaleString('fr-FR', {
-                year: 'numeric',
-                month: "2-digit",
-                day: "2-digit"
-              })}</span>
+              <span>
+                {' '}
+                {new Date().toLocaleString('fr-FR', {
+                  year: 'numeric',
+                  month: '2-digit',
+                  day: '2-digit',
+                })}
+              </span>
             </P>
             <P>
               <strong>Role: </strong> <span>{user.role}</span>

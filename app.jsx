@@ -19,6 +19,9 @@ import { Home as HomeProf } from './page/professor/home.jsx'
 import { Modules as ModulesProf } from './page/professor/modules.jsx'
 import { Module as ModuleProf } from './page/professor/module.jsx'
 import { Quizzes as QuizzesProf } from './page/professor/quizzes.jsx'
+import { students as StudentsProf } from './page/professor/students.jsx'
+import { Profile as ProfileProf } from './page/professor/profile.jsx'
+import { Settings as SettingsProf } from './page/professor/settings.jsx'
 
 const Redirection = (pathname) => {
   const tab = pathname.split('/')
@@ -81,6 +84,9 @@ const App = () => {
       <ModulesProf path="/professor/modules" />
       <ModuleProf path="/professor/module-cours/:moduleName" />
       <QuizzesProf path="/professor/quizzes" />
+      <StudentsProf path="/professor/students" />
+      <ProfileProf path="/professor/profile" />
+      <SettingsProf path="/professor/settings" />
     </Router>
   )
 }

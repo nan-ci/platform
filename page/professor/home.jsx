@@ -9,7 +9,10 @@ import { navigate } from '../../lib/router'
 css(``)
 
 export const Home = () => {
-  return <Layout>
-    
-  </Layout>
+  return (
+    <Layout>
+      <br />
+      <P class="username-curriculum">Welcome back 👋, {user.name}</P>
+    </Layout>
+  )
 }
