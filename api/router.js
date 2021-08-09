@@ -10,6 +10,7 @@ export const GET = ROUTE('GET/api')
 export const POST = ROUTE('POST/api')
 
 export const withUser = (fn) => async (params) => {
+  console.log('data', params.url.href)
   if (!params.session) return new Response('No Session', UNAUTHORIZED)
   params.user = await db.get(params.session)
   if (!params.user) return new Response('Bad Session', UNAUTHORIZED)

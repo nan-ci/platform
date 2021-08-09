@@ -2,6 +2,7 @@ import { css } from '../../lib/dom'
 import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { StudentCard } from '../../component/professor/StudentCard.jsx'
+import { ModalStudent } from '../../component/professor/ModalStudent.jsx'
 css(`
     .prof-students-container header {
         display:flex;
@@ -60,6 +61,7 @@ export const students = () => {
           })}
         </section>
       </Div>
+      <ModalStudent />
     </Layout>
   )
 }
