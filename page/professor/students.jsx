@@ -1,4 +1,5 @@
 import { css } from '../../lib/dom'
+import { useState } from 'preact/hooks'
 import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { StudentCard } from '../../component/professor/StudentCard.jsx'
@@ -24,27 +25,40 @@ css(`
 `)
 
 export const students = () => {
+  const [showModal, setShowModal] = useState(false)
+  const [data, setData] = useState({
+    dataType: null,
+    data: null,
+    student: null,
+  })
+
+  const showUserInfo = (data) => {
+    setData({ ...data })
+    setShowModal(true)
+  }
+
   const students = [
     {
-      name: 'Koffi',
-      lastname: 'Kouamé Rameaux',
+      name: 'Walter',
+      lastname: 'Bishop',
       points: 246,
       avatar:
         'https://cdn.pixabay.com/photo/2015/08/05/04/25/people-875617_1280.jpg',
     },
     {
-      name: 'Koffi',
-      lastname: 'Kouamé Rameaux',
+      name: 'Olivia',
+      lastname: 'Donham',
       points: 246,
       avatar:
         'https://cdn.pixabay.com/photo/2015/08/05/04/25/people-875617_1280.jpg',
     },
     {
-      name: 'Koffi',
-      lastname: 'Kouamé Rameaux',
+      name: 'Jhon',
+      lastname: 'Scott',
       points: 246,
       avatar:
         'https://cdn.pixabay.com/photo/2015/08/05/04/25/people-875617_1280.jpg',
+      blocked: true,
     },
   ]
 
@@ -57,11 +71,26 @@ export const students = () => {
         </header>
         <section class="prof-students-section">
           {students.map((student) => {
-            return <StudentCard {...student} speciality="javascript" />
+            return (
+              <StudentCard
+                {...student}
+                speciality="javascript"
+                showUserInfo={(data) => showUserInfo(data)}
+              />
+            )
           })}
         </section>
       </Div>
-      <ModalStudent />
+      {showModal && (
+        <ModalStudent
+          show={showModal}
+          {...data}
+          close={() => {
+            setShowModal(false)
+            setData({ data: null, dataType: null, student: null })
+          }}
+        />
+      )}
     </Layout>
   )
 }

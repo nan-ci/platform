@@ -1,19 +1,22 @@
 import { Div, P } from '../elements.jsx'
+import { useEffect } from 'preact/hooks'
 import { css } from '../../lib/dom.js'
 
 css(`
 .prof-student-modalStudent {
-  width: 900px;
+  width: 700px;
   background: black;
   position:absolute;
   top:20%;
-  left:20%;
-  right:20%;
+  left:25%;
+  right:25%;
   transform:translate(-50%,-50%);
   border:2px solid blue;
   padding-bottom: 2rem;
+  padding: 0.5rem;
   border-radius:0.5rem;
-  transform:scale(1);
+  text-align:center;
+  transform:scale(0);
   transition: all .2s ease-in-out;
 }
 
@@ -31,10 +34,29 @@ css(`
  cursor:pointer;
 }
 
+.prof-student-modalStudent .body h1 {
+  font-size: 2rem;
+  font-weight: bolder;
+}
+
+.prof-student-modalStudent .body h4 {
+    color: darkgrey;
+    margin-top: 5px;
+    font-size: 1.4rem;
+    text-decoration: underline;
+}
+
 
 
 `)
-export const ModalStudent = () => {
+export const ModalStudent = ({ show, close, student, data, dataType }) => {
+  useEffect(() => {
+    if (show) {
+      document.querySelector('.prof-student-modalStudent').style.transform =
+        'scale(1)'
+    }
+  }, [show])
+
   return (
     <Div class="prof-student-modalStudent">
       <button
@@ -47,6 +69,12 @@ export const ModalStudent = () => {
       >
         &times;
       </button>
+      <Div class="body">
+        <h1>
+          {student.name} {student.lastname}
+        </h1>
+        <h4>{dataType} results</h4>
+      </Div>
     </Div>
   )
 }

@@ -51,7 +51,13 @@ css(`
     }
 
     .prof-student-card .first_block .info_card h1{
-        margin-top: 15px;
+        margin-top: 10px;
+    }
+
+    .prof-student-card .first_block .info_card h4{
+      margin-top: 5px;
+      font-weight: normal;
+       color: red;
     }
 
     .prof-student-card .second_block{
@@ -63,6 +69,17 @@ css(`
       margin-top: 10px;
     }
 
+    .prof-student-card .second_block p {
+      cursor:pointer;
+    }
+
+    .prof-student-card .second_block p:hover strong,.prof-student-card .second_block p:hover span{
+      color: skyblue;
+      font-weight:bolder;
+    }
+
+
+
     .prof-student-card .second_block p strong{
       font-size: 1rem;
       color:darkgrey;
@@ -71,10 +88,25 @@ css(`
     .prof-student-card .second_block p span{
         font-size: 1rem;
     }
-
 `)
 
-export const StudentCard = ({ name, lastname, speciality, points, avatar }) => {
+export const StudentCard = ({
+  name,
+  lastname,
+  speciality,
+  points,
+  avatar,
+  blocked,
+  showUserInfo,
+}) => {
+  const show = (type) => {
+    showUserInfo({
+      student: { name, lastname },
+      data: null,
+      dataType: type,
+    })
+  }
+
   return (
     <Div class="prof-student-card">
       <Div class="first_block">
@@ -92,18 +124,19 @@ export const StudentCard = ({ name, lastname, speciality, points, avatar }) => {
             <Star color="grey" size={20} />
           </Div>
           <h1>{points} points</h1>
+      {blocked &&  <h4>blocked</h4>}
         </Div>
       </Div>
       <Div class="second_block">
-        <P>
+        <P onClick={() => show('quizzes')}>
           <strong>quizzes passed : </strong>
           <span>4/8</span>
         </P>
-        <P>
+        <P onClick={() => show('kata')}>
           <strong>kata passed : </strong>
           <span>4/8</span>
         </P>
-        <P>
+        <P onClick={() => show('projects')}>
           <strong>projects passed : </strong>
           <span>4/8</span>
         </P>
