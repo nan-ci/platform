@@ -57,7 +57,7 @@ css(`
   }
 
   .t-block .left-block .block-co {
-    margin-top:60px;
+    margin-top:30px;
     width:100%;
     text-align:left;
   }
@@ -126,29 +126,24 @@ export const Home = () => {
                   <P class="title">Next step</P>
                   <Div class="block-co">
                     <Div>
-                      <strong>
-                        <i class="fab fa-buffer" aria-hidden="true"></i> quizz
-                      </strong>{' '}
-                      <span>variables</span>
+                      <h6>Quizz variables</h6>
+                      <p style={{marginTop: 10}}>
+                        <strong>Challenges</strong> check if a number is a test
+                        value
+                      </p>
                     </Div>
                     <Div>
-                      <strong>
-                        {' '}
-                        <i class="fab fa-buffer" aria-hidden="true"></i>{' '}
-                        challenges
-                      </strong>{' '}
-                      check if a number is a test value
+                      <button> Go to quizz </button>
+                      <button
+                        style={{
+                          background: 'transparent',
+                          color: 'var(--comment-darker)',
+                          border: '1px solid var(--comment-darker)',
+                        }}
+                      >
+                        Go to challenge
+                      </button>
                     </Div>
-                    <button> Go to quizz </button>
-                    <button
-                      style={{
-                        background: 'transparent',
-                        color: 'var(--comment-darker)',
-                        border: '1px solid var(--comment-darker)',
-                      }}
-                    >
-                      Go to challenge
-                    </button>
                   </Div>
                 </Div>
                 <Div class="right-block">
