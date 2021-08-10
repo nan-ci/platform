@@ -29,7 +29,7 @@ export const Table = ({ data, columns }) => {
           ))}
         </tr>
         {data.map((row) => (
-          <tr key={row.login}>
+          <tr key={row['0']}>
             {columns.map((name) => (
               <td key={name[0]} style={{ background: name[1].color }}>
                 {row[name[0]]}

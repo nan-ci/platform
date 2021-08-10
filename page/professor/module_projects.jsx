@@ -4,6 +4,7 @@ import { API } from '../../lib/env'
 import { useState } from 'preact/hooks'
 import { ProjectCard } from '../../component/professor/ProjectCard.jsx'
 import { ModalProject } from '../../component/professor/ModalProject.jsx'
+import { ModalProjectStudent } from '../../component/professor/ModalProjectStudent.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
 css(`
@@ -44,16 +45,25 @@ export const ModuleProjects = ({ moduleName }) => {
     sessionStorage.getItem('modules'),
   ).find((m) => m.name === decodeURI(moduleName))
   const [showModal, setShowModal] = useState(false)
+  const [showStudentModal, setShowStudentModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [Projects, setProjects] = useState(projects ? projects : [])
   const [currentProject, setCurrentProject] = useState(null)
 
-  const setProjectToUpdate = (projectId, state) => {
+  const [students, setStudents] = useState([])
+
+  const setProjectToUpdate = (project, state) => {
     setCurrentProject({
-      ...projects.find((m) => m.id === projectId),
+      ...project,
       ifStart: state,
     })
     state === 'delete' ? setShowDeleteModal(true) : setShowModal(true)
+  }
+
+  const showStudentsResults = (project, students) => {
+    setShowStudentModal(true)
+    setCurrentProject(project)
+    setStudents(students)
   }
 
   return (
@@ -73,7 +83,12 @@ export const ModuleProjects = ({ moduleName }) => {
             <ProjectCard
               key={project.name}
               data={project}
-              setProjectToUpdate={(id, state) => setProjectToUpdate(id, state)}
+              setProjectToUpdate={(data, state) =>
+                setProjectToUpdate(data, state)
+              }
+              showStudentsResults={(proj, stud) =>
+                showStudentsResults(proj, stud)
+              }
             />
           ))
         ) : (
@@ -127,6 +142,18 @@ export const ModuleProjects = ({ moduleName }) => {
           update={setProjects}
           close={() => {
             setShowDeleteModal(false)
+            setCurrentProject(null)
+          }}
+        />
+      )}
+
+      {showStudentModal && (
+        <ModalProjectStudent
+          show={showStudentModal}
+          project={currentProject}
+          students={students}
+          close={() => {
+            setShowStudentModal(false)
             setCurrentProject(null)
           }}
         />

@@ -70,13 +70,12 @@ css(`
 
 `)
 
-export const ModuleCard = ({
-  data: { id, name, description, hours, codeColor, projects },
-  setModuleToUpdate,
-}) => {
+export const ModuleCard = ({ data, setModuleToUpdate }) => {
   const courses = sessionStorage.getItem('courses')
     ? JSON.parse(sessionStorage.getItem('courses'))
     : []
+
+  const { id, name, description, hours, codeColor, projects } = data
   return (
     <Div
       class="prof-cours-moduleCard"
@@ -111,7 +110,7 @@ export const ModuleCard = ({
           style={{ background: 'dodgerblue' }}
           onClick={(e) => {
             e.stopPropagation()
-            setModuleToUpdate(id)
+            setModuleToUpdate(data)
           }}
         >
           {' '}
@@ -121,7 +120,7 @@ export const ModuleCard = ({
           style={{ background: 'var(--red-darker)' }}
           onClick={(e) => {
             e.stopPropagation()
-            setModuleToUpdate(id, 'delete')
+            setModuleToUpdate(data, 'delete')
           }}
         >
           {' '}

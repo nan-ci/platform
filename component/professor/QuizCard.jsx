@@ -57,6 +57,12 @@ css(`
   .prof-quizzes-moduleCard  .buttons_group  span{
         font-weight:bolder;
         color:grey;
+        cursor:pointer;
+        margin-top: 10px;
+  }
+
+  .prof-quizzes-moduleCard  .buttons_group  span:hover{
+    color: skyblue;
   }
 
 
@@ -72,8 +78,8 @@ css(`
 
 `)
 
-export const QuizCard = ({
-  data: {
+export const QuizCard = ({ data, setQuizToUpdate, showStudentsResults }) => {
+  const {
     id,
     name,
     questions,
@@ -81,9 +87,8 @@ export const QuizCard = ({
     endDate,
     duration,
     percentOfValidation,
-  },
-  setQuizToUpdate,
-}) => {
+  } = data
+
   let [quizStart, setQuizStart] = useState(
     moment(new Date()).isAfter(moment(beginDate)),
   )
@@ -124,6 +129,15 @@ export const QuizCard = ({
     }
   }, [id, endDate, beginDate])
 
+  const studentsResults = () => {
+    showStudentsResults(['d', 'f'], {
+      id,
+      name,
+      questions,
+      percentOfValidation,
+    })
+  }
+
   return (
     <Div class="prof-quizzes-moduleCard">
       <Div class="container">
@@ -162,13 +176,18 @@ export const QuizCard = ({
               : 'flex-end',
         }}
       >
-        {quizStart && !quizClose && <span> 2 students have finished</span>}
+        {quizStart && !quizClose && (
+          <span onClick={() => studentsResults()}>
+            {' '}
+            2 students have finished
+          </span>
+        )}
         <Div>
           <button
             style={{ background: 'dodgerblue' }}
             onClick={(e) => {
               e.stopPropagation()
-              setQuizToUpdate(id, quizStart && !quizClose)
+              setQuizToUpdate(data, quizStart && !quizClose)
             }}
           >
             {' '}
@@ -179,7 +198,7 @@ export const QuizCard = ({
               style={{ background: 'var(--red-darker)' }}
               onClick={(e) => {
                 e.stopPropagation()
-                setQuizToUpdate(id, 'delete')
+                setQuizToUpdate(data, 'delete')
               }}
             >
               {' '}

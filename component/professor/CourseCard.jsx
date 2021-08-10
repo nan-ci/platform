@@ -63,10 +63,8 @@ css(`
 
 `)
 
-export const CourseCard = ({
-  data: { id, name, description, link, ressources },
-  setCourseToUpdate,
-}) => {
+export const CourseCard = ({ data, setCourseToUpdate }) => {
+  const { id, name, description, link, ressources } = data
   return (
     <Div class="prof-cours-courseCard">
       <Div class="container">
@@ -92,14 +90,14 @@ export const CourseCard = ({
       <Div class="buttons_group">
         <button
           style={{ background: 'dodgerblue' }}
-          onClick={() => setCourseToUpdate(id)}
+          onClick={() => setCourseToUpdate(data)}
         >
           {' '}
           Modify{' '}
         </button>
         <button
           style={{ background: 'var(--red-darker)' }}
-          onClick={() => setCourseToUpdate(id, 'delete')}
+          onClick={() => setCourseToUpdate(data, 'delete')}
         >
           {' '}
           Delete{' '}
