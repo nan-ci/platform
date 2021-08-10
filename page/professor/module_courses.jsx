@@ -56,8 +56,8 @@ export const ModuleCourses = ({ moduleName }) => {
   )
   const [currentCourse, setCurrentCourse] = useState(null)
 
-  const setCourseToUpdate = (coursid, state) => {
-    setCurrentCourse(courses.find((m) => m.id === coursid))
+  const setCourseToUpdate = (course, state) => {
+    setCurrentCourse(course)
     state === 'update' ? setShowModal(true) : setShowDeleteModal(true)
   }
 
@@ -78,8 +78,8 @@ export const ModuleCourses = ({ moduleName }) => {
             <CourseCard
               key={course.name}
               data={course}
-              setCourseToUpdate={(id, state = 'update') =>
-                setCourseToUpdate(id, state)
+              setCourseToUpdate={(course, state = 'update') =>
+                setCourseToUpdate(course, state)
               }
             />
           ))

@@ -51,8 +51,8 @@ export const Modules = () => {
   )
   const [module, setModule] = useState(null)
 
-  const setModuleToUpdate = (moduleid, state) => {
-    setModule(modules.find((m) => m.id === moduleid))
+  const setModuleToUpdate = (module, state) => {
+    setModule(module)
     state === 'update' ? setShowModal(true) : setShowDeleteModal(true)
   }
 
@@ -77,8 +77,8 @@ export const Modules = () => {
             <ModuleCard
               key={module.name}
               data={module}
-              setModuleToUpdate={(id, state = 'update') =>
-                setModuleToUpdate(id, state)
+              setModuleToUpdate={(module, state = 'update') =>
+                setModuleToUpdate(module, state)
               }
             />
           ))

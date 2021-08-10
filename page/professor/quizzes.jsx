@@ -5,6 +5,7 @@ import { API } from '../../lib/env'
 import { useState } from 'preact/hooks'
 import { QuizCard } from '../../component/professor/QuizCard.jsx'
 import { ModalQuiz } from '../../component/professor/ModalQuiz.jsx'
+import { ModalQuizStudent } from '../../component/professor/ModalQuizStudent.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
 css(`
@@ -43,17 +44,26 @@ css(`
 
 export const Quizzes = () => {
   const [showModal, setShowModal] = useState(false)
+  const [showModalStudent, setShowModalStudent] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [quizzes, setQuizzes] = useState(
     sessionStorage.getItem('quizzes')
       ? JSON.parse(sessionStorage.getItem('quizzes'))
       : [],
   )
-  const [quiz, setQuiz] = useState(null)
 
-  const setQuizToUpdate = (quizId, state) => {
+  const [quiz, setQuiz] = useState(null)
+  const [students, setStudents] = useState([])
+
+  const showStudentsResults = (students, quiz) => {
+    setShowModalStudent(true)
+    setStudents(students)
+    setQuiz(quiz)
+  }
+
+  const setQuizToUpdate = (quiz, state) => {
     setQuiz({
-      ...quizzes.find((m) => m.id === quizId),
+      ...quiz,
       ifQuizStart: state !== 'delete' && state,
     })
     state === 'delete' ? setShowDeleteModal(true) : setShowModal(true)
@@ -80,7 +90,10 @@ export const Quizzes = () => {
             <QuizCard
               key={quiz.name}
               data={quiz}
-              setQuizToUpdate={(id, state) => setQuizToUpdate(id, state)}
+              setQuizToUpdate={(quiz, state) => setQuizToUpdate(quiz, state)}
+              showStudentsResults={(data, quiz) =>
+                showStudentsResults(data, quiz)
+              }
             />
           ))
         ) : (
@@ -129,6 +142,18 @@ export const Quizzes = () => {
           update={setQuizzes}
           close={() => {
             setShowDeleteModal(false)
+            setQuiz(null)
+          }}
+        />
+      )}
+      {showModalStudent && (
+        <ModalQuizStudent
+          show={showModalStudent}
+          quiz={quiz}
+          students={students}
+          close={() => {
+            setShowModalStudent(false)
+            setStudents(null)
             setQuiz(null)
           }}
         />

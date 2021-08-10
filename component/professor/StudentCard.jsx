@@ -102,7 +102,7 @@ export const StudentCard = ({
   const show = (type) => {
     showUserInfo({
       student: { name, lastname },
-      data: null,
+      data: [],
       dataType: type,
     })
   }
@@ -124,7 +124,7 @@ export const StudentCard = ({
             <Star color="grey" size={20} />
           </Div>
           <h1>{points} points</h1>
-      {blocked &&  <h4>blocked</h4>}
+          {blocked && <h4>blocked</h4>}
         </Div>
       </Div>
       <Div class="second_block">

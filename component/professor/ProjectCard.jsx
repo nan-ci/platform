@@ -57,7 +57,13 @@ css(`
   .prof-module-projectCard  .buttons_group  span{
         font-weight:bolder;
         color:grey;
+        cursor:pointer;
+        margin-top: 10px;
   }
+
+  .prof-module-projectCard  .buttons_group  span:hover{
+     color:skyblue;
+}
 
 
 
@@ -72,9 +78,11 @@ css(`
 `)
 
 export const ProjectCard = ({
-  data: { id, name, description, beginDate, endDate },
+  data,
   setProjectToUpdate,
+  showStudentsResults,
 }) => {
+  const { id, name, description, beginDate, endDate } = data
   let [projectStart, setProjectStart] = useState(
     moment(new Date()).isAfter(moment(beginDate)),
   )
@@ -115,6 +123,10 @@ export const ProjectCard = ({
     }
   }, [id, endDate, beginDate])
 
+  const showStudents = () => {
+    showStudentsResults({ name, description }, [])
+  }
+
   return (
     <Div class="prof-module-projectCard">
       <Div class="container">
@@ -149,14 +161,14 @@ export const ProjectCard = ({
         }}
       >
         {projectStart && !projectClose && (
-          <span> 2 students have finished</span>
+          <span onClick={() => showStudents()}> 2 students have finished</span>
         )}
         <Div>
           <button
             style={{ background: 'dodgerblue' }}
             onClick={(e) => {
               e.stopPropagation()
-              setProjectToUpdate(id, projectStart && !projectClose)
+              setProjectToUpdate(data, projectStart && !projectClose)
             }}
           >
             {' '}
@@ -167,7 +179,7 @@ export const ProjectCard = ({
               style={{ background: 'var(--red-darker)' }}
               onClick={(e) => {
                 e.stopPropagation()
-                setProjectToUpdate(id, 'delete')
+                setProjectToUpdate(data, 'delete')
               }}
             >
               {' '}
