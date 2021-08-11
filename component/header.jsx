@@ -87,6 +87,10 @@ const Nav = ({ path }) => (
             <LinkMatch path={path} href="/student/quizzes">
               Quizzes
             </LinkMatch>
+            {' - '}
+            <LinkMatch path={path} href="/student/projects">
+              Projects
+            </LinkMatch>
           </>
         )}
       </ul>

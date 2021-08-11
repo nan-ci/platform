@@ -75,7 +75,10 @@ export const ModuleCard = ({ data, setModuleToUpdate }) => {
     ? JSON.parse(sessionStorage.getItem('courses'))
     : []
 
-  const { id, name, description, hours, codeColor, projects } = data
+  const projects = sessionStorage.getItem('projects')
+    ? JSON.parse(sessionStorage.getItem('projects'))
+    : []
+  const { id, name, description, hours, codeColor } = data
   return (
     <Div
       class="prof-cours-moduleCard"
@@ -101,7 +104,8 @@ export const ModuleCard = ({ data, setModuleToUpdate }) => {
             {courses.filter((c) => c.idModule === id).length}
           </P>
           <P>
-            <span> projects : </span> {projects.length}
+            <span> projects : </span>{' '}
+            {projects.filter((c) => c.idModule === id).length}
           </P>
         </Div>
       </Div>

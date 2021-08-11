@@ -55,6 +55,11 @@ export const Module = ({ moduleName }) => {
   const courses = sessionStorage.getItem('courses')
     ? JSON.parse(sessionStorage.getItem('courses'))
     : []
+
+  const projects = sessionStorage.getItem('projects')
+    ? JSON.parse(sessionStorage.getItem('projects'))
+    : []
+
   return (
     <Layout>
       <h1 class="prof-module-h1">
@@ -73,7 +78,8 @@ export const Module = ({ moduleName }) => {
           class={show === 'projects' && 'active'}
           onClick={() => setShow('projects')}
         >
-          projects ({currentModule.projects.length})
+          projects (
+          {projects.filter((c) => c.idModule === currentModule.id).length})
         </button>
       </Div>
       {show === 'courses' ? (

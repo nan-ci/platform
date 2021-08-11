@@ -64,7 +64,6 @@ css(`
 .prof-projects-modalProjectStudent table td input {
   padding: 0.5rem;
   width: 100%;
-  border-bottom:1px solid grey
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -77,6 +76,12 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 .prof-projects-modalProjectStudent table td input[type=number] {
   -moz-appearance: textfield;
+}
+
+
+.prof-projects-modalProjectStudent table td input[type=number]::placeholder {
+    color: grey;
+    font-weight:bolder;
 }
 
 `)
@@ -202,6 +207,7 @@ export const ModalProjectStudent = ({ show, close, project, students }) => {
                         <input
                           type="number"
                           autofocus
+                          placeholder="Enter a number"
                           class={`input${index}`}
                           max="20"
                           onKeyUp={(e) => updateNote(e, index)}
