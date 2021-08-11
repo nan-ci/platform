@@ -124,24 +124,15 @@ export const courses = [
     challenges: [
       {
         id: 1,
-        title: 'Javascript basics',
+        title: 'BUILD A RANDOM QUOTES',
         description:
-          'This series of challenges covers the very basics of Javascript',
-        kata: [
-          {
-            id: 1,
-            title: 'Check if a number is even',
-            description:
-              'Write a function that takes a number as argument. If the number is even, return true',
-            submited: false,
-          },
-          {
-            id: 2,
-            title: 'Split a number into its digits',
-            description: '',
-            submited: true,
-          },
-        ],
+          'This series focuses on learning and practicing JavaScript. Each challenge comes with a tutorial article, and you can view these articles by clicking either the Topics tab along the top or the article icon in the right-hand menu.',
+      },
+      {
+        id: 2,
+        title: 'CREATE A CALCULATOR WITH REACT',
+        description:
+          "Today, we're discussing data types. Check out the attached tutorial for more details",
       },
     ],
     quizzes: [
@@ -159,11 +150,12 @@ export const courses = [
             'Document Object Module': false,
             'Document Object Model': true,
           },
-          'what is the name of  the variable type taht give only one  result, either True or False': {
-            string: false,
-            boolean: true,
-            integer: false,
-          },
+          'what is the name of  the variable type taht give only one  result, either True or False':
+            {
+              string: false,
+              boolean: true,
+              integer: false,
+            },
           'what mean NaN in javascript': {
             'Not a Number': true,
             'Not a Numeric': false,
