@@ -3,7 +3,7 @@ import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
 import { useState } from 'preact/hooks'
 import { ProjectCard } from '../../component/professor/ProjectCard.jsx'
-import { ModalProject } from '../../component/professor/ModalProject.jsx'
+import { Modal } from '../../component/professor/modal.jsx'
 import { ModalProjectStudent } from '../../component/professor/ModalProjectStudent.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
@@ -41,19 +41,25 @@ css(`
 `)
 
 export const ModuleProjects = ({ moduleName }) => {
-  const { id: moduleId, projects } = JSON.parse(
-    sessionStorage.getItem('modules'),
-  ).find((m) => m.name === decodeURI(moduleName))
+  const { id: moduleId } = JSON.parse(sessionStorage.getItem('modules')).find(
+    (m) => m.name === decodeURI(moduleName),
+  )
   const [showModal, setShowModal] = useState(false)
   const [showStudentModal, setShowStudentModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [Projects, setProjects] = useState(projects ? projects : [])
-  const [currentProject, setCurrentProject] = useState(null)
+  const [projects, setProjects] = useState(
+    sessionStorage.getItem('projects')
+      ? JSON.parse(sessionStorage.getItem('projects')).filter(
+          (c) => c.idModule === moduleId,
+        )
+      : [],
+  )
+  const [project, setProject] = useState(null)
 
   const [students, setStudents] = useState([])
 
   const setProjectToUpdate = (project, state) => {
-    setCurrentProject({
+    setProject({
       ...project,
       ifStart: state,
     })
@@ -62,7 +68,7 @@ export const ModuleProjects = ({ moduleName }) => {
 
   const showStudentsResults = (project, students) => {
     setShowStudentModal(true)
-    setCurrentProject(project)
+    setProject(project)
     setStudents(students)
   }
 
@@ -78,8 +84,8 @@ export const ModuleProjects = ({ moduleName }) => {
         </button>
       </section>
       <section style={{ marginTop: '20px' }}>
-        {Projects.length > 0 ? (
-          Projects.map((project) => (
+        {projects.length > 0 ? (
+          projects.map((project) => (
             <ProjectCard
               key={project.name}
               data={project}
@@ -105,28 +111,26 @@ export const ModuleProjects = ({ moduleName }) => {
       </section>
 
       {showModal && (
-        <ModalProject
+        <Modal
+          infoType="projects"
           show={showModal}
-          projectsLength={projects.length}
-          project={currentProject}
+          idModule={moduleId}
+          datasLength={projects.length}
+          data={project}
           close={() => {
             setShowModal(false)
-            setCurrentProject(null)
+            setProject(null)
           }}
-          setProject={(data, type) => {
-            const modules = JSON.parse(sessionStorage.getItem('modules'))
+          setData={(data, type) => {
             if (type === 'add') {
-              modules[
-                modules.findIndex((m) => m.id === moduleId)
-              ].projects.push(data)
-              sessionStorage.setItem('modules', JSON.stringify(modules))
+              sessionStorage.setItem(
+                'projects',
+                JSON.stringify([...projects, data]),
+              )
               setProjects((val) => [...val, data])
             } else {
               projects[projects.findIndex((m) => m.id === data.id)] = data
-              modules[
-                modules.findIndex((m) => m.id === moduleId)
-              ].projects = projects
-              sessionStorage.setItem('modules', JSON.stringify(modules))
+              sessionStorage.setItem('projects', JSON.stringify(projects))
               setProjects([...projects])
             }
           }}
@@ -136,13 +140,13 @@ export const ModuleProjects = ({ moduleName }) => {
         <DeleteModal
           type="projects"
           show={showDeleteModal}
-          message={`Do you want really delete  this project ${currentProject.name} ??`}
+          message={`Do you want really delete  this project ${project.name} ??`}
           moduleId={moduleId}
-          id={currentProject.id}
+          id={project.id}
           update={setProjects}
           close={() => {
             setShowDeleteModal(false)
-            setCurrentProject(null)
+            setProject(null)
           }}
         />
       )}
@@ -150,11 +154,11 @@ export const ModuleProjects = ({ moduleName }) => {
       {showStudentModal && (
         <ModalProjectStudent
           show={showStudentModal}
-          project={currentProject}
+          project={project}
           students={students}
           close={() => {
             setShowStudentModal(false)
-            setCurrentProject(null)
+            setProject(null)
           }}
         />
       )}

@@ -4,7 +4,7 @@ import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
 import { useState } from 'preact/hooks'
 import { QuizCard } from '../../component/professor/QuizCard.jsx'
-import { ModalQuiz } from '../../component/professor/ModalQuiz.jsx'
+import { Modal } from '../../component/professor/modal.jsx'
 import { ModalQuizStudent } from '../../component/professor/ModalQuizStudent.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
@@ -110,15 +110,16 @@ export const Quizzes = () => {
       </section>
 
       {showModal && (
-        <ModalQuiz
+        <Modal
+          infoType="quizzes"
           show={showModal}
-          quizzesLength={quizzes.length}
-          quiz={quiz}
+          datasLength={quizzes.length}
+          data={quiz}
           close={() => {
             setShowModal(false)
             setQuiz(null)
           }}
-          setQuiz={(data, type) => {
+          setData={(data, type) => {
             if (type === 'add') {
               sessionStorage.setItem(
                 'quizzes',

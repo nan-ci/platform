@@ -3,7 +3,7 @@ import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
 import { useState } from 'preact/hooks'
 import { CourseCard } from '../../component/professor/CourseCard.jsx'
-import { ModalCourse } from '../../component/professor/ModalCourse.jsx'
+import { Modal } from '../../component/professor/modal.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
 css(`
@@ -97,16 +97,17 @@ export const ModuleCourses = ({ moduleName }) => {
       </section>
 
       {showModal && (
-        <ModalCourse
+        <Modal
+          infoType="courses"
           show={showModal}
           idModule={moduleId}
-          coursesLength={courses.length}
-          course={currentCourse}
+          datasLength={courses.length}
+          data={currentCourse}
           close={() => {
             setShowModal(false)
             setCurrentCourse(null)
           }}
-          setCourse={(data, type) => {
+          setData={(data, type) => {
             if (type === 'add') {
               sessionStorage.setItem(
                 'courses',

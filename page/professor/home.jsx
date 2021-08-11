@@ -13,6 +13,7 @@ export const Home = () => {
     <Layout>
       <br />
       <P class="username-curriculum">Welcome back 👋, {user.name}</P>
+      <Div class="container"></Div>
     </Layout>
   )
 }

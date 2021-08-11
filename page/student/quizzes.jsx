@@ -30,6 +30,7 @@ css(`
            justify-content:center;
            margin-top: 20px;
       }
+
       .quizz-modal .body .quiz-duration,  .quizz-modal .body .quiz-duration strong{
         text-align:center;
         font-size:1.1rem;
@@ -46,13 +47,13 @@ css(`
       }
 
       .quizz-modal .button-group .cancel {
-        background:var(--red-darker);
-        color:white;
-        font-weight:bolder;
-        padding:0.4rem;
-        cursor:pointer;
-        margin: 5px;
-        border:none;
+          background:var(--red-darker);
+          color:white;
+          font-weight:bolder;
+          padding:0.4rem;
+          cursor:pointer;
+          margin: 5px;
+          border:none;
       }
 `)
 
@@ -118,7 +119,7 @@ export const Quizzes = () => {
   const [showModal, setShowModal] = useState(false)
   const [myQuizzes, setMyQuizzes] = useState(undefined)
 
-  const quizzes = courses.find((c) => c.name === user.speciality).quizzes
+  setMyQuizzes(courses.find((c) => c.name === user.speciality).quizzes)
 
   const selectQuiz = (quiz) => {
     setCurrentQuiz({ ...quiz })
@@ -126,10 +127,11 @@ export const Quizzes = () => {
   }
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/user/quizzes`)).json()
-    if (resp.data) {
-      setMyQuizzes(resp.data)
-    }
+    // setMyQuizzes()
+    // const resp = await (await fetch(`${API}/user/quizzes`)).json()
+    // if (resp.data) {
+    //   setMyQuizzes(resp.data)
+    // }
   }, [])
 
   const initQuiz = async ({ name, duration }) => {
@@ -156,7 +158,7 @@ export const Quizzes = () => {
     <Layout>
       <Div>
         {myQuizzes !== undefined &&
-          quizzes.map((quiz) => (
+          myQuizzes.map((quiz) => (
             <QuizCard
               {...quiz}
               selectQuiz={(quiz) => selectQuiz(quiz)}

@@ -4,7 +4,7 @@ import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
 import { useState } from 'preact/hooks'
 import { ModuleCard } from '../../component/professor/ModuleCard.jsx'
-import { ModalModule } from '../../component/professor/ModalModule.jsx'
+import { Modal } from '../../component/professor/modal.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
 
 css(`
@@ -96,15 +96,16 @@ export const Modules = () => {
       </section>
 
       {showModal && (
-        <ModalModule
+        <Modal
+          infoType="modules"
           show={showModal}
-          modulesLength={modules.length}
-          module={module}
+          datasLength={modules.length}
+          data={module}
           close={() => {
             setShowModal(false)
             setModule(null)
           }}
-          setModule={(data, type) => {
+          setData={(data, type) => {
             if (type === 'add') {
               sessionStorage.setItem(
                 'modules',
