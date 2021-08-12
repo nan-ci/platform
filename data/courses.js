@@ -45,7 +45,6 @@ export const courses = [
           'Learn fundamentals and advanced data structure in Javascript ',
         hours: 300,
         codeColor: '#dbb958',
-        project: null,
       },
       {
         id: 2,
@@ -53,7 +52,6 @@ export const courses = [
         description: 'Learn to build APIs and Microservice ',
         hours: 200,
         codeColor: '#5886db',
-        project: null,
       },
       {
         id: 3,
@@ -62,7 +60,28 @@ export const courses = [
           'The complete guide of ReactJS and VueJS for the frontend developers',
         hours: 200,
         codeColor: 'var(--comment-light)',
-        project: null,
+      },
+    ],
+    projects: [
+      {
+        id: 1,
+        idModule: 1,
+        name: 'Getting One',
+        description: 'here you will do all this in one day',
+        beginDate:
+          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        endDate:
+          'Fri Aug 13 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+      },
+      {
+        id: 2,
+        idModule: 1,
+        name: 'Getting Two',
+        description: 'here you will do all this in one day',
+        beginDate:
+          'Fri Aug 12 2021 12:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        endDate:
+          'Thu Aug 12 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
       },
     ],
     cours: [
@@ -183,9 +202,9 @@ export const courses = [
           },
         },
         beginDate:
-          'Fri Jul 09 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Tue Jul 13 2021 17:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Aug 13 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '15:00',
         percentOfValidation: 60,
       },
@@ -206,9 +225,9 @@ export const courses = [
           },
         },
         beginDate:
-          'Sat Jul 10 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Wed Jul 14 2021 17:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Aug 13 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '25:00',
         percentOfValidation: 60,
       },

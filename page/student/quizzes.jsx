@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'preact/hooks'
 import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
-import { QuizCard } from '../../component/student/quiz-card.jsx'
+import { Card } from '../../component/student/card.jsx'
 import { courses } from '../../data/courses.js'
 import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
@@ -118,8 +118,11 @@ export const Quizzes = () => {
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [myQuizzes, setMyQuizzes] = useState(undefined)
+  const [quizzes, setQuizzes] = useState(
+    courses.find((c) => c.name === user.speciality).quizzes,
+  )
 
-  setMyQuizzes(courses.find((c) => c.name === user.speciality).quizzes)
+  setMyQuizzes(sessionStorage.getItem('quizzes') && JSON.parse(sessionStorage.getitem('quizzes')))
 
   const selectQuiz = (quiz) => {
     setCurrentQuiz({ ...quiz })
@@ -157,15 +160,17 @@ export const Quizzes = () => {
   return (
     <Layout>
       <Div>
-        {myQuizzes !== undefined &&
-          myQuizzes.map((quiz) => (
-            <QuizCard
+        {quizzes &&
+          quizzes.map((quiz) => (
+            <Card
+              type="quizzes"
               {...quiz}
-              selectQuiz={(quiz) => selectQuiz(quiz)}
-              quizzes={myQuizzes}
+              selectData={(quiz) => selectQuiz(quiz)}
+              ifDone={myQuizzes && myQuizzes.find(q => q.name === quiz.name)}
+              datas={myQuizzes}
             />
           ))}
-        {!myQuizzes && <h1>Loading ....</h1>}
+        {!quizzes && <h1>Loading ....</h1>}
       </Div>
       <Div
         class="quizz-modal"

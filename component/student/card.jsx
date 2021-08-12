@@ -4,8 +4,9 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import moment from 'moment'
 import { navigate } from '../../lib/router.js'
 import { format, getQuiz } from '../../lib/quiz.js'
+import { courses } from '../../data/courses.js'
 import { API } from '../../lib/env.js'
-import { Chrono, Quiz, Done, NotDone, Lock } from '../icons.jsx'
+import { Chrono, Quiz, Done, NotDone, Lock, Stack } from '../icons.jsx'
 
 css(`
     .quizz-container {
@@ -50,25 +51,25 @@ css(`
     }
 `)
 
-export const QuizCard = ({
+export const Card = ({
+  type,
   id,
   name,
+  description,
   duration,
   endDate,
   beginDate,
   questions,
   percentOfValidation,
-  selectQuiz,
-  quizzes,
+  selectData,
+  ifDone,
+  datas,
 }) => {
   const [time, setTime] = useState('00:00')
   const timeRef = useRef(null)
 
-  const [quizClose, setQuizClose] = useState(moment().isAfter(endDate))
-  const [ifQuizDone, setIfQuizDone] = useState(
-    quizzes && quizzes[name] && quizzes[name].submit,
-  )
-  const [quizStart, setQuizStart] = useState(moment().isAfter(beginDate))
+  const [close, setClose] = useState(moment().isAfter(endDate))
+  const [start, setStart] = useState(moment().isAfter(beginDate))
 
   const getDateInfos = (end, start) => {
     const currentDate = moment()
@@ -80,7 +81,7 @@ export const QuizCard = ({
       minutes: diff.minutes(),
       seconds: diff.seconds(),
     }
-    setQuizStart(moment().isAfter(start))
+    setStart(moment().isAfter(start))
     setTime(
       (meth['days'] > 0 ? format(meth, 'days') : '') +
         ' ' +
@@ -90,7 +91,7 @@ export const QuizCard = ({
         ' ' +
         (meth['seconds'] ? format(meth, 'seconds') : ''),
     )
-    setQuizClose(moment().isAfter(end))
+    setClose(moment().isAfter(end))
   }
 
   useEffect(() => {
@@ -100,58 +101,80 @@ export const QuizCard = ({
     return () => {
       clearInterval(timeRef.current)
     }
-  }, [quizzes])
+  }, [datas])
 
-  const findQuiz = async () => {
-    const resp = await (await fetch(`${API}/user/quiz?name=${name}`)).json()
+  const findData = async () => {
+    //  const resp = await (await fetch(`${API}/user/${type}?name=${name}`)).json()
+    const resp =
+      sessionStorage.getItem(type) &&
+      JSON.parse(sessionStorage.getItem(type)).find((d) => d.name === name)
+        ? {
+            status: true,
+            data: JSON.parse(sessionStorage.getItem(type)).find(
+              (d) => d.name === name,
+            ),
+          }
+        : { status: false }
     if (
       resp.status &&
       !resp.data.submit &&
       moment().isBefore(resp.data.end_date)
     ) {
-      localStorage.setItem('quiz', JSON.stringify(resp.data))
-      return navigate('/student/quiz?name=' + name)
+      // localStorage.setItem(type, JSON.stringify(resp.data))
+      return navigate(`/student/${type}?name='` + name)
     } else {
-      selectQuiz({ name, duration, percentOfValidation, questions })
+      selectData(
+        type === 'quizzes'
+          ? { name, duration, percentOfValidation, questions }
+          : { name, description },
+      )
     }
   }
 
   return (
     <Div
       key={id}
-      class={`quizz-container ${!quizClose && !ifQuizDone && 'canHover'}`}
+      class={`quizz-container ${!close && !ifDone && 'canHover'}`}
       style={{
-        background: !quizClose && !ifQuizDone ? '#788bb061' : '#4f4f4f',
+        background: !close && !ifDone ? '#788bb061' : '#4f4f4f',
       }}
       onClick={() => {
-        !quizClose && !ifQuizDone && findQuiz()
+        !close && !ifDone && findData()
       }}
     >
       <Div class="l">
-        <Quiz size={20} color="orangered" style={{ fontWeight: 'bolder' }} />
+        {type === 'quizzes' ? (
+          <Quiz size={20} color="orangered" style={{ fontWeight: 'bolder' }} />
+        ) : (
+          <Stack size={20} color="white" style={{ fontWeight: 'bolder' }} />
+        )}
         <h1>{name}</h1>
-        <Chrono size={20} color="red" style={{ fontWeight: 'bolder' }} />
-        <span>{duration}</span>
+        {type === 'quizzes' && (
+          <>
+            <Chrono size={20} color="red" style={{ fontWeight: 'bolder' }} />
+            <span>{duration}</span>
+          </>
+        )}
       </Div>
       <Div class="r">
-        {!quizClose && (
+        {!close && (
           <P>
-            <strong>{quizStart ? 'close' : 'open'} in :</strong>
+            <strong>{start ? 'close' : 'open'} in :</strong>
             <span>{time}</span>
           </P>
         )}
-        {quizClose && (
+        {close && (
           <P>
             <Lock size={20} /> <span> Closed </span>
           </P>
         )}
-        {ifQuizDone && (
+        {ifDone && (
           <P>
             <Done size={20} color="green" />
             <span> Done </span>
           </P>
         )}
-        {quizClose && !ifQuizDone && (
+        {close && !ifDone && (
           <P>
             <NotDone size={20} color={'red'} />
             <span> Not Done </span>

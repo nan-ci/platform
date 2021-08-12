@@ -18,7 +18,7 @@ o['get on quiz with name query'] = {
     NAN.put(session, '', {
       metadata: { quizzes: { javascript: { responses: {} } } },
     })
-    const { body, options } = await GET('/user/quiz?name=javascript', {
+    const { body, options } = await GET('/user/quizzes?name=javascript', {
       headers: { cookie: 'nan-session=' + session },
     })
     eq({ status: options.status }, { status: 200 })
