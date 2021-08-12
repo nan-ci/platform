@@ -3,7 +3,6 @@ import { TYPE_JSON } from './defs.js'
 import { GET, POST, withBody, withUser } from './router.js'
 import * as db from './db.js'
 
-
 POST.user.profile = withBody(async ({ session, body }) => {
   await db.update(session, body)
   return new Response(
@@ -14,40 +13,62 @@ POST.user.profile = withBody(async ({ session, body }) => {
   )
 })
 
-GET.user.quizzes = withUser(async ({ session }) => {
+GET.user.projects = withUser(async ({ session }) => {
   const data = await db.get(session)
-  if (data.quizzes) {
-    return new Response(JSON.stringify({ data: data.quizzes }), { status: 200 })
+  const name = url.searchParams.get('name')
+  const datas = name
+    ? data.projects && data.projects.find((p) => p.name === name)
+    : data.projects
+  if (datas) {
+    return new Response(JSON.stringify({ data: datas }), { status: 200 })
   } else {
     return new Response(JSON.stringify({ data: null }), { status: 200 })
   }
 })
 
-GET.user.quiz = withUser(async ({ session, url }) => {
+GET.user.quizzes = withUser(async ({ session, url }) => {
   const data = await db.get(session)
-  const quiz = data.quizzes && data.quizzes[url.searchParams.get('name')]
-  if (!quiz)
-    return new Response(JSON.stringify({ data: null, status: false }), {
-      status: 200,
-    })
-  if (quiz)
-    return new Response(JSON.stringify({ data: quiz, status: true }), {
-      status: 200,
-    })
+  const name = url.searchParams.get('name')
+  const datas = name ? data.quizzes && data.quizzes[name] : data.quizzes
+  if (datas) {
+    return new Response(JSON.stringify({ data: datas }), { status: 200 })
+  } else {
+    return new Response(JSON.stringify({ data: null }), { status: 200 })
+  }
 })
 
-POST.user.quiz = withBody(async ({ url, session, body }) => {
-  const data = await db.get(session)
-  if (!data.quizzes) data.quizzes = {}
+POST.user.quizzes = withBody(async ({ url, session, body }) => {
+  const { quizzes } = await db.get(session)
+  if (!quizzes) quizzes = {}
   if (!url.searchParams.get('name')) {
-    data.quizzes[body.name] = { ...body, name: null }
+    delete body.name
+    quizzes[url.searchParams.get('name')] = { ...body }
   } else {
-    data.quizzes[url.searchParams.get('name')] = {
-      ...data.quizzes[url.searchParams.get('name')],
+    quizzes[url.searchParams.get('name')] = {
+      ...quizzes[url.searchParams.get('name')],
       ...body,
     }
   }
-  await db.update(session, data)
+  await db.update(session, quizzes)
+  return new Response(
+    JSON.stringify({ message: 'ok all is set', data: body, status: true }),
+    {
+      status: 200,
+    },
+  )
+})
+
+POST.user.projects = withBody(async ({ url, session, body }) => {
+  const { projects } = await db.get(session)
+  if (!projects) projects = []
+  if (!url.searchParams.get('name')) {
+    projects.push = body
+  } else {
+    projects[
+      projects.findIndex((p) => p.name === url.searchParams.get('name'))
+    ] = { ...body }
+  }
+  await db.update(session, projects)
   return new Response(
     JSON.stringify({ message: 'ok all is set', data: body, status: true }),
     {
