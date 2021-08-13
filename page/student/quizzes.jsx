@@ -122,7 +122,10 @@ export const Quizzes = () => {
     courses.find((c) => c.name === user.speciality).quizzes,
   )
 
-  setMyQuizzes(sessionStorage.getItem('quizzes') && JSON.parse(sessionStorage.getitem('quizzes')))
+  setMyQuizzes(
+    sessionStorage.getItem('quizzes') &&
+      JSON.parse(sessionStorage.getitem('quizzes')),
+  )
 
   const selectQuiz = (quiz) => {
     setCurrentQuiz({ ...quiz })
@@ -138,23 +141,34 @@ export const Quizzes = () => {
   }, [])
 
   const initQuiz = async ({ name, duration }) => {
-    const fetching = await fetch(`${API}/user/quiz`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        responses: {},
-        percent: 0,
-        end_date: EndDate(duration),
-        submit: false,
-      }),
-    })
+    // const fetching = await fetch(`${API}/user/quizzes`, {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     name,
+    //     responses: {},
+    //     percent: 0,
+    //     end_date: EndDate(duration),
+    //     submit: false,
+    //   }),
+    // })
 
-    const resp = await fetching.json()
-    if (resp.status) {
-      localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
-      navigate('/student/quiz?name=' + resp.data.name)
+    // const resp = await fetching.json()
+    // if (resp.status) {
+    //   localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
+    //   navigate('/student/quiz?name=' + resp.data.name)
+    // }
+    const datas = {
+      name,
+      responses: {},
+      percent: 0,
+      end_date: EndDate(duration),
+      submit: false,
     }
+    console.log('datas', datas)
+
+    sessionStorage.setItem('quiz', JSON.stringify({ ...datas }))
+    navigate('/student/quiz?name=' + name)
   }
 
   return (
@@ -166,7 +180,7 @@ export const Quizzes = () => {
               type="quizzes"
               {...quiz}
               selectData={(quiz) => selectQuiz(quiz)}
-              ifDone={myQuizzes && myQuizzes.find(q => q.name === quiz.name)}
+              ifDone={myQuizzes && myQuizzes.find((q) => q.name === quiz.name)}
               datas={myQuizzes}
             />
           ))}
