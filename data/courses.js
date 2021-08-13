@@ -62,7 +62,28 @@ export const courses = [
           'The complete guide of ReactJS and VueJS for the frontend developers',
         hours: 200,
         codeColor: 'var(--comment-light)',
-        project: null,
+      },
+    ],
+    projects: [
+      {
+        id: 1,
+        idModule: 1,
+        name: 'Getting One',
+        description: 'here you will do all this in one day',
+        beginDate:
+          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        endDate:
+          'Fri Aug 13 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
+      },
+      {
+        id: 2,
+        idModule: 1,
+        name: 'Getting Two',
+        description: 'here you will do all this in one day',
+        beginDate:
+          'Fri Aug 12 2021 12:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        endDate:
+          'Thu Aug 13 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
       },
     ],
     cours: [

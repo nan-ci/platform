@@ -38,12 +38,11 @@ css(`
 
 
     .quizz-container .l {
-
       width:50%;
       display:flex;
       flex-direction:row;
       align-items:center;
-      justify-content:space-between;
+      justify-content:flex-start;
     }
 
     .quizz-container h1,.quizz-container p{
@@ -107,15 +106,19 @@ export const Card = ({
     //  const resp = await (await fetch(`${API}/user/${type}?name=${name}`)).json()
     const resp =
       sessionStorage.getItem(type) &&
-      JSON.parse(sessionStorage.getItem(type)).find((d) => d.name === name)
+      JSON.parse(sessionStorage.getItem(type)).find((d) =>
+        type === 'quizzes' ? d.name === name : d.project_name === name,
+      )
         ? {
             status: true,
-            data: JSON.parse(sessionStorage.getItem(type)).find(
-              (d) => d.name === name,
+            data: JSON.parse(sessionStorage.getItem(type)).find((d) =>
+              type === 'quizzes' ? d.name === name : d.project_name === name,
             ),
           }
         : { status: false }
+
     if (
+      type === 'quizzes' &&
       resp.status &&
       !resp.data.submit &&
       moment().isBefore(resp.data.end_date)
@@ -139,19 +142,26 @@ export const Card = ({
         background: !close && !ifDone ? '#788bb061' : '#4f4f4f',
       }}
       onClick={() => {
-        !close && !ifDone && findData()
+        !close &&
+          ((type === 'quizzes' && !ifDone) || type === 'projects') &&
+          findData()
       }}
     >
-      <Div class="l">
+      <Div
+        class="l"
+        style={{
+          justifyContent: type === 'quizzes' ? 'space-between' : 'flex-start',
+        }}
+      >
         {type === 'quizzes' ? (
-          <Quiz size={20} color="orangered" style={{ fontWeight: 'bolder' }} />
+          <Quiz size={20} color="white" style={{ fontWeight: 'bolder' }} />
         ) : (
           <Stack size={20} color="white" style={{ fontWeight: 'bolder' }} />
         )}
         <h1>{name}</h1>
         {type === 'quizzes' && (
           <>
-            <Chrono size={20} color="red" style={{ fontWeight: 'bolder' }} />
+            <Chrono size={20} color="white" style={{ fontWeight: 'bolder' }} />
             <span>{duration}</span>
           </>
         )}

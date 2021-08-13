@@ -96,15 +96,21 @@ export const Projects = () => {
 
   const submitproject = () => {
     let check = sessionStorage.getItem('projects')
-    const data = {
-      project_name: currentProject.name,
-      project_link: input.current.value,
-      submit: true,
+      ? JSON.parse(sessionStorage.getItem('projects'))
+      : []
+    let index = check.findIndex((p) => p.project_name === currentProject.name)
+    console.log('ins', index)
+    if (check && index >= 0) {
+      check[index].project_link = input.current.value
+    } else {
+      check.push({
+        project_name: currentProject.name,
+        project_link: input.current.value,
+        submit: true,
+      })
     }
-    sessionStorage.setItem(
-      'projects',
-      JSON.stringify(check ? [...JSON.parse(check), data] : [data]),
-    )
+    sessionStorage.setItem('projects', JSON.stringify([...check]))
+
     setShowModal(false)
     setCurrentProject(null)
   }
@@ -127,7 +133,8 @@ export const Projects = () => {
               {...data}
               selectData={(dat) => selectProject(dat)}
               ifDone={
-                myProjects && myProjects.find((p) => p.name === data.name)
+                myProjects &&
+                myProjects.find((p) => p.project_name === data.name)
               }
               datas={myProjects}
             />
@@ -149,11 +156,20 @@ export const Projects = () => {
             <input
               type="text"
               placeholder="entrer the project link here"
+              defaultValue={
+                myProjects &&
+                myProjects.find((p) => p.project_name === currentProject.name)
+                  ?.project_link
+              }
               ref={input}
             />
             <Div class="button-group">
               <button class="go" onClick={() => submitproject()}>
-                submit the project
+                {myProjects &&
+                myProjects.find((p) => p.project_name === currentProject.name)
+                  ? 'update'
+                  : 'submit'}{' '}
+                the project
               </button>
               <button class="cancel" onClick={() => setShowModal(false)}>
                 {' '}

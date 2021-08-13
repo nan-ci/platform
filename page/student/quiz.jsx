@@ -355,7 +355,7 @@ export const InputExample = ({ type, checked }) => {
 export const Quiz = ({ params: { name, relecture } }) => {
   const quiz = courses
     .find((c) => c.name === getUser().speciality)
-    .quizzes.find((q) => q.name === name)
+    .quizzes.find((q) => q.name === decodeURI(name))
 
   const QuiZ = getQuiz()
 
@@ -370,7 +370,6 @@ export const Quiz = ({ params: { name, relecture } }) => {
   const [currentResponses, setCurrentResponses] = useState(
     quiz.questions[currentQuestion],
   )
-
   const [manyResponse, setManyResponse] = useState(
     Object.values(currentResponses).filter((f) => f).length > 1,
   )
@@ -423,14 +422,14 @@ export const Quiz = ({ params: { name, relecture } }) => {
     setMyResponses((r) => {
       return { ...r, ...myResponses }
     })
-    await (
-      await fetch(`${API}/user/quiz?name=${name}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ responses: { ...myResponses } }),
-      })
-    ).json()
-    localStorage.setItem(
+    // await (
+    //   await fetch(`${API}/user/quiz?name=${name}`, {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({ responses: { ...myResponses } }),
+    //   })
+    // ).json()
+    sessionStorage.setItem(
       'quiz',
       JSON.stringify({ ...getQuiz(), responses: { ...myResponses } }),
     )
@@ -468,7 +467,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
   useEffect(() => {
     if (!relecture) {
       chronoInterval = setInterval(() => {
-        const duration = time('all', quiz.endDate)
+        const duration = time('all', QuiZ.end_date)
         if (duration.asSeconds() > 0) {
           setChrono(
             `${
@@ -495,7 +494,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
   useEffect(() => {
     if (!relecture) {
       progressInterval = setInterval(() => {
-        const seconds = time('asSeconds', quiz.endDate)
+        const seconds = time('asSeconds', QuiZ.end_date)
         if (seconds >= 0) {
           setProgressPercent(
             100 -
