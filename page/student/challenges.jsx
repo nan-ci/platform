@@ -1,4 +1,3 @@
-//import { ChallengeCard } from '..'
 import {ChallengeCard} from '../../component/student/challenge-card.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { courses } from '../../data/courses.js'
