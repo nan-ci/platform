@@ -20,6 +20,7 @@ css(`
   align-items: center
   width: 100%;
 }
+
 .infos {
    display:flex;
    flex-flow: column wrap;
@@ -127,6 +128,49 @@ border-radius:0px;
    }
 
 
+   .tab-pane.projects .pcard {
+     position:relative;
+     width: 100%;
+     padding: 0.6rem;
+     padding-bottom: 2rem;
+     height: auto;
+     cursor:pointer;
+     border-radius: 0.5rem;
+     background:linear-gradient( 90deg,#5dd48e30 50%,#04b81978 100%);
+   }
+
+
+   .tab-pane.projects .pcard  h1{
+    font-size: 2rem;
+    color:white;
+}
+
+   .tab-pane.projects .pcard p{
+     margin-top: 10px;
+   }
+
+   .tab-pane.projects .pcard p strong{
+     font-weight:bold;
+     color:grey;
+  }
+
+  .tab-pane.projects .pcard p span{
+    color:white;
+  }
+
+
+  .tab-pane.projects .pcard .note{
+    position:absolute;
+    top: 20%;
+    right:7%;
+    font-size: 5rem;
+    color:grey;
+    font-weight:bolder;
+  }
+
+
+
+
 
 `)
 
@@ -139,13 +183,22 @@ export const Profile = () => {
   useEffect(() => setData(timeline), [])
 
   const columns = Object.entries({
-    challenge: {
-      size: '50%',
+    name: {
+      size: '25%',
       type: '',
-      bgcolor: 'var(--orange-dark)',
     },
-    solution: { size: '25%', type: '', bgcolor: 'var(--pink-dark)', color: '' },
-    date: { size: '25%', type: '', bgcolor: 'var(--purple-lighter)' },
+    link: {
+      size: '25%',
+      type: '',
+    },
+    note: {
+      size: '25%',
+      type: '',
+    },
+    date: {
+      size: '25%',
+      type: '',
+    },
   })
 
   const [activeTab, setActiveTab] = useState('stats')
@@ -242,6 +295,12 @@ export const Profile = () => {
               >
                 quizzes - results
               </button>
+              <button
+                class={`${activeTab === 'projects' && 'active'}`}
+                onClick={() => setActiveTab('projects')}
+              >
+                projects - results
+              </button>
             </nav>
             <Div class="content">
               <Div
@@ -264,13 +323,17 @@ export const Profile = () => {
                 </Div>
               </Div>
               <Div
-                class={`tab-pane ${activeTab === 'challenges' && 'active'}`}
+                class={`tab-pane challenges ${
+                  activeTab === 'challenges' && 'active'
+                }`}
                 id="challenges"
               >
                 <h1>challenges - results </h1>
               </Div>
               <Div
-                class={`tab-pane ${activeTab === 'quizzes' && 'active'}`}
+                class={`tab-pane quizzes ${
+                  activeTab === 'quizzes' && 'active'
+                }`}
                 id="quizzes"
               >
                 {userQuizzes &&
@@ -287,11 +350,27 @@ export const Profile = () => {
                     )
                   })}
               </Div>
+              <Div
+                class={`tab-pane projects ${
+                  activeTab === 'projects' && 'active'
+                }`}
+                id="projects"
+              >
+                <Div class="pcard">
+                  <h1> Project : commerce</h1>
+                  <P>
+                    <strong> your link : </strong>
+                    <span>https://google.com</span>
+                  </P>
+                  <P>
+                    <strong> status : </strong> <span> fail </span>
+                  </P>
+                  <P class="note"> 17/20 </P>
+                </Div>
+              </Div>
             </Div>
           </Div>
           {divider}
-          <h2 style={{ textAlign: 'center', fontSize: '1.5rem' }}>Timeline</h2>
-          <TimelineTable data={data.map(getTimeline)} columns={columns} />
         </>
       )}
     </Layout>
