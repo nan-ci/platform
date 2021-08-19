@@ -9,6 +9,7 @@ import { navigate } from '../lib/router.js'
 import { API } from '../lib/env.js'
 import { EndDate } from '../lib/quiz.js'
 import moment from 'moment'
+import {Spinner} from '../component/spinner.jsx'
 
 css(`
       .quizz-modal {
@@ -163,7 +164,7 @@ export const Quizzes = () => {
               quizzes={myQuizzes}
             />
           ))}
-        {!myQuizzes && <h1>Loading ....</h1>}
+        {!myQuizzes && <Spinner color="var(--green-darker)"/>}
       </Div>
       <Div
         class="quizz-modal"
