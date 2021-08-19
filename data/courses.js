@@ -45,6 +45,7 @@ export const courses = [
           'Learn fundamentals and advanced data structure in Javascript ',
         hours: 300,
         codeColor: '#dbb958',
+        project: null,
       },
       {
         id: 2,
@@ -52,6 +53,7 @@ export const courses = [
         description: 'Learn to build APIs and Microservice ',
         hours: 200,
         codeColor: '#5886db',
+        project: null,
       },
       {
         id: 3,
@@ -60,28 +62,7 @@ export const courses = [
           'The complete guide of ReactJS and VueJS for the frontend developers',
         hours: 200,
         codeColor: 'var(--comment-light)',
-      },
-    ],
-    projects: [
-      {
-        id: 1,
-        idModule: 1,
-        name: 'Getting One',
-        description: 'here you will do all this in one day',
-        beginDate:
-          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        endDate:
-          'Fri Aug 13 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
-      },
-      {
-        id: 2,
-        idModule: 1,
-        name: 'Getting Two',
-        description: 'here you will do all this in one day',
-        beginDate:
-          'Fri Aug 12 2021 12:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        endDate:
-          'Thu Aug 12 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        project: null,
       },
     ],
     cours: [
@@ -143,24 +124,15 @@ export const courses = [
     challenges: [
       {
         id: 1,
-        title: 'Javascript basics',
+        title: 'BUILD A RANDOM QUOTES',
         description:
-          'This series of challenges covers the very basics of Javascript',
-        kata: [
-          {
-            id: 1,
-            title: 'Check if a number is even',
-            description:
-              'Write a function that takes a number as argument. If the number is even, return true',
-            submited: false,
-          },
-          {
-            id: 2,
-            title: 'Split a number into its digits',
-            description: '',
-            submited: true,
-          },
-        ],
+          'This series focuses on learning and practicing JavaScript. Each challenge comes with a tutorial article, and you can view these articles by clicking either the Topics tab along the top or the article icon in the right-hand menu.',
+      },
+      {
+        id: 2,
+        title: 'CREATE A CALCULATOR WITH REACT',
+        description:
+          "Today, we're discussing data types. Check out the attached tutorial for more details",
       },
     ],
     quizzes: [
@@ -178,11 +150,12 @@ export const courses = [
             'Document Object Module': false,
             'Document Object Model': true,
           },
-          'what is the name of  the variable type taht give only one  result, either True or False': {
-            string: false,
-            boolean: true,
-            integer: false,
-          },
+          'what is the name of  the variable type taht give only one  result, either True or False':
+            {
+              string: false,
+              boolean: true,
+              integer: false,
+            },
           'what mean NaN in javascript': {
             'Not a Number': true,
             'Not a Numeric': false,
@@ -202,9 +175,9 @@ export const courses = [
           },
         },
         beginDate:
-          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Jul 09 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Fri Aug 13 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Tue Jul 13 2021 17:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '15:00',
         percentOfValidation: 60,
       },
@@ -225,9 +198,9 @@ export const courses = [
           },
         },
         beginDate:
-          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Sat Jul 10 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Fri Aug 13 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Wed Jul 14 2021 17:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '25:00',
         percentOfValidation: 60,
       },

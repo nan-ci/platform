@@ -1,58 +1,53 @@
-import { css } from '../../lib/dom'
-import { Div, P, Span } from '../elements'
+import { css } from '../../lib/dom.js'
+import {Div} from '../elements.jsx'
 
 css(`
-.block{
+._card{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  background: var(--white-lighter);
+  padding:20px;
+  margin: 1px 0px;
+  color: var(--selection-dark);
+  cursor: pointer;
+}
+._card:hover {
   background: var(--white-darker);
+}
+._btnsolve{
+  color: var(--background-darker);
+  background: transparent;
   padding: 10px;
-  margin: 20px 0px;
-  border-radius: 5px;
-  color: var(--selection-dark);
-}
-details > summary {
-  outline: none;
-  font-size: 1.4rem;
+  border: none;
+  outline-color: var(--green-darker);
   cursor: pointer;
-  color: var(--selection-dark);
-
 }
-.block-item{
-  margin: 10px 0px;
-  font-size: 1.3rem;
-  color: var(--selection-dark);
+._title{
+  color: var(--background-lighter);
+  font-size: 20px;
 }
-.kata-item {
-  font-size: 1.3rem;
+._info{
+  color: var(--red-darker);
+  font-size: 15px;
+}
+._btnsolve:focus {
+  background: transparent;
+  color: var(--background-darker);
+  background: transparent;
+  outline-color: var(--green-darker);
   cursor: pointer;
-  padding: 2px;
-  color: var(--selection-dark);
-}
-.kata-item:hover{
-  background: var(--grey-lighter);
-  width: 100%;
 }
 `)
 
 export const ChallengeCard = ({ data }) => (
-  <details class="block">
-    <summary class="block-title">
-      {data.title}
-      <P style={{ color: 'var(--selection-dark)' }}>{data.description}</P>
-    </summary>
-    <Div class="block-item">
-      {data.kata.map((m) => (
-        <ul key={m.id}>
-          <li class="kata-item">
-            {m.title}{' '}
-            {m.submited ? (
-              <Span
-                class="fa fa-check"
-                style={{ color: 'var(--orange)' }}
-              ></Span>
-            ) : null}
-          </li>
-        </ul>
-      ))}
-    </Div>
-  </details>
+  <Div class="_card">
+    <section>
+      <h1 class="_title">{data.title}</h1>
+      <small class="_info">Click on for more details 👉</small>
+    </section>
+    <section>
+      <button class="_btnsolve">Solve challenge</button>
+    </section>
+  </Div>
 )
