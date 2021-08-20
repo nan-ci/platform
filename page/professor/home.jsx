@@ -7,7 +7,7 @@ import { user } from '../../lib/auth.js'
 import { navigate } from '../../lib/router'
 import moment from 'moment'
 import 'moment/locale/fr'
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useState, useRef } from 'preact/hooks'
 import { CircelStep } from '../../component/icons.jsx'
 
 css(`
@@ -33,20 +33,34 @@ css(`
    }
 
    ._card.one h1 {
-     width: 400px;
      white-space:normal;
-     font-size: 2.5rem;
+     font-size: 2.7rem;
+     width: 500px;
    }
 
    ._card.one p {
-      margin-top: 20px;
+      margin-top: 10px;
+      width: 90%;
+      display:flex;
+      flex-direction:row;
+      align-items:;
+      justify-content: flex-start;
   }
 
+  ._card.one p .red {
+      display:block;
+      width: 20px;
+      height: 20px;
+      background: red;
+      border-radius: 2rem;
+      margin-right: 10px;
+  }
    ._card.two {
     width: 47%;
-    height: 150px;
+    height: 160px;
     background: black;
     padding: 0.7rem;
+
   }
 
   ._card.two h1 {
@@ -58,9 +72,8 @@ css(`
   ._card.two .flop{
     width:100%;
     height: 80%;
-    overflow:scroll;
-    overflow-y:scroll;
-    overflow-x:hidden;
+    overflow:hidden;
+    padding-bottom: 1rem;
     background: black;
   }
 
@@ -79,23 +92,63 @@ css(`
 
   ._card.three {
     width: 47%;
-    height: 150px;
+    height: 160px;
     background: black;
     padding:0.7rem;
   }
+
+  ._card.three .flop {
+     width: 100%;
+     height: 80%;
+     background: transparent;
+    transition: all .5s ease-in-out;
+  }
+
+  ._card.three h1 {
+    text-decoration:underline;
+  }
+
+  ._card.three .flop p {
+     color: white;
+     font-weight: bolder;
+     font-size: 1.5rem;
+     margin: 20px auto;
+  }
+
+
 
 `)
 
 export const Home = () => {
   let inter = null
+  let inter2 = null
   const [time, setTime] = useState(moment().format('llll'))
+  const [eventIndex, setEventIindex] = useState(0)
+  const eventsInfo = [
+    'the quizz  javascript has beginning ',
+    'the project juyfull is closed',
+    '3 students are do the last project',
+  ]
+
   useEffect(() => {
+    let count = 1
     inter = setInterval(() => {
       setTime(moment().format('llll'))
     }, 60000)
 
+    inter2 = setInterval(() => {
+      document.querySelector('._card.three .flop').style.opacity = 0
+      document.querySelector('._card.three .flop').style.opacity = 1
+      document.querySelector('._card.three .flop').style.transform = `rotateX(${
+        count * (180 * 2)
+      }deg)`
+      count++
+      setEventIindex((d) => (d === eventsInfo.length - 1 ? 0 : d + 1))
+    }, 5000)
+
     return () => {
       clearInterval(inter)
+      clearInterval(inter2)
     }
   }, [])
 
@@ -106,7 +159,10 @@ export const Home = () => {
       <Div class="_container">
         <Div class="_card one">
           <h1>{time}</h1>
-          <P> vous avez trois project en attente de correction</P>
+          <P>
+            <span class="red"></span> vous avez trois project en attente de
+            correction
+          </P>
         </Div>
         <Div class="_card two">
           <h1>Stats</h1>
@@ -117,17 +173,23 @@ export const Home = () => {
             </P>
             <P>
               <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
-              <span>5 students</span>
+              <span>3 modules </span>
             </P>
             <P>
               <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
-              <span>5 students</span>
+              <span>80 courses </span>
+            </P>
+            <P>
+              <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
+              <span>12 projects </span>
             </P>
           </Div>
         </Div>
         <Div class="_card three">
           <h1>Events</h1>
-          <Div class="flop"></Div>
+          <Div class="flop">
+            <P>{eventsInfo[eventIndex]}</P>
+          </Div>
         </Div>
       </Div>
     </Layout>

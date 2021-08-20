@@ -64,28 +64,6 @@ export const courses = [
         codeColor: 'var(--comment-light)',
       },
     ],
-    projects: [
-      {
-        id: 1,
-        idModule: 1,
-        name: 'Getting One',
-        description: 'here you will do all this in one day',
-        beginDate:
-          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        endDate:
-          'Fri Aug 13 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
-      },
-      {
-        id: 2,
-        idModule: 1,
-        name: 'Getting Two',
-        description: 'here you will do all this in one day',
-        beginDate:
-          'Fri Aug 12 2021 12:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        endDate:
-          'Thu Aug 13 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
-      },
-    ],
     cours: [
       {
         id: 1,
@@ -171,12 +149,11 @@ export const courses = [
             'Document Object Module': false,
             'Document Object Model': true,
           },
-          'what is the name of  the variable type taht give only one  result, either True or False':
-            {
-              string: false,
-              boolean: true,
-              integer: false,
-            },
+          'what is the name of  the variable type taht give only one  result, either True or False': {
+            string: false,
+            boolean: true,
+            integer: false,
+          },
           'what mean NaN in javascript': {
             'Not a Number': true,
             'Not a Numeric': false,
