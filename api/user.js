@@ -38,7 +38,7 @@ GET.user.quizzes = withUser(async ({ session, url }) => {
 })
 
 POST.user.quizzes = withBody(async ({ url, session, body }) => {
-  const { quizzes } = await db.get(session)
+  let { quizzes } = await db.get(session)
   if (!quizzes) quizzes = {}
   if (!url.searchParams.get('name')) {
     delete body.name

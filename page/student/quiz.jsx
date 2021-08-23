@@ -422,13 +422,13 @@ export const Quiz = ({ params: { name, relecture } }) => {
     setMyResponses((r) => {
       return { ...r, ...myResponses }
     })
-    // await (
-    //   await fetch(`${API}/user/quiz?name=${name}`, {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({ responses: { ...myResponses } }),
-    //   })
-    // ).json()
+    await (
+      await fetch(`${API}/user/quiz?name=${name}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ responses: { ...myResponses } }),
+      })
+    ).json()
     sessionStorage.setItem(
       'quiz',
       JSON.stringify({ ...getQuiz(), responses: { ...myResponses } }),

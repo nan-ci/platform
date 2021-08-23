@@ -103,28 +103,15 @@ export const Card = ({
   }, [datas])
 
   const findData = async () => {
-    //  const resp = await (await fetch(`${API}/user/${type}?name=${name}`)).json()
-    const resp =
-      sessionStorage.getItem(type) &&
-      JSON.parse(sessionStorage.getItem(type)).find((d) =>
-        type === 'quizzes' ? d.name === name : d.project_name === name,
-      )
-        ? {
-            status: true,
-            data: JSON.parse(sessionStorage.getItem(type)).find((d) =>
-              type === 'quizzes' ? d.name === name : d.project_name === name,
-            ),
-          }
-        : { status: false }
-
+    const resp = await (await fetch(`${API}/user/${type}?name=${name}`)).json()
     if (
       type === 'quizzes' &&
       resp.status &&
       !resp.data.submit &&
       moment().isBefore(resp.data.end_date)
     ) {
-      // localStorage.setItem(type, JSON.stringify(resp.data))
-      return navigate(`/student/${type}?name='` + name)
+      localStorage.setItem('quiz', JSON.stringify(resp.data))
+      return navigate(`/student/quiz?name='` + name)
     } else {
       selectData(
         type === 'quizzes'

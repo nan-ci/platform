@@ -118,14 +118,12 @@ export const Quizzes = () => {
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [myQuizzes, setMyQuizzes] = useState(undefined)
+
   const [quizzes, setQuizzes] = useState(
     courses.find((c) => c.name === user.speciality).quizzes,
   )
 
-  setMyQuizzes(
-    sessionStorage.getItem('quizzes') &&
-      JSON.parse(sessionStorage.getitem('quizzes')),
-  )
+  setMyQuizzes(null)
 
   const selectQuiz = (quiz) => {
     setCurrentQuiz({ ...quiz })
@@ -133,31 +131,32 @@ export const Quizzes = () => {
   }
 
   useEffect(async () => {
-    // setMyQuizzes()
-    // const resp = await (await fetch(`${API}/user/quizzes`)).json()
-    // if (resp.data) {
-    //   setMyQuizzes(resp.data)
-    // }
+    setMyQuizzes()
+    const resp = await (await fetch(`${API}/user/quizzes`)).json()
+    console.log('resp', resp)
+    if (resp.data) {
+      setMyQuizzes(resp.data)
+    }
   }, [])
 
   const initQuiz = async ({ name, duration }) => {
-    // const fetching = await fetch(`${API}/user/quizzes`, {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({
-    //     name,
-    //     responses: {},
-    //     percent: 0,
-    //     end_date: EndDate(duration),
-    //     submit: false,
-    //   }),
-    // })
+    const fetching = await fetch(`${API}/user/quizzes`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        responses: {},
+        percent: 0,
+        end_date: EndDate(duration),
+        submit: false,
+      }),
+    })
 
-    // const resp = await fetching.json()
-    // if (resp.status) {
-    //   localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
-    //   navigate('/student/quiz?name=' + resp.data.name)
-    // }
+    const resp = await fetching.json()
+    if (resp.status) {
+      localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
+      navigate('/student/quiz?name=' + resp.data.name)
+    }
     const datas = {
       name,
       responses: {},

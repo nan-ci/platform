@@ -175,7 +175,7 @@ export const courses = [
         beginDate:
           'Fri Jul 09 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Tue Jul 13 2021 17:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Aug 27 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '15:00',
         percentOfValidation: 60,
       },
@@ -198,7 +198,7 @@ export const courses = [
         beginDate:
           'Sat Jul 10 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Wed Jul 14 2021 17:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Aug 27 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '25:00',
         percentOfValidation: 60,
       },
@@ -212,7 +212,7 @@ export const courses = [
         beginDate:
           'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Fri Aug 13 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Aug 27 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
       },
       {
         id: 2,
@@ -222,7 +222,7 @@ export const courses = [
         beginDate:
           'Fri Aug 12 2021 12:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Thu Aug 12 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Aug 27 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
       },
     ],
   },
