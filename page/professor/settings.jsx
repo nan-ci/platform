@@ -98,6 +98,17 @@ export const Settings = () => {
           <Row>
             <Input
               inputType="input"
+              name="email"
+              type="email"
+              comment="Email"
+              class="input-settings"
+              divStyle={{ width: '45%' }}
+              value={user.email}
+              errors={errors}
+              updateErrors={setErrors}
+            />
+            <Input
+              inputType="input"
               name="location"
               comment="Location"
               class="input-settings"
@@ -107,18 +118,30 @@ export const Settings = () => {
               updateErrors={setErrors}
             />
           </Row>
-
           <br />
-          <Input
-            inputType="textarea"
-            rows={6}
-            name="biography"
-            comment="Biography"
-            class="input-settings"
-            value={user.biography}
-            errors={errors}
-            updateErrors={setErrors}
-          />
+          <Row>
+            <Input
+              inputType="input"
+              name="contact"
+              type="text"
+              comment="Contact"
+              class="input-settings"
+              divStyle={{ width: '45%' }}
+              value={user.contact}
+              errors={errors}
+              updateErrors={setErrors}
+            />
+            <Input
+              inputType="input"
+              name="location"
+              comment="Location"
+              class="input-settings"
+              divStyle={{ width: '45%' }}
+              value={user.location}
+              errors={errors}
+              updateErrors={setErrors}
+            />
+          </Row>
         </Fieldset>
         <br />
         <Fieldset legend={'Social Netwok'}>
@@ -145,8 +168,6 @@ export const Settings = () => {
             />
           </Row>
         </Fieldset>
-        <br />
-        <DangerZone discordId={user?.discordId} userId={''} />
       </Form>
     </Layout>
   )
