@@ -13,7 +13,7 @@ POST.user.profile = withBody(async ({ session, body }) => {
   )
 })
 
-GET.user.projects = withUser(async ({ session }) => {
+GET.user.projects = withUser(async ({ url, session }) => {
   const data = await db.get(session)
   const name = url.searchParams.get('name')
   const datas = name
@@ -41,15 +41,14 @@ POST.user.quizzes = withBody(async ({ url, session, body }) => {
   let { quizzes } = await db.get(session)
   if (!quizzes) quizzes = {}
   if (!url.searchParams.get('name')) {
-    delete body.name
-    quizzes[url.searchParams.get('name')] = { ...body }
+    quizzes[body.name] = { ...body, name: undefined }
   } else {
     quizzes[url.searchParams.get('name')] = {
       ...quizzes[url.searchParams.get('name')],
       ...body,
     }
   }
-  await db.update(session, quizzes)
+  await db.update(session, { quizzes })
   return new Response(
     JSON.stringify({ message: 'ok all is set', data: body, status: true }),
     {
@@ -59,16 +58,17 @@ POST.user.quizzes = withBody(async ({ url, session, body }) => {
 })
 
 POST.user.projects = withBody(async ({ url, session, body }) => {
-  const { projects } = await db.get(session)
+  let { projects } = await db.get(session)
   if (!projects) projects = []
+  console.log('url', url.href)
   if (!url.searchParams.get('name')) {
-    projects.push = body
+    projects.push(body)
   } else {
     projects[
-      projects.findIndex((p) => p.name === url.searchParams.get('name'))
-    ] = { ...body }
+      projects.findIndex((p) => p.project_name === url.searchParams.get('name'))
+    ].project_link = body.project_link
   }
-  await db.update(session, projects)
+  await db.update(session, { projects })
   return new Response(
     JSON.stringify({ message: 'ok all is set', data: body, status: true }),
     {

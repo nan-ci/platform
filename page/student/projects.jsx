@@ -80,10 +80,7 @@ css(`
 export const Projects = () => {
   const [currentProject, setCurrentProject] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  const [myProjects, setMyProjects] = useState(
-    sessionStorage.getItem('projects') &&
-      JSON.parse(sessionStorage.getItem('projects')),
-  )
+  const [myProjects, setMyProjects] = useState(null)
   const [projects, setprojects] = useState(
     courses.find((c) => c.name === user.speciality).projects,
   )
@@ -94,34 +91,43 @@ export const Projects = () => {
     setShowModal(true)
   }
 
-  const submitproject = () => {
-    let check = sessionStorage.getItem('projects')
-      ? JSON.parse(sessionStorage.getItem('projects'))
-      : []
-    let index = check.findIndex((p) => p.project_name === currentProject.name)
-    console.log('ins', index)
-    if (check && index >= 0) {
-      check[index].project_link = input.current.value
-    } else {
-      check.push({
-        project_name: currentProject.name,
-        project_link: input.current.value,
-        submit: true,
-      })
+  useEffect(async () => {
+    const resp = await (await fetch(`${API}/user/projects`)).json()
+    if (resp.data) {
+      setMyProjects(resp.data)
     }
-    sessionStorage.setItem('projects', JSON.stringify([...check]))
+  }, [])
 
+  const submitproject = async () => {
+    const resp = await (
+      await fetch(
+        `${API}/user/${
+          myProjects &&
+          myProjects.find((p) => p.project_name === currentProject.name)
+            ? `projects?name=${currentProject.name}`
+            : 'projects'
+        }`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(
+            myProjects &&
+              myProjects.find((p) => p.project_name === currentProject.name)
+              ? {
+                  project_link: input.current.value,
+                }
+              : {
+                  project_name: currentProject.name,
+                  project_link: input.current.value,
+                  submit: true,
+                },
+          ),
+        },
+      )
+    ).json()
     setShowModal(false)
     setCurrentProject(null)
   }
-
-  useEffect(async () => {
-    // setMyQuizzes()
-    // const resp = await (await fetch(`${API}/user/quizzes`)).json()
-    // if (resp.data) {
-    //   setMyQuizzes(resp.data)
-    // }
-  }, [])
 
   return (
     <Layout>
@@ -134,7 +140,7 @@ export const Projects = () => {
               selectData={(dat) => selectProject(dat)}
               ifDone={
                 myProjects &&
-                myProjects.find((p) => p.project_name === data.name)
+                myProjects.find((p) => p.project_name === data.name)?.submit
               }
               datas={myProjects}
             />

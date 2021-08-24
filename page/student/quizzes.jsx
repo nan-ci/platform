@@ -117,13 +117,11 @@ const QuizInfos = ({ currentQuiz }) => (
 export const Quizzes = () => {
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  const [myQuizzes, setMyQuizzes] = useState(undefined)
+  const [myQuizzes, setMyQuizzes] = useState(null)
 
   const [quizzes, setQuizzes] = useState(
     courses.find((c) => c.name === user.speciality).quizzes,
   )
-
-  setMyQuizzes(null)
 
   const selectQuiz = (quiz) => {
     setCurrentQuiz({ ...quiz })
@@ -131,9 +129,7 @@ export const Quizzes = () => {
   }
 
   useEffect(async () => {
-    setMyQuizzes()
     const resp = await (await fetch(`${API}/user/quizzes`)).json()
-    console.log('resp', resp)
     if (resp.data) {
       setMyQuizzes(resp.data)
     }
@@ -164,7 +160,6 @@ export const Quizzes = () => {
       end_date: EndDate(duration),
       submit: false,
     }
-    console.log('datas', datas)
 
     sessionStorage.setItem('quiz', JSON.stringify({ ...datas }))
     navigate('/student/quiz?name=' + name)
@@ -174,12 +169,13 @@ export const Quizzes = () => {
     <Layout>
       <Div>
         {quizzes &&
+          myQuizzes &&
           quizzes.map((quiz) => (
             <Card
               type="quizzes"
               {...quiz}
               selectData={(quiz) => selectQuiz(quiz)}
-              ifDone={myQuizzes && myQuizzes.find((q) => q.name === quiz.name)}
+              ifDone={myQuizzes[quiz.name]}
               datas={myQuizzes}
             />
           ))}

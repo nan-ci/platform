@@ -19,6 +19,7 @@ css(`
       cursor:pointer;
       transition:all 0.5s ease-in-out;
       margin:7px auto;
+      position:relative;
     }
 
     .canHover:hover{
@@ -48,6 +49,21 @@ css(`
     .quizz-container h1,.quizz-container p{
       margin-left:15px;
     }
+
+    .quizz-container .absolute {
+      display:flex;
+      flex-direction:row;
+      align-items:center;
+      justify-content:center;
+      position:absolute;
+      top: 4px;
+      right: 5px;
+    }
+
+    .quizz-container .absolute  span{
+       font-size: 0.8rem;
+       margin-left: 4px;
+    }
 `)
 
 export const Card = ({
@@ -66,7 +82,6 @@ export const Card = ({
 }) => {
   const [time, setTime] = useState('00:00')
   const timeRef = useRef(null)
-
   const [close, setClose] = useState(moment().isAfter(endDate))
   const [start, setStart] = useState(moment().isAfter(beginDate))
 
@@ -106,12 +121,12 @@ export const Card = ({
     const resp = await (await fetch(`${API}/user/${type}?name=${name}`)).json()
     if (
       type === 'quizzes' &&
-      resp.status &&
+      resp.data &&
       !resp.data.submit &&
       moment().isBefore(resp.data.end_date)
     ) {
-      localStorage.setItem('quiz', JSON.stringify(resp.data))
-      return navigate(`/student/quiz?name='` + name)
+      sessionStorage.setItem('quiz', JSON.stringify(resp.data))
+      return navigate(`/student/quiz?name=` + name)
     } else {
       selectData(
         type === 'quizzes'
@@ -121,16 +136,37 @@ export const Card = ({
     }
   }
 
+  const checkCondition = () => {
+    if (type === 'projects') {
+      return true
+    } else if (
+      type === 'quizzes' &&
+      (!ifDone ||
+        (ifDone &&
+          !datas[name].submit &&
+          moment().isBefore(datas[name].end_date)))
+    ) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   return (
     <Div
       key={id}
-      class={`quizz-container ${!close && !ifDone && 'canHover'}`}
+      class={`quizz-container ${!close && checkCondition() && 'canHover'}`}
       style={{
-        background: !close && !ifDone ? '#788bb061' : '#4f4f4f',
+        background: !close && checkCondition() ? '#788bb061' : '#4f4f4f',
       }}
       onClick={() => {
         !close &&
-          ((type === 'quizzes' && !ifDone) || type === 'projects') &&
+          ((type === 'quizzes' &&
+            (!ifDone ||
+              (ifDone &&
+                !datas[name].submit &&
+                moment().isBefore(datas[name].end_date)))) ||
+            type === 'projects') &&
           findData()
       }}
     >
@@ -165,19 +201,32 @@ export const Card = ({
             <Lock size={20} /> <span> Closed </span>
           </P>
         )}
-        {ifDone && (
-          <P>
-            <Done size={20} color="green" />
-            <span> Done </span>
-          </P>
-        )}
-        {close && !ifDone && (
-          <P>
-            <NotDone size={20} color={'red'} />
-            <span> Not Done </span>
-          </P>
-        )}
       </Div>
+      <P class="absolute">
+        {(type === 'projects' && ifDone) ||
+        (type === 'quizzes' &&
+          ifDone &&
+          (datas[name].submit || moment().isAfter(datas[name].end_date))) ? (
+          <Done size={10} color="green" />
+        ) : close ? (
+          <NotDone size={10} color={'red'} />
+        ) : null}
+        <span>
+          {(type === 'projects' && ifDone) ||
+          (type === 'quizzes' &&
+            ifDone &&
+            (datas[name].submit || moment().isAfter(datas[name].end_date)))
+            ? 'Done'
+            : type === 'quizzes' &&
+              ifDone &&
+              !datas[name].submit &&
+              moment().isBefore(datas[name].end_date)
+            ? 'in progress ...'
+            : close
+            ? 'Not Done'
+            : null}
+        </span>
+      </P>
     </Div>
   )
 }

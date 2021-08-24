@@ -28,7 +28,7 @@ export const getCookie = (request, key) => {
   const cookieStr = request.headers.get('cookie')
   if (!cookieStr) return undefined
   const x = cookieStr.indexOf(`${key}=`)
-  if (x < 0) return0
+  if (x < 0) return
   const y = cookieStr.indexOf('; ', x)
   return cookieStr.slice(x + key.length + 1, y < x ? cookieStr.length : y)
 }
