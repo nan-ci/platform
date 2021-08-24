@@ -84,6 +84,8 @@ border-radius:0px;
 .content {
   width: 100%;
   height:400px;
+  overflow:scroll;
+  overflow-x:hidden;
   background: #272729;
 }
 
@@ -93,6 +95,7 @@ border-radius:0px;
   display:none;
   padding: 1rem;
   transition:all 1s ease-in-out;
+
 }
 
 .content .tab-pane.active{
@@ -136,7 +139,18 @@ border-radius:0px;
      height: auto;
      cursor:pointer;
      border-radius: 0.5rem;
-     background:linear-gradient( 90deg,#5dd48e30 50%,#04b81978 100%);
+     margin-bottom: 20px;
+   }
+
+   .tab-pane.projects .pcard.wcor {
+    background: linear-gradient(90deg,#f9ddab47 50%,#d85322b0 100%)
+   }
+
+   .tab-pane.projects .pcard.pass {
+    background:linear-gradient( 90deg,#5dd48e30 50%,#04b81978 100%);
+   }
+   .tab-pane.projects .pcard.fail {
+    background:linear-gradient(90deg,#d45d5d30 50%,#b8040478 100%);
    }
 
 
@@ -151,7 +165,7 @@ border-radius:0px;
 
    .tab-pane.projects .pcard p strong{
      font-weight:bold;
-     color:grey;
+     color:white;
   }
 
   .tab-pane.projects .pcard p span{
@@ -168,16 +182,13 @@ border-radius:0px;
     font-weight:bolder;
   }
 
-
-
-
-
 `)
 
 export const Profile = () => {
   const [data, setData] = useState([])
   const getTimeline = (item) => item
   const [userQuizzes, setUserQuizzes] = useState(null)
+  const [userProjects, setUserProjects] = useState(null)
   const [quizzes, setQuizzes] = useState(null)
 
   useEffect(() => setData(timeline), [])
@@ -210,20 +221,18 @@ export const Profile = () => {
       const resp = await (await fetch(`${API}/user/quizzes`)).json()
       if (resp.data) {
         for (let k in resp.data) {
-          if (
-            moment().isBefore(
-              (quizzes.find((q) => q.name === k) &&
-                quizzes.find((q) => q.name === k).endDate) ||
-                resp.data[k].end_date,
-            ) &&
-            !resp.data[k].submit
-          )
+          if (moment().isBefore(resp.data[k].end_date) && !resp.data[k].submit)
             delete resp.data[k]
         }
         setUserQuizzes(resp.data)
       }
+    } else if (!userProjects) {
+      const resp = await (await fetch(`${API}/user/projects`)).json()
+      if (resp.data) {
+        setUserProjects(resp.data.filter((p) => p.submit))
+      }
     }
-  }, [quizzes, userQuizzes])
+  }, [quizzes, userQuizzes, userProjects])
 
   return (
     <Layout>
@@ -356,17 +365,39 @@ export const Profile = () => {
                 }`}
                 id="projects"
               >
-                <Div class="pcard">
-                  <h1> Project : commerce</h1>
-                  <P>
-                    <strong> your link : </strong>
-                    <span>https://google.com</span>
-                  </P>
-                  <P>
-                    <strong> status : </strong> <span> fail </span>
-                  </P>
-                  <P class="note"> 17/20 </P>
-                </Div>
+                {userProjects &&
+                  userProjects.map((project) => {
+                    return (
+                      <Div
+                        class={`pcard ${
+                          project.note
+                            ? project.note > 12
+                              ? 'pass'
+                              : 'fail'
+                            : 'wcor'
+                        }`}
+                        key={project.project_name}
+                      >
+                        <h1> Project : {project.project_name}</h1>
+                        <P>
+                          <strong> your link : </strong>
+                          <span>{project.project_link}</span>
+                        </P>
+                        <P>
+                          <strong> status : </strong>{' '}
+                          <span>
+                            {' '}
+                            {project.note
+                              ? project.note > 12
+                                ? 'pass'
+                                : 'fail'
+                              : 'waiting correction ...'}{' '}
+                          </span>
+                        </P>
+                        {project.note && <P class="note"> 17/20 </P>}
+                      </Div>
+                    )
+                  })}
               </Div>
             </Div>
           </Div>

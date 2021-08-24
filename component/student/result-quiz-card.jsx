@@ -76,7 +76,7 @@ export const QuizCard = ({
             : 'linear-gradient(90deg,#d45d5d30 50%,#b8040478 100%)',
       }}
       onClick={() => {
-        localStorage.setItem('quiz', JSON.stringify({ responses }))
+        sessionStorage.setItem('quiz', JSON.stringify({ responses }))
         navigate(`/student/quiz?name=${name}&relecture=true`)
       }}
     >

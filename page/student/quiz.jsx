@@ -353,6 +353,7 @@ export const InputExample = ({ type, checked }) => {
 }
 
 export const Quiz = ({ params: { name, relecture } }) => {
+
   const quiz = courses
     .find((c) => c.name === getUser().speciality)
     .quizzes.find((q) => q.name === decodeURI(name))
@@ -370,6 +371,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
   const [currentResponses, setCurrentResponses] = useState(
     quiz.questions[currentQuestion],
   )
+  
   const [manyResponse, setManyResponse] = useState(
     Object.values(currentResponses).filter((f) => f).length > 1,
   )
@@ -384,7 +386,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
   const submitQuiz = async () => {
     clearInterval(chronoInterval)
     clearInterval(progressInterval)
-    const fetching = await fetch(`${API}/user/quiz?name=${name}`, {
+    const fetching = await fetch(`${API}/user/quizzes?name=${name}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ submit: true }),
@@ -423,7 +425,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
       return { ...r, ...myResponses }
     })
     await (
-      await fetch(`${API}/user/quiz?name=${name}`, {
+      await fetch(`${API}/user/quizzes?name=${name}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ responses: { ...myResponses } }),
@@ -509,7 +511,6 @@ export const Quiz = ({ params: { name, relecture } }) => {
       clearInterval(progressInterval)
     }
   }, [relecture])
-
   if (!QuiZ) return navigate('/quizzes')
 
   return (
