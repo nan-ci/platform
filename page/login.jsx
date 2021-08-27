@@ -1,10 +1,10 @@
-import { Div, P } from '../../component/elements'
-import { NavLink } from '../../component/header'
-import { logo } from '../../data/ascii'
-import { css } from '../../lib/dom'
-import { API } from '../../lib/env'
-import { user } from '../../lib/auth.js'
-import { navigate } from '../../lib/router'
+import { Div, P } from '../component/elements'
+import { NavLink } from '../component/header'
+import { logo } from '../data/ascii'
+import { css } from '../lib/dom'
+import { API } from '../lib/env'
+import { user } from '../lib/auth.js'
+import { navigate } from '../lib/router'
 
 css(`
 .div-login {
@@ -39,8 +39,13 @@ export const Login = () => {
         connecting.{'\n'}
       </P>
       <br />
-      <NavLink href={`${API}/link/github`} style={{ fontSize: 23 }}>
-        <button class="btn-login">Join with Github</button>
+      <NavLink
+        href={`${API}/link/${!user ? 'github' : 'discord'}`}
+        style={{ fontSize: 23 }}
+      >
+        <button class="btn-login">
+          Join with {!user ? 'Github' : 'Discord'}{' '}
+        </button>
       </NavLink>
     </Div>
   )

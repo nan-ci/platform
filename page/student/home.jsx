@@ -98,7 +98,7 @@ export const Home = () => {
   return (
     <Layout>
       <br />
-      <P class="username-curriculum">Welcome back 👋, {user.name}</P>
+      <P class="username-curriculum">Welcome back 👋, {user && user.name}</P>
       <br />
       {user && (
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
