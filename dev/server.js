@@ -21,9 +21,11 @@ const { API, sendResponse } = await import('./mocks.js')
 // load KV data
 
 const db = join(rootDir, '.nan.kv.json')
+
 NAN.entries = await readFile(db, 'utf8')
   .then(JSON.parse)
   .catch(() => ({}))
+
 // Then start a proxy server on port 3000
 createServer(async (req, res) => {
   const { url: path, method } = req
@@ -48,10 +50,9 @@ createServer(async (req, res) => {
 
   // Handle the root index
   if (!url.pathname.startsWith('/api/')) return res.end(await generate('index'))
-
   // Forward to the mock of cloudflare worker
-  const { body, options } = await API(req)
 
+  const { body, options } = await API(req)
   // Save KV data
   await writeFile(db, JSON.stringify(NAN.entries), 'utf8')
 

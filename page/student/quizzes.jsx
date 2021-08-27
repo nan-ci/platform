@@ -169,13 +169,12 @@ export const Quizzes = () => {
     <Layout>
       <Div>
         {quizzes &&
-          myQuizzes &&
           quizzes.map((quiz) => (
             <Card
               type="quizzes"
               {...quiz}
               selectData={(quiz) => selectQuiz(quiz)}
-              ifDone={myQuizzes[quiz.name]}
+              ifDone={myQuizzes && myQuizzes[quiz.name]}
               datas={myQuizzes}
             />
           ))}

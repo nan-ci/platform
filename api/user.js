@@ -60,7 +60,6 @@ POST.user.quizzes = withBody(async ({ url, session, body }) => {
 POST.user.projects = withBody(async ({ url, session, body }) => {
   let { projects } = await db.get(session)
   if (!projects) projects = []
-  console.log('url', url.href)
   if (!url.searchParams.get('name')) {
     projects.push(body)
   } else {

@@ -167,7 +167,7 @@ const UserCard = ({ user: { username, name }, path }) => {
                 href={data.path}
                 key={data.name}
                 style={{ marginTop: '10px', color: ' black' }}
-                onClick={data.name === 'Logout' && clearStorage}
+                onClick={() => data.name === 'Logout' && clearStorage()}
               >
                 {data.name}
               </LinkMatch>

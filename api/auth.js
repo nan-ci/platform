@@ -1,6 +1,6 @@
 import { BAD_REQUEST, UNAUTHORIZED, TYPE_JSON, INTERNAL, rand } from './defs.js'
 import { specialities, roles, rolesByKey } from '../data/discord.js'
-import { GET, withUser } from './router.js'
+import { GET, POST, withUser } from './router.js'
 import * as db from './db.js'
 
 const gql = async (query) => {
@@ -14,15 +14,60 @@ const gql = async (query) => {
 }
 
 const DISCORD = 'https://discordapp.com/api'
-const joinGuild = async ({ discordId, request, body }) => {
+
+const checkMember = async (discordId) => {
+  const resp = await fetch(`${DISCORD}/guilds/${GUILD}/members/${discordId}`, {
+    method: 'GET',
+  })
+  return {
+    status: resp.status,
+    statusText: resp.statusText,
+    data: await resp.json(),
+  }
+}
+
+const updateNickName = async (discordId, request, user) => {
   const url = `${DISCORD}/guilds/${GUILD}/members/${discordId}`
-  const join = await fetch(url, { ...request, body: JSON.stringify(body) })
-  if (join.status !== 204) return { reply: join, roles: body.roles }
-  const user = await (await fetch(url)).json()
-  body.roles = [...new Set([...user.roles, ...body.roles])]
-  request.method = 'PATCH'
-  const reply = await fetch(url, { ...request, body: JSON.stringify(body) })
-  return { reply, roles: body.roles }
+  const resp = await fetch(url, {
+    ...request,
+    body: JSON.stringify({
+      nick:
+        user.name && user.name !== user.login
+          ? `${user.login} (${user.name})`
+          : user.login,
+    }),
+  })
+  return {
+    status: resp.status,
+    statusText: resp.statusText,
+    data: await resp.json(),
+  }
+}
+
+const updateRole = async (discordId, request, roleId) => {
+  const url = `${DISCORD}/guilds/${GUILD}/members/${discordId}/roles/${roleId}`
+  const resp = await fetch(url, { ...request })
+  return { status: resp.status, data: await resp.json() }
+}
+
+const joinGuild = async (discordId, request, user, access_token) => {
+  const url = `${DISCORD}/guilds/${GUILD}/members/${discordId}`
+  const join = await fetch(url, {
+    ...request,
+    body: JSON.stringify({
+      nick:
+        user.name && user.name !== user.login
+          ? `${user.login} (${user.name})`
+          : user.login,
+      access_token,
+      roles: [rolesByKey.visitor.id],
+    }),
+  })
+  return {
+    status: join.status,
+    statusText: join.statusText,
+    data: await join.json(),
+  }
 }
 
 GET.auth.discord = async ({ url }) => {
@@ -48,31 +93,74 @@ GET.auth.discord = async ({ url }) => {
   const userResponse = await fetch(`${DISCORD}/users/@me`, {
     headers: { authorization: `Bearer ${auth.access_token}` },
   })
+
   const { speciality } = session
   const { id: discordId, email, avatar } = await userResponse.json()
   const user = { ...session.user, discordId, email, avatar, speciality }
 
-  // join discord server
-  const join = await joinGuild({
-    discordId,
-    request: {
-      method: 'PUT',
-      headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
-    },
-    body: {
-      nick:
-        user.name && user.name !== user.login
-          ? `${user.login} (${user.name})`
-          : user.login,
-      access_token: auth.access_token,
-      roles: [rolesByKey.visitor.id, specialities[speciality].id],
-    },
-  })
+  let resp = null
 
-  join.reply.ok || console.error('Unable to join discord:', join.reply)
-  user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'visitor'
-  await db.set(session.name, user)
-  const location = `/student/dashboard?${new URLSearchParams(user)}`
+  const { status, data } = await checkMember(discordId)
+
+  if (status === 200 && data) {
+    if (
+      data.roles.includes(rolesByKey.admin.id) ||
+      data.roles.includes(rolesByKey.professor.id)
+    ) {
+      resp = await updateNickName(
+        discordId,
+        {
+          method: 'PATCH',
+          headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+        },
+        user,
+      )
+    } else if (user?.role === 'visitor' && !user.speciality) {
+      resp = await updateRole(
+        discordId,
+        {
+          method: 'PUT',
+          headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+        },
+        specialities[speciality].id,
+      )
+    }
+  } else {
+    resp = await joinGuild(
+      discordId,
+      {
+        method: 'PUT',
+        headers: { authorization: `Bot ${BOT_TOKEN}`, ...TYPE_JSON },
+      },
+      user,
+      auth.access_token,
+    )
+  }
+
+  resp.statusText !== 'ok' ||
+    console.error('Unable to join discord:', join.reply)
+  user.role =
+    roles.find((r) => resp.data.roles.includes(r.id))?.key || 'visitor'
+  user.speciality =
+    user.role !== 'visitor'
+      ? Object.values(specialities)
+          .find((r) => resp.data.roles.includes(r.id))
+          .name.toLowerCase()
+      : user.speciality
+
+  if (user?.role === 'visitor' && !speciality) delete user.speciality
+
+  !speciality
+    ? await db.set(session.name, user)
+    : await db.update(session.name, { speciality })
+
+  const location = `${
+    user.role === 'visitor'
+      ? !user.speciality
+        ? '/learningchoice'
+        : '/student/dashboard'
+      : `/${user.role}/dashboard`
+  }?${new URLSearchParams(user)}`
   return new Response(null, { headers: { location }, status: 301 })
 }
 
@@ -134,10 +222,18 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
     ])
   }
 
+  let redirectUrl = user?.role
+    ? user.role === 'visitor' || user.role === 'student'
+      ? 'student/dashboard'
+      : user.role === 'professor'
+      ? 'professor/dashboard'
+      : 'admin/dashboard'
+    : 'login'
+
   return new Response(null, {
     status: 301,
     headers: {
-      location: `/learningchoice?${new URLSearchParams(user)}`,
+      location: `/${redirectUrl}?${new URLSearchParams(user)}`,
       'set-cookie': [
         `nan-session=${session}`,
         'max-age=31536000',
@@ -155,10 +251,10 @@ const oauth2Url = (url, args) => `https://${url}?${new URLSearchParams(args)}`
 
 GET.link.discord = withUser(async ({ user, session, url }) => {
   const speciality = url.searchParams.get('speciality')
-  if (!specialities[speciality])
+  if (user?.role === 'visitor' && !speciality)
     return new Response('Missing Speciality', BAD_REQUEST)
   const state = `${rand()}-${rand()}`
-  const metadata = { user, name: session, speciality }
+  const metadata = { user, name: session, speciality: user?.role && speciality }
   await db.put(`discord:${state}`, '', { expirationTtl: 3600, metadata })
   const location = oauth2Url('discordapp.com/api/oauth2/authorize', {
     client_id: DISCORD_CLIENT,
@@ -182,7 +278,7 @@ GET.link.github = async () => {
 
 GET.logout = async ({ session, url: { hostname } }) => {
   // Clear Session
-  session && (await db.del(session))
+  // session && (await db.del(session))
 
   // Clear cookie
   const cookie = `nan-session=; path=/; domain=${hostname}; max-age=-1`

@@ -3,16 +3,18 @@ import { STATUS_CODES } from 'http'
 import { handleRequest } from '../api/router.js'
 import { getWranglerConfig } from './utils.js'
 import { courses } from '../data/courses.js'
-
 globalThis.addEventListener = () => {}
 
 await import('../api/server.js')
+import { rolesByKey, specialities } from '../data/discord.js'
 
+export const whoTest = 'professor'
 export const avatar = ''
 export const login = 'tester'
 export const email = 'dev@nan.ci'
 export const name = 'Jean Patrick'
 export const user = { login, name }
+export const roles = [rolesByKey.professor.id, specialities['javascript'].id]
 export const quizzes = courses.find((c) => c.name === 'javascript').quizzes
 export const config = await getWranglerConfig()
 export const DOMAIN =
@@ -128,13 +130,13 @@ const passToProvider = (url, request) => {
   }
 
   // DISCORD join the guild
-  if (
-    method === 'PUT' &&
-    url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
-  ) {
-    const discordId = url.slice(43 + GUILD.length)
-    return { body: 'OK', status: discordId === '13381338' ? 204 : 201 }
-  }
+  // if (
+  //   method === 'PUT' &&
+  //   url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
+  // ) {
+  //   const discordId = url.slice(43 + GUILD.length)
+  //   return { body: 'OK', status: discordId === '13381338' ? 204 : 201 }
+  // }
 
   // DISCORD get user guild roles
   if (
@@ -142,12 +144,45 @@ const passToProvider = (url, request) => {
     url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
   ) {
     const discordId = url.slice(43 + GUILD.length)
-    return { body: { user: { id: discordId }, roles: [] } }
+    return {
+      body: whoTest === 'student' ? null : { id: discordId, ...user, roles },
+    }
+  }
+
+  if (
+    method === 'PUT' &&
+    url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
+  ) {
+    const data = JSON.parse(request.body)
+    const discordId = url.slice(43 + GUILD.length)
+    return {
+      status: 200,
+      body: { id: discordId, nick: data.nick, roles: data.roles },
+    }
   }
 
   // DISCORD update user in the guild
-  if (url === `https://discordapp.com/api/guilds/${GUILD}/members/13381338`) {
-    return { body: { nick: 'tester (Jean Patrick)' } }
+  if (
+    method === 'PATCH' &&
+    url.startsWith(`https://discordapp.com/api/guilds/${GUILD}/members/`)
+  ) {
+    return {
+      status: 200,
+      body: {
+        nick: 'tester (Jean Patrick)',
+        roles: whoTest === 'student' ? [] : roles,
+      },
+    }
+  }
+
+  if (
+    url.startsWith(
+      `https://discordapp.com/api/guilds/${GUILD}/members/13381338/roles/`,
+    )
+  ) {
+    const getRole = url.split('/')[url.split('/').length - 1]
+    method === 'PUT' ? roles.push(getRole) : roles.filter((r) => r !== getRole)
+    return { body: { roles: roles } }
   }
 
   // Unexpected request
