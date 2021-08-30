@@ -1,6 +1,6 @@
 import { Div, P } from '../../component/elements'
 import { Layout } from '../../component/layout.jsx'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { logo } from '../../data/ascii'
 import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
@@ -47,45 +47,55 @@ css(`
 
 `)
 
-export const Module = ({ moduleName }) => {
+export const Module = ({ moduleId }) => {
   const [show, setShow] = useState('courses')
-  const currentModule = JSON.parse(sessionStorage.getItem('modules')).find(
-    (m) => m.name === decodeURI(moduleName),
-  )
-  const courses = sessionStorage.getItem('courses')
-    ? JSON.parse(sessionStorage.getItem('courses'))
-    : []
+  const [courses, setCourses] = useState([])
+  const [projects, setProjects] = useState([])
+  const [currentModule, setCurrentModule] = useState({})
 
-  const projects = sessionStorage.getItem('projects')
-    ? JSON.parse(sessionStorage.getItem('projects'))
-    : []
+  useEffect(async () => {
+    const courses = await (await fetch(`${API}/professor/courses`)).json()
+    if (courses.data) setCourses(courses.data)
+    const projects = await (await fetch(`${API}/professor/projects`)).json()
+    if (projects.data) setProjects(projects.data)
+    const module = await (
+      await fetch(`${API}/professor/modules?key=${moduleId}`)
+    ).json()
+    if (module.data) setCurrentModule(module.data)
+  }, [])
 
   return (
     <Layout>
       <h1 class="prof-module-h1">
         <strong>Module : </strong>
-        {decodeURI(moduleName)}
+        {currentModule.name}
       </h1>
       <Div class="prof-module-choice-buttons">
         <button
           class={show === 'courses' && 'active'}
           onClick={() => setShow('courses')}
         >
-          courses (
-          {courses.filter((c) => c.idModule === currentModule.id).length})
+          courses ({courses.filter((c) => c.idModule === moduleId).length})
         </button>
         <button
           class={show === 'projects' && 'active'}
           onClick={() => setShow('projects')}
         >
-          projects (
-          {projects.filter((c) => c.idModule === currentModule.id).length})
+          projects ({projects.filter((c) => c.idModule === moduleId).length})
         </button>
       </Div>
       {show === 'courses' ? (
-        <ModuleCourses moduleName={moduleName} />
+        <ModuleCourses
+          moduleId={moduleId}
+          courses={courses}
+          setCourses={setCourses}
+        />
       ) : (
-        <ModuleProjects moduleName={moduleName} />
+        <ModuleProjects
+          moduleId={moduleId}
+          projects={projects}
+          setProjects={setProjects}
+        />
       )}
     </Layout>
   )

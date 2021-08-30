@@ -6,9 +6,10 @@ const put = (key, value, opts) => NAN.put(key, value, opts)
 const update = async (key, p) => set(key, { ...(await get(key)), ...p })
 const find = async (prefix) => (await NAN.list({ prefix, limit: 1 })).keys[0]
 const filter = async (prefix) => {
-  let cursor, list
+  let cursor = null,
+    list
   const results = []
-  while ((list = await NAN.list({ prefix, cursor }))) {
+  while ((list = await NAN.list({ prefix, cursor: cursor ? cursor : '' }))) {
     results.push(...list.keys)
     if (list.list_complete) break
     cursor = list.cursor

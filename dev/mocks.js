@@ -30,13 +30,30 @@ globalThis.DISCORD_SECRET = 'fake-discord-secret'
 // KV
 const NAN = (globalThis.NAN = { entries: {} })
 NAN.getWithMetadata = async (key) => NAN.entries[key]
-NAN.delete = (key) => (NAN.entries[key] = undefined)
+NAN.delete = (key) => delete NAN.entries[key]
 NAN.put = async (key, value, op) => (NAN.entries[key] = { ...op, value, key })
-NAN.list = async ({ prefix, limit = 1000 }) =>
-  Object.entries(NAN.entries)
-    .filter(([k]) => k.startsWith(prefix))
-    .slice(0, limit)
-    .map(([, v]) => v)
+NAN.list = async ({ prefix, limit = 1000, cursor = '' }) => {
+  let list = { keys: [], list_complete: false, cursor: '' }
+  const lastIndex = cursor
+    ? Object.entries(NAN.entries)
+        .filter(([k]) => k.startsWith(prefix))
+        .findIndex(([k]) => k === cursor)
+    : 0
+  const allData = Object.entries(NAN.entries).filter(([k]) =>
+    k.startsWith(prefix),
+  )
+  const sliceData = allData.slice(lastIndex, limit + lastIndex)
+  list.keys =
+    sliceData.length > 0 &&
+    sliceData.map(([k, v]) =>
+      v.metadata ? { name: k, metadata: v.metadata } : { name: k },
+    )
+  list.list_complete = allData.length > lastIndex + limit ? false : true
+  list.cursor = list.list_complete
+    ? null
+    : allData.find(([k], index) => index === limit)[0]
+  return allData.length > 0 ? list : null
+}
 
 export const requests = {}
 const getText = async (text) => {

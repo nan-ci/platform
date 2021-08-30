@@ -77,7 +77,7 @@ const App = () => {
       {/** professor routes */}
       <HomeProf path="/professor/dashboard" />
       <ModulesProf path="/professor/modules" />
-      <ModuleProf path="/professor/module-cours/:moduleName" />
+      <ModuleProf path="/professor/module-cours/:moduleId" />
       <QuizzesProf path="/professor/quizzes" />
       <StudentsProf path="/professor/students" />
       <ProfileProf path="/professor/profile" />

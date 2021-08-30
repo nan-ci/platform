@@ -88,7 +88,7 @@ export const Modal = ({
 
   const onSubmit = (datas) => {
     !data
-      ? setData({ id: datasLength + 1, ...datas }, 'add')
+      ? setData({ ...datas }, 'add')
       : setData({ ...data, ...datas }, 'update')
     document.querySelector('.prof-modal').style.transform = 'scale(0)'
     setTimeout(() => close(), 200)
@@ -101,7 +101,7 @@ export const Modal = ({
         width:
           infoType === 'quizzes'
             ? data
-              ? '200px'
+              ? '900px'
               : '900px'
             : infoType === 'courses'
             ? '800px'

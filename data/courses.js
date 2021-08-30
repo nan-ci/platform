@@ -173,9 +173,9 @@ export const courses = [
           },
         },
         beginDate:
-          'Fri Jul 09 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Mon Aug 30 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Fri Aug 27 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Sep 03 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '15:00',
         percentOfValidation: 60,
       },
@@ -196,9 +196,9 @@ export const courses = [
           },
         },
         beginDate:
-          'Sat Jul 10 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        endDate:
-          'Fri Aug 27 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        'Mon Aug 30 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+      endDate:
+        'Fri Sep 03 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
         duration: '25:00',
         percentOfValidation: 60,
       },
@@ -210,9 +210,9 @@ export const courses = [
         name: 'Getting One',
         description: 'here you will do all this in one day',
         beginDate:
-          'Wed Aug 11 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Mon Aug 30 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
         endDate:
-          'Fri Aug 27 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+          'Fri Sep 03 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
       },
       {
         id: 2,
@@ -220,9 +220,9 @@ export const courses = [
         name: 'Getting Two',
         description: 'here you will do all this in one day',
         beginDate:
-          'Fri Aug 12 2021 12:00:00 GMT+0000 (heure moyenne de Greenwich)',
-        endDate:
-          'Fri Aug 27 2021 20:00:00 GMT+0000 (heure moyenne de Greenwich)',
+        'Mon Aug 30 2021 08:00:00 GMT+0000 (heure moyenne de Greenwich)',
+      endDate:
+        'Fri Sep 03 2021 18:00:00 GMT+0000 (heure moyenne de Greenwich)',
       },
     ],
   },

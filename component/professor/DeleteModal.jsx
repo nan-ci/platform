@@ -1,5 +1,6 @@
 import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
+import { API } from '../../lib/env.js'
 import { useEffect } from 'preact/hooks'
 css(`
    .prof-cours-deleteModal {
@@ -58,6 +59,7 @@ export const DeleteModal = ({
   message,
   type,
   close,
+  data,
   update,
 }) => {
   useEffect(() => {
@@ -67,24 +69,20 @@ export const DeleteModal = ({
     }
   }, [show])
 
-  const Delete = () => {
-    update((modles) => {
-      modles.splice(
-        modles.findIndex((m) => m.id === id),
+  const Delete = async () => {
+    const resp = await (
+      await fetch(`${API}/professor/${type}?key=${id}&del=true`)
+    ).json()
+    if (resp.message === 'ok') {
+      data.splice(
+        data.findIndex((d) => d.id === id),
         1,
       )
-      if (type === 'projects') {
-        const modules = JSON.parse(sessionStorage.getItem('modules'))
-        let index = modules.findIndex((m) => m.id === moduleId)
-        let indexp = modules[index].projects.findIndex((p) => p.id === id)
-        modules[index].projects.splice(indexp, 1)
-        sessionStorage.setItem('modules', JSON.stringify(modules))
-      } else sessionStorage.setItem(type, JSON.stringify(modles))
-      return { ...modles }
-    })
-    document.querySelector('.prof-cours-deleteModal').style.transform =
-      'scale(0)'
-    setTimeout(() => close(), 200)
+      update([...data])
+      document.querySelector('.prof-cours-deleteModal').style.transform =
+        'scale(0)'
+      setTimeout(() => close(), 200)
+    }
   }
 
   return (

@@ -1,7 +1,7 @@
 import { Div, P } from '../../component/elements'
 import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { CourseCard } from '../../component/professor/CourseCard.jsx'
 import { Modal } from '../../component/professor/modal.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
@@ -41,19 +41,9 @@ css(`
 
 `)
 
-export const ModuleCourses = ({ moduleName }) => {
-  const { id: moduleId } = JSON.parse(sessionStorage.getItem('modules')).find(
-    (m) => m.name === decodeURI(moduleName),
-  )
+export const ModuleCourses = ({ moduleId, courses, setCourses }) => {
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [courses, setCourses] = useState(
-    sessionStorage.getItem('courses')
-      ? JSON.parse(sessionStorage.getItem('courses')).filter(
-          (c) => c.idModule === moduleId,
-        )
-      : [],
-  )
   const [currentCourse, setCurrentCourse] = useState(null)
 
   const setCourseToUpdate = (course, state) => {
@@ -107,17 +97,25 @@ export const ModuleCourses = ({ moduleName }) => {
             setShowModal(false)
             setCurrentCourse(null)
           }}
-          setData={(data, type) => {
-            if (type === 'add') {
-              sessionStorage.setItem(
-                'courses',
-                JSON.stringify([...courses, data]),
+          setData={async (data, type) => {
+            const resp = await (
+              await fetch(
+                `${API}/professor/courses${
+                  type === 'add' ? '' : `?key=${data.id}`
+                }`,
+                {
+                  method: 'POST',
+                  headers: { 'content-type': 'application/json' },
+                  body: JSON.stringify(data),
+                },
               )
-              setCourses((val) => [...val, data])
-            } else {
-              courses[courses.findIndex((m) => m.id === data.id)] = data
-              sessionStorage.setItem('courses', JSON.stringify(courses))
-              setCourses([...courses])
+            ).json()
+            if (resp.message === 'ok') {
+              if (type === 'add') setCourses((val) => [...val, data])
+              else {
+                courses[courses.findIndex((m) => m.id === data.id)] = data
+                setCourses([...courses])
+              }
             }
           }}
         />
@@ -128,6 +126,7 @@ export const ModuleCourses = ({ moduleName }) => {
           show={showDeleteModal}
           message={`Do you want really delete  the course ${currentCourse.name} ??`}
           id={currentCourse.id}
+          data={courses}
           update={setCourses}
           close={() => {
             setShowDeleteModal(false)

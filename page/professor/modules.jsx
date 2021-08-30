@@ -2,7 +2,7 @@ import { Div, P } from '../../component/elements'
 import { Layout } from '../../component/layout.jsx'
 import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { ModuleCard } from '../../component/professor/ModuleCard.jsx'
 import { Modal } from '../../component/professor/modal.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
@@ -44,13 +44,25 @@ css(`
 export const Modules = () => {
   const [showModal, setShowModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [modules, setModules] = useState(
-    sessionStorage.getItem('modules')
-      ? JSON.parse(sessionStorage.getItem('modules'))
-      : [],
-  )
+  const [modules, setModules] = useState([])
+  const [courses, setCourses] = useState([])
+  const [projects, setProjects] = useState([])
   const [module, setModule] = useState(null)
 
+  useEffect(async () => {
+    const modules = await (await fetch(`${API}/professor/modules`)).json()
+    if (modules.data) {
+      setModules(modules.data)
+    }
+    const courses = await (await fetch(`${API}/professor/courses`)).json()
+    if (courses.data) {
+      setCourses(courses.data)
+    }
+    const projects = await (await fetch(`${API}/professor/projects`)).json()
+    if (projects.data) {
+      setProjects(projects.data)
+    }
+  }, [])
   const setModuleToUpdate = (module, state) => {
     setModule(module)
     state === 'update' ? setShowModal(true) : setShowDeleteModal(true)
@@ -77,6 +89,8 @@ export const Modules = () => {
             <ModuleCard
               key={module.name}
               data={module}
+              courses={courses.filter((p) => p.idModule === module.id).length}
+              projects={projects.filter((p) => p.idModule === module.id).length}
               setModuleToUpdate={(module, state = 'update') =>
                 setModuleToUpdate(module, state)
               }
@@ -105,17 +119,25 @@ export const Modules = () => {
             setShowModal(false)
             setModule(null)
           }}
-          setData={(data, type) => {
-            if (type === 'add') {
-              sessionStorage.setItem(
-                'modules',
-                JSON.stringify([...modules, data]),
+          setData={async (data, type) => {
+            const resp = await (
+              await fetch(
+                `${API}/professor/modules${
+                  type === 'add' ? '' : `?key=${data.id}`
+                }`,
+                {
+                  method: 'POST',
+                  headers: { 'content-type': 'application/json' },
+                  body: JSON.stringify({ ...data }),
+                },
               )
-              setModules((val) => [...val, data])
-            } else {
-              modules[modules.findIndex((m) => m.id === data.id)] = data
-              sessionStorage.setItem('modules', JSON.stringify(modules))
-              setModules([...modules])
+            ).json()
+            if (resp.message === 'ok') {
+              if (type === 'add') setModules((val) => [...val, data])
+              else {
+                modules[modules.findIndex((m) => m.id === data.id)] = data
+                setModules([...modules])
+              }
             }
           }}
         />
@@ -126,6 +148,7 @@ export const Modules = () => {
           show={showDeleteModal}
           message={`Do you want really delete  the module ${module.name} ??`}
           id={module.id}
+          data={modules}
           update={setModules}
           close={() => {
             setShowDeleteModal(false)

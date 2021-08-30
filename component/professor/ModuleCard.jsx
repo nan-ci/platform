@@ -70,20 +70,13 @@ css(`
 
 `)
 
-export const ModuleCard = ({ data, setModuleToUpdate }) => {
-  const courses = sessionStorage.getItem('courses')
-    ? JSON.parse(sessionStorage.getItem('courses'))
-    : []
-
-  const projects = sessionStorage.getItem('projects')
-    ? JSON.parse(sessionStorage.getItem('projects'))
-    : []
+export const ModuleCard = ({ data, courses, projects, setModuleToUpdate }) => {
   const { id, name, description, hours, codeColor } = data
   return (
     <Div
       class="prof-cours-moduleCard"
       style={{ background: codeColor }}
-      onClick={() => navigate('/professor/module-cours/' + name)}
+      onClick={() => navigate('/professor/module-cours/' + id)}
     >
       <Div class="container">
         <Module size={90} color="white" />
@@ -100,12 +93,10 @@ export const ModuleCard = ({ data, setModuleToUpdate }) => {
             {hours}
           </P>
           <P>
-            <span> courses : </span>{' '}
-            {courses.filter((c) => c.idModule === id).length}
+            <span> courses : </span> {courses}
           </P>
           <P>
-            <span> projects : </span>{' '}
-            {projects.filter((c) => c.idModule === id).length}
+            <span> projects : </span> {projects}
           </P>
         </Div>
       </Div>

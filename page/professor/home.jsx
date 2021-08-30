@@ -72,7 +72,7 @@ css(`
   ._card.two .flop{
     width:100%;
     height: 80%;
-    overflow:hidden;
+    overflow-y:scroll;
     padding-bottom: 1rem;
     background: black;
   }
@@ -124,12 +124,26 @@ export const Home = () => {
   let inter2 = null
   const [time, setTime] = useState(moment().format('llll'))
   const [eventIndex, setEventIindex] = useState(0)
+  const [modulesLength, setModuleLength] = useState(0)
+  const [projectsLength, setProjectsLength] = useState(0)
+  const [courseslength, setCoursesLength] = useState(0)
+  const [quizzesLength, setQuizzesLength] = useState(0)
   const eventsInfo = [
     'the quizz  javascript has beginning ',
     'the project juyfull is closed',
     '3 students are do the last project',
   ]
 
+  useEffect(async () => {
+    const p = await (await fetch(`${API}/professor/projects`)).json()
+    if (p.data) setProjectsLength(p.data.length)
+    const m = await (await fetch(`${API}/professor/modules`)).json()
+    if (m.data) setModuleLength(m.data.length)
+    const c = await (await fetch(`${API}/professor/courses`)).json()
+    if (c.data) setCoursesLength(c.data.length)
+    const q = await (await fetch(`${API}/professor/quizzes`)).json()
+    if (q.data) setQuizzesLength(q.data.length)
+  }, [])
   useEffect(() => {
     let count = 1
     inter = setInterval(() => {
@@ -169,19 +183,23 @@ export const Home = () => {
           <Div class="flop">
             <P>
               <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
-              <span>5 students</span>
+              <span> student(s)</span>
             </P>
             <P>
               <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
-              <span>3 modules </span>
+              <span> {modulesLength} module(s) </span>
             </P>
             <P>
               <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
-              <span>80 courses </span>
+              <span> {courseslength} course(s) </span>
             </P>
             <P>
               <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
-              <span>12 projects </span>
+              <span>{projectsLength} project(s) </span>
+            </P>
+            <P>
+              <CircelStep size={20} colors={['#84CAFF', '#00A6FF']} />
+              <span>{quizzesLength} quiz(zes) </span>
             </P>
           </Div>
         </Div>

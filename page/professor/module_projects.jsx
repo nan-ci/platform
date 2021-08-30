@@ -40,20 +40,10 @@ css(`
 
 `)
 
-export const ModuleProjects = ({ moduleName }) => {
-  const { id: moduleId } = JSON.parse(sessionStorage.getItem('modules')).find(
-    (m) => m.name === decodeURI(moduleName),
-  )
+export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
   const [showModal, setShowModal] = useState(false)
   const [showStudentModal, setShowStudentModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [projects, setProjects] = useState(
-    sessionStorage.getItem('projects')
-      ? JSON.parse(sessionStorage.getItem('projects')).filter(
-          (c) => c.idModule === moduleId,
-        )
-      : [],
-  )
   const [project, setProject] = useState(null)
 
   const [students, setStudents] = useState([])
@@ -121,17 +111,25 @@ export const ModuleProjects = ({ moduleName }) => {
             setShowModal(false)
             setProject(null)
           }}
-          setData={(data, type) => {
-            if (type === 'add') {
-              sessionStorage.setItem(
-                'projects',
-                JSON.stringify([...projects, data]),
+          setData={async (data, type) => {
+            const resp = await (
+              await fetch(
+                `${API}/professor/projects${
+                  type === 'add' ? '' : `?key=${data.id}`
+                }`,
+                {
+                  method: 'POST',
+                  headers: { 'content-type': 'application/json' },
+                  body: JSON.stringify(data),
+                },
               )
-              setProjects((val) => [...val, data])
-            } else {
-              projects[projects.findIndex((m) => m.id === data.id)] = data
-              sessionStorage.setItem('projects', JSON.stringify(projects))
-              setProjects([...projects])
+            ).json()
+            if (resp.message === 'ok') {
+              if (type === 'add') setProjects((val) => [...val, data])
+              else {
+                projects[projects.findIndex((m) => m.id === data.id)] = data
+                setProjects([...projects])
+              }
             }
           }}
         />
@@ -143,6 +141,7 @@ export const ModuleProjects = ({ moduleName }) => {
           message={`Do you want really delete  this project ${project.name} ??`}
           moduleId={moduleId}
           id={project.id}
+          data={projects}
           update={setProjects}
           close={() => {
             setShowDeleteModal(false)

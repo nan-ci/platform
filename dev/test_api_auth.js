@@ -247,39 +247,6 @@ o['GET /link/discord with a session generate a state'] = {
   },
 }
 
-// o['GET /auth/discord  student with a proper state and whithout  role '] = {
-//   it: async () => {
-//     // set state in KV
-//     const name = 'user:tester:knddr12r:test-exist'
-//     const metadata = { user, name }
-//     await NAN.put('discord:exists-state', '', { metadata })
-
-//     // init query
-//     const res = await GET('/auth/discord?code=already&state=exists-state')
-//     const { status, headers } = res.options
-//     console.log('res', res) /
-//       // // expect a redirect
-//       eq({ body: res.body, status }, { body: null, status: 301 })
-
-//     // location should include user own discordId
-//     const role = 'visitor'
-//     const discordId = '13381338'
-//     const discordUser = { ...user, discordId, email, avatar, role }
-//     eq(headers.location, `/learningchoice?${new URLSearchParams(discordUser)}`)
-
-//     // if user already exists in discord we expect to have
-//     // another PATCH request made to discord servers
-//     const expectedUrl = `https://discordapp.com/api/guilds/${GUILD}/members/13381338`
-//     const guildUpdate = requests.PATCH?.find(({ url }) =>
-//       url.endsWith(expectedUrl),
-//     )
-//     eq(guildUpdate?.url, expectedUrl, 'patch request missing')
-
-//     // the user session is set in the database
-//     eq(NAN.entries[name]?.metadata, discordUser)
-//   },
-// }
-
 o['GET /auth/discord  with a proper state '] = {
   it: async () => {
     // set state in KV

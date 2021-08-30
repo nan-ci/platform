@@ -2,7 +2,7 @@ import { Div, P } from '../../component/elements'
 import { Layout } from '../../component/layout.jsx'
 import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { QuizCard } from '../../component/professor/QuizCard.jsx'
 import { Modal } from '../../component/professor/modal.jsx'
 import { ModalQuizStudent } from '../../component/professor/ModalQuizStudent.jsx'
@@ -46,14 +46,14 @@ export const Quizzes = () => {
   const [showModal, setShowModal] = useState(false)
   const [showModalStudent, setShowModalStudent] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [quizzes, setQuizzes] = useState(
-    sessionStorage.getItem('quizzes')
-      ? JSON.parse(sessionStorage.getItem('quizzes'))
-      : [],
-  )
-
+  const [quizzes, setQuizzes] = useState([])
   const [quiz, setQuiz] = useState(null)
   const [students, setStudents] = useState([])
+
+  useEffect(async () => {
+    const resp = await (await fetch(`${API}/professor/quizzes`)).json()
+    if (resp.data) setQuizzes(resp.data)
+  }, [])
 
   const showStudentsResults = (students, quiz) => {
     setShowModalStudent(true)
@@ -119,17 +119,25 @@ export const Quizzes = () => {
             setShowModal(false)
             setQuiz(null)
           }}
-          setData={(data, type) => {
-            if (type === 'add') {
-              sessionStorage.setItem(
-                'quizzes',
-                JSON.stringify([...quizzes, data]),
+          setData={async (data, type) => {
+            const resp = await (
+              await fetch(
+                `${API}/professor/quizzes${
+                  type === 'add' ? '' : `?key=${data.id}`
+                }`,
+                {
+                  method: 'POST',
+                  headers: { 'content-type': 'application/json' },
+                  body: JSON.stringify(data),
+                },
               )
-              setQuizzes((val) => [...val, data])
-            } else {
-              quizzes[quizzes.findIndex((m) => m.id === data.id)] = data
-              sessionStorage.setItem('quizzes', JSON.stringify(quizzes))
-              setQuizzes([...quizzes])
+            ).json()
+            if (resp.message === 'ok') {
+              if (type === 'add') setQuizzes((val) => [...val, data])
+              else {
+                quizzes[quizzes.findIndex((m) => m.id === data.id)] = data
+                setQuizzes([...quizzes])
+              }
             }
           }}
         />
@@ -140,6 +148,7 @@ export const Quizzes = () => {
           show={showDeleteModal}
           message={`Do you want really delete  this quiz ${quiz.name} ??`}
           id={quiz.id}
+          value={quizzes}
           update={setQuizzes}
           close={() => {
             setShowDeleteModal(false)
