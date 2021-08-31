@@ -54,13 +54,11 @@ export const Module = ({ moduleId }) => {
   const [currentModule, setCurrentModule] = useState({})
 
   useEffect(async () => {
-    const courses = await (await fetch(`${API}/professor/courses`)).json()
+    const courses = await (await fetch(`${API}/courses`)).json()
     if (courses.data) setCourses(courses.data)
-    const projects = await (await fetch(`${API}/professor/projects`)).json()
+    const projects = await (await fetch(`${API}/projects`)).json()
     if (projects.data) setProjects(projects.data)
-    const module = await (
-      await fetch(`${API}/professor/modules?key=${moduleId}`)
-    ).json()
+    const module = await (await fetch(`${API}/modules?key=${moduleId}`)).json()
     if (module.data) setCurrentModule(module.data)
   }, [])
 

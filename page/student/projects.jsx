@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'preact/hooks'
 import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { Card } from '../../component/student/card.jsx'
-import { courses } from '../../data/courses.js'
-import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
 import { API } from '../../lib/env.js'
 import moment from 'moment'
@@ -81,9 +79,7 @@ export const Projects = () => {
   const [currentProject, setCurrentProject] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [myProjects, setMyProjects] = useState(null)
-  const [projects, setprojects] = useState(
-    courses.find((c) => c.name === user.speciality).projects,
-  )
+  const [projects, setProjects] = useState([])
   const input = useRef(null)
 
   const selectProject = (proj) => {
@@ -96,6 +92,8 @@ export const Projects = () => {
     if (resp.data) {
       setMyProjects(resp.data)
     }
+    const proj = await (await fetch(`${API}/projects`)).json()
+    if (proj.data) setProjects(proj.data)
   }, [])
 
   const submitproject = async () => {
@@ -103,8 +101,8 @@ export const Projects = () => {
       await fetch(
         `${API}/user/${
           myProjects &&
-          myProjects.find((p) => p.project_name === currentProject.name)
-            ? `projects?name=${currentProject.name}`
+          myProjects.find((p) => p.project_id === currentProject.id)
+            ? `projects?key=${currentProject.id}`
             : 'projects'
         }`,
         {
@@ -112,12 +110,12 @@ export const Projects = () => {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(
             myProjects &&
-              myProjects.find((p) => p.project_name === currentProject.name)
+              myProjects.find((p) => p.project_id === currentProject.id)
               ? {
                   project_link: input.current.value,
                 }
               : {
-                  project_name: currentProject.name,
+                  project_id: currentProject.id,
                   project_link: input.current.value,
                   submit: true,
                 },
@@ -125,8 +123,20 @@ export const Projects = () => {
         },
       )
     ).json()
-    setShowModal(false)
-    setCurrentProject(null)
+    if (resp.status) {
+      setShowModal(false)
+      setCurrentProject(null)
+      myProjects && myProjects.find((p) => p.project_id === currentProject.id)
+        ? (myProjects.find(
+            (p) => p.project_id === currentProject.id,
+          ).project_link = input.current.value)
+        : myProjects.push({
+            project_id: currentProject.id,
+            project_link: input.current.value,
+            submit: true,
+          })
+      setMyProjects([...myProjects])
+    }
   }
 
   return (
@@ -140,7 +150,7 @@ export const Projects = () => {
               selectData={(dat) => selectProject(dat)}
               ifDone={
                 myProjects &&
-                myProjects.find((p) => p.project_name === data.name)?.submit
+                myProjects.find((p) => p.project_id === data.id)?.submit
               }
               datas={myProjects}
             />
@@ -164,7 +174,7 @@ export const Projects = () => {
               placeholder="entrer the project link here"
               defaultValue={
                 myProjects &&
-                myProjects.find((p) => p.project_name === currentProject.name)
+                myProjects.find((p) => p.project_id === currentProject.id)
                   ?.project_link
               }
               ref={input}
@@ -172,7 +182,7 @@ export const Projects = () => {
             <Div class="button-group">
               <button class="go" onClick={() => submitproject()}>
                 {myProjects &&
-                myProjects.find((p) => p.project_name === currentProject.name)
+                myProjects.find((p) => p.project_id === currentProject.id)
                   ? 'update'
                   : 'submit'}{' '}
                 the project

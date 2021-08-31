@@ -352,30 +352,15 @@ export const InputExample = ({ type, checked }) => {
   )
 }
 
-export const Quiz = ({ params: { name, relecture } }) => {
-
-  const quiz = courses
-    .find((c) => c.name === getUser().speciality)
-    .quizzes.find((q) => q.name === decodeURI(name))
-
+export const Quiz = ({ params: { key, relecture } }) => {
   const QuiZ = getQuiz()
-
   const [chrono, setChrono] = useState(null)
   const [progressPercent, setProgressPercent] = useState(0)
+  const [quiz, setQuiz] = useState(null)
   const [currentIndex, setCurrentIndex] = useState(0)
-
-  const [currentQuestion, setCurrentQuestion] = useState(
-    Object.keys(quiz.questions)[currentIndex],
-  )
-
-  const [currentResponses, setCurrentResponses] = useState(
-    quiz.questions[currentQuestion],
-  )
-  
-  const [manyResponse, setManyResponse] = useState(
-    Object.values(currentResponses).filter((f) => f).length > 1,
-  )
-
+  const [currentQuestion, setCurrentQuestion] = useState(null)
+  const [currentResponses, setCurrentResponses] = useState(null)
+  const [manyResponse, setManyResponse] = useState(null)
   const [myResponses, setMyResponses] = useState({})
 
   const [showModal, setShowModal] = useState(false)
@@ -383,10 +368,23 @@ export const Quiz = ({ params: { name, relecture } }) => {
   let chronoInterval = null
   let progressInterval = null
 
+  useEffect(async () => {
+    const resp = await (await fetch(`${API}/quizzes?key=${key}`)).json()
+    if (resp.data) {
+      const question = Object.keys(resp.data.questions)[currentIndex]
+      const responses = resp.data.questions[question]
+      const manyResponse = Object.values(responses).filter((t) => t).length > 1
+      setQuiz(resp.data)
+      setCurrentQuestion(question)
+      setCurrentResponses(responses)
+      setManyResponse(manyResponse)
+    }
+  }, [])
+
   const submitQuiz = async () => {
     clearInterval(chronoInterval)
     clearInterval(progressInterval)
-    const fetching = await fetch(`${API}/user/quizzes?name=${name}`, {
+    const fetching = await fetch(`${API}/user/quizzes?key=${key}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ submit: true }),
@@ -425,7 +423,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
       return { ...r, ...myResponses }
     })
     await (
-      await fetch(`${API}/user/quizzes?name=${name}`, {
+      await fetch(`${API}/user/quizzes?key=${key}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ responses: { ...myResponses } }),
@@ -494,7 +492,7 @@ export const Quiz = ({ params: { name, relecture } }) => {
   }, [relecture])
 
   useEffect(() => {
-    if (!relecture) {
+    if (!relecture && quiz) {
       progressInterval = setInterval(() => {
         const seconds = time('asSeconds', QuiZ.end_date)
         if (seconds >= 0) {
@@ -510,14 +508,14 @@ export const Quiz = ({ params: { name, relecture } }) => {
     return () => {
       clearInterval(progressInterval)
     }
-  }, [relecture])
-  if (!QuiZ) return navigate('/quizzes')
+  }, [relecture, quiz])
+  if (!QuiZ) return navigate('/student/quizzes')
 
   return (
     <Layout>
       <h1 class="quiz-h1">
         <span>{!relecture ? 'Quiz' : 'Proofreading'} : </span>
-        <span>{quiz.name}</span>
+        <span>{quiz && quiz.name}</span>
       </h1>
       <Div class="quiz-container">
         {!relecture ? (
@@ -555,74 +553,80 @@ export const Quiz = ({ params: { name, relecture } }) => {
             </header>
 
             <Div class="responses">
-              {Object.keys(currentResponses).map((val, index) => {
-                return !relecture ? (
-                  <P key={val}>
-                    <input
-                      disabled={relecture}
-                      checked={
-                        myResponses[currentQuestion] &&
+              {currentResponses &&
+                Object.keys(currentResponses).map((val, index) => {
+                  return !relecture ? (
+                    <P key={val}>
+                      <input
+                        disabled={relecture}
+                        checked={
+                          myResponses[currentQuestion] &&
+                          (!manyResponse
+                            ? val === myResponses[currentQuestion]
+                            : myResponses[currentQuestion].includes(val))
+                        }
+                        type={manyResponse ? 'checkbox' : 'radio'}
+                        id={`check${index}`}
+                        name="resp"
+                        onChange={(e) => chooseResponse(e.target.value)}
+                        value={val}
+                      />
+                      <label for={`check${index}`}> {val}</label>
+                    </P>
+                  ) : (
+                    <P key={val}>
+                      <InputExample
+                        type={manyResponse ? 'checkbox' : 'radio'}
+                        checked={
+                          myResponses[currentQuestion] &&
+                          (!manyResponse
+                            ? val === myResponses[currentQuestion]
+                            : myResponses[currentQuestion].includes(val))
+                        }
+                      />
+                      <label> {val}</label> &nbsp;
+                      {myResponses[currentQuestion] &&
                         (!manyResponse
                           ? val === myResponses[currentQuestion]
-                          : myResponses[currentQuestion].includes(val))
-                      }
-                      type={manyResponse ? 'checkbox' : 'radio'}
-                      id={`check${index}`}
-                      name="resp"
-                      onChange={(e) => chooseResponse(e.target.value)}
-                      value={val}
-                    />
-                    <label for={`check${index}`}> {val}</label>
-                  </P>
-                ) : (
-                  <P key={val}>
-                    <InputExample
-                      type={manyResponse ? 'checkbox' : 'radio'}
-                      checked={
-                        myResponses[currentQuestion] &&
-                        (!manyResponse
-                          ? val === myResponses[currentQuestion]
-                          : myResponses[currentQuestion].includes(val))
-                      }
-                    />
-                    <label> {val}</label> &nbsp;
-                    {myResponses[currentQuestion] &&
-                      (!manyResponse
-                        ? val === myResponses[currentQuestion]
-                        : myResponses[currentQuestion].includes(val)) && (
-                        <>
-                          {checkIfFound(currentQuestion, val) ? (
-                            <Done size={10} color="lime" />
-                          ) : (
-                            <NotDone size={10} color="red" />
-                          )}
-                        </>
-                      )}
-                    {checkIfFound(currentQuestion, val) &&
-                      !(
-                        myResponses[currentQuestion] &&
-                        (!manyResponse
-                          ? val === myResponses[currentQuestion]
-                          : myResponses[currentQuestion].includes(val))
-                      ) && <Done size={10} color="lime" />}
-                  </P>
-                )
-              })}
+                          : myResponses[currentQuestion].includes(val)) && (
+                          <>
+                            {checkIfFound(currentQuestion, val) ? (
+                              <Done size={10} color="lime" />
+                            ) : (
+                              <NotDone size={10} color="red" />
+                            )}
+                          </>
+                        )}
+                      {checkIfFound(currentQuestion, val) &&
+                        !(
+                          myResponses[currentQuestion] &&
+                          (!manyResponse
+                            ? val === myResponses[currentQuestion]
+                            : myResponses[currentQuestion].includes(val))
+                        ) && <Done size={10} color="lime" />}
+                    </P>
+                  )
+                })}
             </Div>
 
             <Div class="next-prev">
               <button
                 onClick={() =>
                   currentIndex > 0 &&
-                  changeQuestion(Object.keys(quiz.questions)[currentIndex - 1])
+                  changeQuestion(
+                    Object.keys(quiz && quiz.questions)[currentIndex - 1],
+                  )
                 }
               >
                 <ArrowLeft size={15} color="white" />
               </button>
               <button
                 onClick={() =>
-                  currentIndex < Object.keys(quiz.questions).length - 1 &&
-                  changeQuestion(Object.keys(quiz.questions)[currentIndex + 1])
+                  currentIndex <
+                    Object.keys(quiz && quiz.questions).length - 1 &&
+                  changeQuestion(
+                    Object.keys(quiz && quiz.questions)[currentIndex + 1],
+                  )
                 }
               >
                 <ArrowRight size={15} color="white" />
@@ -632,38 +636,40 @@ export const Quiz = ({ params: { name, relecture } }) => {
 
           <section class="questionNumber">
             <Div class="content-card">
-              {Object.keys(quiz.questions).map((val, index) => {
-                return !relecture ? (
-                  <Div
-                    key={val}
-                    class={`${val === currentQuestion && 'active'} ${
-                      !relecture &&
-                      val !== currentQuestion &&
-                      Object.keys(myResponses).includes(val) &&
-                      'respond'
-                    }`}
-                    onClick={() => changeQuestion(val)}
-                  >
-                    {index + 1}
-                  </Div>
-                ) : (
-                  <Div
-                    key={val}
-                    class={`${val === currentQuestion && 'active'} ${
-                      val !== currentQuestion && checkIfFound(val)
-                        ? 'respond'
-                        : 'notfound'
-                    }`}
-                    onClick={() => changeQuestion(val)}
-                  >
-                    {index + 1}
-                  </Div>
-                )
-              })}
+              {quiz &&
+                Object.keys(quiz.questions).map((val, index) => {
+                  return !relecture ? (
+                    <Div
+                      key={val}
+                      class={`${val === currentQuestion && 'active'} ${
+                        !relecture &&
+                        val !== currentQuestion &&
+                        Object.keys(myResponses).includes(val) &&
+                        'respond'
+                      }`}
+                      onClick={() => changeQuestion(val)}
+                    >
+                      {index + 1}
+                    </Div>
+                  ) : (
+                    <Div
+                      key={val}
+                      class={`${val === currentQuestion && 'active'} ${
+                        val !== currentQuestion && checkIfFound(val)
+                          ? 'respond'
+                          : 'notfound'
+                      }`}
+                      onClick={() => changeQuestion(val)}
+                    >
+                      {index + 1}
+                    </Div>
+                  )
+                })}
             </Div>
             <button
+              style={{ marginTop: '30px' }}
               onClick={() =>
-                !relecture ? setShowModal(true) : navigate('/profile')
+                !relecture ? setShowModal(true) : navigate('/student/profile')
               }
             >
               {!relecture ? 'submit' : 'cancel'}{' '}

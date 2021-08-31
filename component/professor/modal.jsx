@@ -90,8 +90,6 @@ export const Modal = ({
     !data
       ? setData({ ...datas }, 'add')
       : setData({ ...data, ...datas }, 'update')
-    document.querySelector('.prof-modal').style.transform = 'scale(0)'
-    setTimeout(() => close(), 200)
   }
 
   return (

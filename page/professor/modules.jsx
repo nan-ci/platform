@@ -50,15 +50,15 @@ export const Modules = () => {
   const [module, setModule] = useState(null)
 
   useEffect(async () => {
-    const modules = await (await fetch(`${API}/professor/modules`)).json()
+    const modules = await (await fetch(`${API}/modules`)).json()
     if (modules.data) {
       setModules(modules.data)
     }
-    const courses = await (await fetch(`${API}/professor/courses`)).json()
+    const courses = await (await fetch(`${API}/courses`)).json()
     if (courses.data) {
       setCourses(courses.data)
     }
-    const projects = await (await fetch(`${API}/professor/projects`)).json()
+    const projects = await (await fetch(`${API}/projects`)).json()
     if (projects.data) {
       setProjects(projects.data)
     }
@@ -120,19 +120,20 @@ export const Modules = () => {
             setModule(null)
           }}
           setData={async (data, type) => {
-            const resp = await (
-              await fetch(
-                `${API}/professor/modules${
-                  type === 'add' ? '' : `?key=${data.id}`
-                }`,
-                {
-                  method: 'POST',
-                  headers: { 'content-type': 'application/json' },
-                  body: JSON.stringify({ ...data }),
-                },
-              )
-            ).json()
-            if (resp.message === 'ok') {
+            const resp = await fetch(
+              `${API}/modules${type === 'add' ? '' : `?key=${data.id}`}`,
+              {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ ...data }),
+              },
+            )
+            if (resp.statusText === 'OK') {
+              document.querySelector('.prof-modal').style.transform = 'scale(0)'
+              setTimeout(() => {
+                setShowModal(false)
+                setModule(null)
+              }, 200)
               if (type === 'add') setModules((val) => [...val, data])
               else {
                 modules[modules.findIndex((m) => m.id === data.id)] = data

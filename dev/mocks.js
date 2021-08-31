@@ -8,11 +8,12 @@ globalThis.addEventListener = () => {}
 await import('../api/server.js')
 import { rolesByKey, specialities } from '../data/discord.js'
 
-export const whoTest = 'professor'
+export const whoTest = 'student'
 export const avatar = ''
 export const login = 'tester'
-export const email = 'dev@nan.ci'
-export const name = 'Jean Patrick'
+export const email =
+  whoTest === 'student' ? 'yves@nan.ci' : 'kouakounoel@nan.ci'
+export const name = whoTest === 'student' ? 'Kouadio Yves' : 'Kouakou noel'
 export const user = { login, name }
 export const roles = [rolesByKey.professor.id, specialities['javascript'].id]
 export const quizzes = courses.find((c) => c.name === 'javascript').quizzes
@@ -122,7 +123,12 @@ const passToProvider = (url, request) => {
 
   // GITHUB user data
   if (url === 'https://api.github.com/graphql') {
-    const viewer = { id: 'MDQ6VXNlcjIzMTc0OA==', login, name }
+    const viewer = {
+      id:
+        whoTest === 'student' ? 'MDQ6VXNlcjIzMTc0OA==' : 'MDQ6VXNlcjQ3NDU2MjU0',
+      login,
+      name,
+    }
     return { body: { data: { viewer } } }
   }
 

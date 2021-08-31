@@ -70,10 +70,8 @@ export const DeleteModal = ({
   }, [show])
 
   const Delete = async () => {
-    const resp = await (
-      await fetch(`${API}/professor/${type}?key=${id}&del=true`)
-    ).json()
-    if (resp.message === 'ok') {
+    const resp = await fetch(`${API}/${type}?key=${id}&del=true`)
+    if (resp.statusText === 'OK') {
       data.splice(
         data.findIndex((d) => d.id === id),
         1,

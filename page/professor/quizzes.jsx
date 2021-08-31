@@ -51,7 +51,7 @@ export const Quizzes = () => {
   const [students, setStudents] = useState([])
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/professor/quizzes`)).json()
+    const resp = await (await fetch(`${API}/quizzes`)).json()
     if (resp.data) setQuizzes(resp.data)
   }, [])
 
@@ -120,19 +120,20 @@ export const Quizzes = () => {
             setQuiz(null)
           }}
           setData={async (data, type) => {
-            const resp = await (
-              await fetch(
-                `${API}/professor/quizzes${
-                  type === 'add' ? '' : `?key=${data.id}`
-                }`,
-                {
-                  method: 'POST',
-                  headers: { 'content-type': 'application/json' },
-                  body: JSON.stringify(data),
-                },
-              )
-            ).json()
-            if (resp.message === 'ok') {
+            const resp = await fetch(
+              `${API}/quizzes${type === 'add' ? '' : `?key=${data.id}`}`,
+              {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(data),
+              },
+            )
+            if (resp.statusText === 'OK') {
+              document.querySelector('.prof-modal').style.transform = 'scale(0)'
+              setTimeout(() => {
+                setShowModal(false)
+                setQuiz(null)
+              }, 200)
               if (type === 'add') setQuizzes((val) => [...val, data])
               else {
                 quizzes[quizzes.findIndex((m) => m.id === data.id)] = data

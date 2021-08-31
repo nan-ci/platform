@@ -38,9 +38,8 @@ css(`
 `)
 
 export const QuizCard = ({
-  name,
   responses,
-  quiz: { questions, percentOfValidation },
+  quiz: { id, name, questions, percentOfValidation },
 }) => {
   const [result, setResult] = useState({ percent: 0, foundQuestions: 0 })
 
@@ -77,7 +76,7 @@ export const QuizCard = ({
       }}
       onClick={() => {
         sessionStorage.setItem('quiz', JSON.stringify({ responses }))
-        navigate(`/student/quiz?name=${name}&relecture=true`)
+        navigate(`/student/quiz?key=${id}&relecture=true`)
       }}
     >
       <h1>

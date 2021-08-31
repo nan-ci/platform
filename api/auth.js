@@ -276,7 +276,7 @@ GET.link.github = async () => {
   return new Response(null, { headers: { location }, status: 301 })
 }
 
-GET.logout = async ({ session, url: { hostname } }) => {
+GET.logout = async ({ url: { hostname } }) => {
   // Clear Session
   // session && (await db.del(session))
 

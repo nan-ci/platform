@@ -98,19 +98,20 @@ export const ModuleCourses = ({ moduleId, courses, setCourses }) => {
             setCurrentCourse(null)
           }}
           setData={async (data, type) => {
-            const resp = await (
-              await fetch(
-                `${API}/professor/courses${
-                  type === 'add' ? '' : `?key=${data.id}`
-                }`,
-                {
-                  method: 'POST',
-                  headers: { 'content-type': 'application/json' },
-                  body: JSON.stringify(data),
-                },
-              )
-            ).json()
-            if (resp.message === 'ok') {
+            const resp = await fetch(
+              `${API}/courses${type === 'add' ? '' : `?key=${data.id}`}`,
+              {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(data),
+              },
+            )
+            if (resp.statusText === 'OK') {
+              document.querySelector('.prof-modal').style.transform = 'scale(0)'
+              setTimeout(() => {
+                setShowModal(false)
+                setCurrentCourse(null)
+              }, 200)
               if (type === 'add') setCourses((val) => [...val, data])
               else {
                 courses[courses.findIndex((m) => m.id === data.id)] = data

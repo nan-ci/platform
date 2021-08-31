@@ -118,11 +118,10 @@ export const Quizzes = () => {
   const [currentQuiz, setCurrentQuiz] = useState(null)
   const [showModal, setShowModal] = useState(false)
   const [myQuizzes, setMyQuizzes] = useState(null)
+  const [quizzes, setQuizzes] = useState([])
 
-  const [quizzes, setQuizzes] = useState(
-    courses.find((c) => c.name === user.speciality).quizzes,
-  )
-
+  // clear session
+  sessionStorage.removeItem('quiz')
   const selectQuiz = (quiz) => {
     setCurrentQuiz({ ...quiz })
     setShowModal(true)
@@ -133,14 +132,16 @@ export const Quizzes = () => {
     if (resp.data) {
       setMyQuizzes(resp.data)
     }
+    const quizzes = await (await fetch(`${API}/quizzes`)).json()
+    if (quizzes.data) setQuizzes(quizzes.data)
   }, [])
 
-  const initQuiz = async ({ name, duration }) => {
+  const initQuiz = async ({ id, duration }) => {
     const fetching = await fetch(`${API}/user/quizzes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name,
+        quizId: id,
         responses: {},
         percent: 0,
         end_date: EndDate(duration),
@@ -151,18 +152,8 @@ export const Quizzes = () => {
     const resp = await fetching.json()
     if (resp.status) {
       localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
-      navigate('/student/quiz?name=' + resp.data.name)
+      navigate('/student/quiz?key=' + resp.data.quizId)
     }
-    const datas = {
-      name,
-      responses: {},
-      percent: 0,
-      end_date: EndDate(duration),
-      submit: false,
-    }
-
-    sessionStorage.setItem('quiz', JSON.stringify({ ...datas }))
-    navigate('/student/quiz?name=' + name)
   }
 
   return (
@@ -174,7 +165,7 @@ export const Quizzes = () => {
               type="quizzes"
               {...quiz}
               selectData={(quiz) => selectQuiz(quiz)}
-              ifDone={myQuizzes && myQuizzes[quiz.name]}
+              ifDone={myQuizzes && myQuizzes[quiz.id]}
               datas={myQuizzes}
             />
           ))}
@@ -191,9 +182,9 @@ export const Quizzes = () => {
         <Div class="body">
           {currentQuiz &&
             user.quizzes &&
-            user.quizzes[currentQuiz.name] &&
-            (user.quizzes[currentQuiz.name].submit ||
-              moment().isAfter(user.quizzes[currentQuiz.name].end)) && (
+            user.quizzes[currentQuiz.id] &&
+            (user.quizzes[currentQuiz.id].submit ||
+              moment().isAfter(user.quizzes[currentQuiz.id].end)) && (
               <FinishedQuizInfos
                 name={currentQuiz.name}
                 questions={currentQuiz.questions}
@@ -202,14 +193,14 @@ export const Quizzes = () => {
 
           {currentQuiz &&
             (!user.quizzes ||
-              (user.quizzes && !user.quizzes[currentQuiz.name])) && (
+              (user.quizzes && !user.quizzes[currentQuiz.id])) && (
               <QuizInfos currentQuiz={currentQuiz} />
             )}
 
           <Div class="button-group">
             {currentQuiz &&
               (!user.quizzes ||
-                (user.quizzes && !user.quizzes[currentQuiz.name])) && (
+                (user.quizzes && !user.quizzes[currentQuiz.id])) && (
                 <button
                   class="go"
                   onClick={() => currentQuiz && initQuiz(currentQuiz)}

@@ -112,19 +112,20 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
             setProject(null)
           }}
           setData={async (data, type) => {
-            const resp = await (
-              await fetch(
-                `${API}/professor/projects${
-                  type === 'add' ? '' : `?key=${data.id}`
-                }`,
-                {
-                  method: 'POST',
-                  headers: { 'content-type': 'application/json' },
-                  body: JSON.stringify(data),
-                },
-              )
-            ).json()
-            if (resp.message === 'ok') {
+            const resp = await fetch(
+              `${API}/projects${type === 'add' ? '' : `?key=${data.id}`}`,
+              {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify(data),
+              },
+            )
+            if (resp.statusText === 'OK') {
+              document.querySelector('.prof-modal').style.transform = 'scale(0)'
+              setTimeout(() => {
+                setShowModal(false)
+                setProject(null)
+              }, 200)
               if (type === 'add') setProjects((val) => [...val, data])
               else {
                 projects[projects.findIndex((m) => m.id === data.id)] = data

@@ -118,7 +118,7 @@ export const Card = ({
   }, [datas])
 
   const findData = async () => {
-    const resp = await (await fetch(`${API}/user/${type}?name=${name}`)).json()
+    const resp = await (await fetch(`${API}/user/${type}?key=${id}`)).json()
     if (
       type === 'quizzes' &&
       resp.data &&
@@ -126,12 +126,12 @@ export const Card = ({
       moment().isBefore(resp.data.end_date)
     ) {
       sessionStorage.setItem('quiz', JSON.stringify(resp.data))
-      return navigate(`/student/quiz?name=` + name)
+      return navigate(`/student/quiz?key=` + id)
     } else {
       selectData(
         type === 'quizzes'
-          ? { name, duration, percentOfValidation, questions }
-          : { name, description },
+          ? { id, name, duration, percentOfValidation, questions }
+          : { id, name, description },
       )
     }
   }
@@ -142,9 +142,7 @@ export const Card = ({
     } else if (
       type === 'quizzes' &&
       (!ifDone ||
-        (ifDone &&
-          !datas[name].submit &&
-          moment().isBefore(datas[name].end_date)))
+        (ifDone && !datas[id].submit && moment().isBefore(datas[id].end_date)))
     ) {
       return true
     } else {
@@ -164,8 +162,8 @@ export const Card = ({
           ((type === 'quizzes' &&
             (!ifDone ||
               (ifDone &&
-                !datas[name].submit &&
-                moment().isBefore(datas[name].end_date)))) ||
+                !datas[id].submit &&
+                moment().isBefore(datas[id].end_date)))) ||
             type === 'projects') &&
           findData()
       }}
@@ -206,7 +204,7 @@ export const Card = ({
         {(type === 'projects' && ifDone) ||
         (type === 'quizzes' &&
           ifDone &&
-          (datas[name].submit || moment().isAfter(datas[name].end_date))) ? (
+          (datas[id].submit || moment().isAfter(datas[id].end_date))) ? (
           <Done size={10} color="green" />
         ) : close ? (
           <NotDone size={10} color={'red'} />
@@ -215,12 +213,12 @@ export const Card = ({
           {(type === 'projects' && ifDone) ||
           (type === 'quizzes' &&
             ifDone &&
-            (datas[name].submit || moment().isAfter(datas[name].end_date)))
+            (datas[id].submit || moment().isAfter(datas[id].end_date)))
             ? 'Done'
             : type === 'quizzes' &&
               ifDone &&
-              !datas[name].submit &&
-              moment().isBefore(datas[name].end_date)
+              !datas[id].submit &&
+              moment().isBefore(datas[id].end_date)
             ? 'in progress ...'
             : close
             ? 'Not Done'

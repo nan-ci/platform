@@ -79,18 +79,18 @@ css(`
 
 .cur-div-contain .lessons .cours  .title{
   font-size:1.3rem;
-  color:var(--background);
+  color: white;
   margin-left:7px;
   cursor:pointer;
 }
 .cur-div-contain .lessons .cours .time {
-  color:var(--background);
+  color:white;
 }
 `)
 
 export const CurriculumCard = ({
   id,
-  title,
+  name,
   description,
   codeColor,
   hours,
@@ -111,10 +111,10 @@ export const CurriculumCard = ({
           class={showCard && 'addpadding'}
         >
           <strong>
-            <span style={{ color: 'var(--white)' }}>Module {id}</span>
+            <span style={{ color: 'var(--white)' }}>Module : </span>
             {!showCard && (
               <>
-                &nbsp;<span>{title}</span>
+                &nbsp;<span>{name}</span>
               </>
             )}
           </strong>
@@ -124,18 +124,18 @@ export const CurriculumCard = ({
           </P>
         </header>
         <Div class={`cur-div-contain ${showCard && 'show'}`}>
-          <h1>{title}</h1>
+          <h1>{name}</h1>
           <p>{description}</p>
           <Div class="lessons">
-            {cours.map(({ id, title, videoLink, ressources, description }) => (
+            {cours.map(({ id, name, link, ressources, description }) => (
               <NavLink key={id} class="cours">
                 <Div
                   onClick={() =>
-                    userLevel && setCours(videoLink, ressources, description)
+                    userLevel && setCours(link, ressources, description)
                   }
                 >
-                  <VideoPlay size={40} color="var(--background)" />
-                  <span class="title"> {title} </span>
+                  <VideoPlay size={40} color="#fff" />
+                  <span class="title"> {name} </span>
                 </Div>
                 <span class="time">02:34</span>
               </NavLink>

@@ -135,13 +135,13 @@ export const Home = () => {
   ]
 
   useEffect(async () => {
-    const p = await (await fetch(`${API}/professor/projects`)).json()
+    const p = await (await fetch(`${API}/projects`)).json()
     if (p.data) setProjectsLength(p.data.length)
-    const m = await (await fetch(`${API}/professor/modules`)).json()
+    const m = await (await fetch(`${API}/modules`)).json()
     if (m.data) setModuleLength(m.data.length)
-    const c = await (await fetch(`${API}/professor/courses`)).json()
+    const c = await (await fetch(`${API}/courses`)).json()
     if (c.data) setCoursesLength(c.data.length)
-    const q = await (await fetch(`${API}/professor/quizzes`)).json()
+    const q = await (await fetch(`${API}/quizzes`)).json()
     if (q.data) setQuizzesLength(q.data.length)
   }, [])
   useEffect(() => {

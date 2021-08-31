@@ -3,12 +3,10 @@ import { Div, divider, P } from '../../component/elements.jsx'
 import { Img } from '../../component/image.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { API } from '../../lib/env.js'
-import { TimelineTable } from '../../component/timeline-table.jsx'
 import { timeline } from '../../data/timeline.js'
 import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
 import { Progress } from '../../component/icons.jsx'
-import { courses } from '../../data/courses.js'
 import { QuizCard } from '../../component/student/result-quiz-card.jsx'
 
 import moment from 'moment'
@@ -190,6 +188,7 @@ export const Profile = () => {
   const [userQuizzes, setUserQuizzes] = useState(null)
   const [userProjects, setUserProjects] = useState(null)
   const [quizzes, setQuizzes] = useState(null)
+  const [projects, setProjects] = useState(null)
 
   useEffect(() => setData(timeline), [])
 
@@ -216,7 +215,11 @@ export const Profile = () => {
 
   useEffect(async () => {
     if (!quizzes) {
-      setQuizzes(courses.find((c) => c.name === user.speciality).quizzes)
+      const r = await (await fetch(`${API}/quizzes`)).json()
+      if (r.data) setQuizzes(r.data)
+    } else if (!projects) {
+      const p = await (await fetch(`${API}/projects`)).json()
+      if (p.data) setProjects(p.data)
     } else if (!userQuizzes) {
       const resp = await (await fetch(`${API}/user/quizzes`)).json()
       if (resp.data) {
@@ -232,7 +235,7 @@ export const Profile = () => {
         setUserProjects(resp.data.filter((p) => p.submit))
       }
     }
-  }, [quizzes, userQuizzes, userProjects])
+  }, [projects, quizzes, userQuizzes, userProjects])
 
   return (
     <Layout>
@@ -348,12 +351,11 @@ export const Profile = () => {
                 {userQuizzes &&
                   Object.keys(userQuizzes).map((key) => {
                     return (
-                      quizzes.find((q) => q.name === key) && (
+                      quizzes.find((q) => q.id === key) && (
                         <QuizCard
                           key={key}
-                          name={key}
                           responses={userQuizzes[key].responses}
-                          quiz={quizzes.find((q) => q.name === key)}
+                          quiz={quizzes.find((q) => q.id === key)}
                         />
                       )
                     )
@@ -378,7 +380,13 @@ export const Profile = () => {
                         }`}
                         key={project.project_name}
                       >
-                        <h1> Project : {project.project_name}</h1>
+                        <h1>
+                          {' '}
+                          Project :{' '}
+                          {projects &&
+                            projects.find((p) => p.id === project.project_id)
+                              .name}
+                        </h1>
                         <P>
                           <strong> your link : </strong>
                           <span>{project.project_link}</span>
