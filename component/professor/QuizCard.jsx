@@ -78,7 +78,12 @@ css(`
 
 `)
 
-export const QuizCard = ({ data, setQuizToUpdate, showStudentsResults }) => {
+export const QuizCard = ({
+  data,
+  setQuizToUpdate,
+  showStudentsResults,
+  studentsLength,
+}) => {
   const {
     id,
     name,
@@ -176,10 +181,10 @@ export const QuizCard = ({ data, setQuizToUpdate, showStudentsResults }) => {
               : 'flex-end',
         }}
       >
-        {quizStart && !quizClose && (
-          <span onClick={() => studentsResults()}>
+        {quizStart && (
+          <span onClick={() => showStudentsResults(data)}>
             {' '}
-            2 students have finished
+            {studentsLength} students have finished
           </span>
         )}
         <Div>

@@ -2,6 +2,7 @@ import { css } from '../../lib/dom'
 import { Div, P } from '../elements'
 import { Star } from '../icons.jsx'
 import { Img } from '../image'
+import { equals } from '../../lib/quiz.js'
 
 css(`
     .prof-student-card {
@@ -91,20 +92,53 @@ css(`
 `)
 
 export const StudentCard = ({
-  name,
-  lastname,
-  speciality,
-  points,
-  avatar,
-  blocked,
+  student: {
+    name,
+    avatar,
+    points,
+    blocked,
+    speciality,
+    quizzes: SQuizzes,
+    projects: SProjects,
+  },
+
   showUserInfo,
+  quizzes,
+  projects,
 }) => {
-  const show = (type) => {
+  const show = (type, data) => {
     showUserInfo({
-      student: { name, lastname },
-      data: [],
+      name: name,
+      data: data,
       dataType: type,
     })
+  }
+
+  const IfPassQuiz = (
+    questions,
+    responses,
+    percentOfValidation,
+    type = 'validation',
+  ) => {
+    let foundQuestions = 0
+    for (let k in questions) {
+      if (Object.values(questions[k]).filter((t) => t).length > 1) {
+        const resps = Object.entries(questions[k])
+          .flatMap((val) => (val[1] ? val[0] : null))
+          .filter((f) => f)
+        if (equals(resps, responses[k])) foundQuestions += 1
+      } else if (questions[k][responses[k]]) {
+        foundQuestions += 1
+      }
+    }
+    const percent = (foundQuestions * 100) / Object.keys(questions).length
+    if (type === 'validation') return percent >= percentOfValidation
+    else
+      return {
+        questions_found: foundQuestions + '/' + Object.keys(questions).length,
+        percent: percent + '%',
+        status: percent >= percentOfValidation ? 'pass' : 'fail',
+      }
   }
 
   return (
@@ -112,9 +146,7 @@ export const StudentCard = ({
       <Div class="first_block">
         <Img uri={avatar} />
         <Div class="info_card">
-          <h2>
-            {name} {lastname}
-          </h2>
+          <h2>{name}</h2>
           <span>{speciality}</span>
           <Div class="stars_block">
             <Star fill color="yellow" size={20} />
@@ -128,17 +160,61 @@ export const StudentCard = ({
         </Div>
       </Div>
       <Div class="second_block">
-        <P onClick={() => show('quizzes')}>
+        <P
+          onClick={() =>
+            show(
+              'quizzes',
+              Object.keys(SQuizzes).map((q) => {
+                return {
+                  name: quizzes.find((qu) => qu.id === q).name,
+                  ...IfPassQuiz(
+                    quizzes.find((qu) => qu.id === q).questions,
+                    SQuizzes[q].responses,
+                    quizzes.find((qu) => qu.id === q).percentOfValidation,
+                    'data',
+                  ),
+                }
+              }),
+            )
+          }
+        >
           <strong>quizzes passed : </strong>
-          <span>4/8</span>
+          <span>
+            {
+              Object.keys(SQuizzes).filter((q) =>
+                IfPassQuiz(
+                  quizzes.find((qu) => qu.id === q).questions,
+                  SQuizzes[q].responses,
+                  quizzes.find((qu) => qu.id === q).percentOfValidation,
+                ),
+              ).length
+            }
+            /{quizzes.length}
+          </span>
         </P>
-        <P onClick={() => show('kata')}>
+        <P onClick={() => show('kata', [])}>
           <strong>kata passed : </strong>
           <span>4/8</span>
         </P>
-        <P onClick={() => show('projects')}>
+        <P
+          onClick={() =>
+            show(
+              'projects',
+              SProjects.map((p) => {
+                return {
+                  name: projects.find((r) => r.id === p.project_id).name,
+                  project_link: p.project_link,
+                  note: p.note ? p.note : 'en attente de notation',
+                }
+              }),
+            )
+          }
+        >
           <strong>projects passed : </strong>
-          <span>4/8</span>
+          <span>
+            {SProjects.filter((p) => p.note && p.note > 12).length}/
+            {projects.length}
+          </span>
         </P>
       </Div>
     </Div>

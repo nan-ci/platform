@@ -51,7 +51,7 @@ css(`
 
 
 `)
-export const ModalStudent = ({ show, close, student, data, dataType }) => {
+export const ModalStudent = ({ show, close, name, data, dataType }) => {
   useEffect(() => {
     if (show) {
       document.querySelector('.prof-student-modalStudent').style.transform =
@@ -85,9 +85,7 @@ export const ModalStudent = ({ show, close, student, data, dataType }) => {
         &times;
       </button>
       <Div class="body">
-        <h1>
-          {student.name} {student.lastname}
-        </h1>
+        <h1>{name}</h1>
         <h4>{dataType} results</h4>
         <table class="table-nan" style={{ width: '100%' }}>
           <tr>
@@ -130,33 +128,39 @@ export const ModalStudent = ({ show, close, student, data, dataType }) => {
                 ? 'percent'
                 : 'valid'}
             </th>
-            {dataType === 'quizzes' && <th style={{ width: '25%' }}>pass</th>}
+            {dataType === 'quizzes' && <th style={{ width: '25%' }}>status</th>}
           </tr>
-          {data.map((val, index) => {
-            if (index === 0) return <td>{val.name}</td>
-            if (index === 1)
-              return (
-                <td>
-                  {dataType === 'projects'
-                    ? val.project_link
-                    : dataType === 'quizzes'
-                    ? val.questions_found
-                    : val.description}
-                </td>
-              )
-            if (index === 2)
-              return (
-                <td>
-                  {dataType === 'projects'
-                    ? val.note
-                    : dataType === 'quizzes'
-                    ? val.percent + '%'
-                    : val.valid}
-                </td>
-              )
-            {
-              dataType === 'quizzes' && <td>{val.pass}</td>
-            }
+          {data.map((val) => {
+            return (
+              <tr>
+                <>
+                  {['a', 'b', 'c'].map((v, index) => {
+                    if (index === 0) return <td>{val.name}</td>
+                    if (index === 1)
+                      return (
+                        <td>
+                          {dataType === 'projects'
+                            ? val.project_link
+                            : dataType === 'quizzes'
+                            ? val.questions_found
+                            : val.description}
+                        </td>
+                      )
+                    if (index === 2)
+                      return (
+                        <td>
+                          {dataType === 'projects'
+                            ? val.note
+                            : dataType === 'quizzes'
+                            ? val.percent
+                            : val.valid}
+                        </td>
+                      )
+                  })}
+                  {dataType === 'quizzes' && <td>{val.status}</td>}
+                </>
+              </tr>
+            )
           })}
         </table>
       </Div>

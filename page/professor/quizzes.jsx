@@ -4,9 +4,11 @@ import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
 import { useState, useEffect } from 'preact/hooks'
 import { QuizCard } from '../../component/professor/QuizCard.jsx'
+import { equals } from '../../lib/quiz.js'
 import { Modal } from '../../component/professor/modal.jsx'
 import { ModalQuizStudent } from '../../component/professor/ModalQuizStudent.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
+import moment from 'moment'
 
 css(`
     .prof-quizzes-header{
@@ -53,11 +55,32 @@ export const Quizzes = () => {
   useEffect(async () => {
     const resp = await (await fetch(`${API}/quizzes`)).json()
     if (resp.data) setQuizzes(resp.data)
+    const st = await (await fetch(`${API}/students?filter=quizzes`)).json()
+    if (st.data) setStudents(st.data)
   }, [])
 
-  const showStudentsResults = (students, quiz) => {
+  const calculResult = (questions, responses, percentOfValidation) => {
+    let foundQuestions = 0
+    for (let k in questions) {
+      if (Object.values(questions[k]).filter((t) => t).length > 1) {
+        const resps = Object.entries(questions[k])
+          .flatMap((val) => (val[1] ? val[0] : null))
+          .filter((f) => f)
+        if (equals(resps, responses[k])) foundQuestions += 1
+      } else if (questions[k][responses[k]]) {
+        foundQuestions += 1
+      }
+    }
+    let percent = (foundQuestions * 100) / Object.keys(questions).length
+    return {
+      questions_found: foundQuestions + '/' + Object.keys(questions).length,
+      percent: percent + '%',
+      status: percent >= percentOfValidation ? 'pass' : 'fail',
+    }
+  }
+
+  const showStudentsResults = (quiz) => {
     setShowModalStudent(true)
-    setStudents(students)
     setQuiz(quiz)
   }
 
@@ -91,8 +114,16 @@ export const Quizzes = () => {
               key={quiz.name}
               data={quiz}
               setQuizToUpdate={(quiz, state) => setQuizToUpdate(quiz, state)}
-              showStudentsResults={(data, quiz) =>
-                showStudentsResults(data, quiz)
+              showStudentsResults={(quiz) => {
+                showStudentsResults(quiz)
+              }}
+              studentsLength={
+                students.filter(
+                  (s) =>
+                    s.quizzes[quiz.id] &&
+                    (s.quizzes[quiz.id].submit ||
+                      moment.isAfter(s.quizzes[quiz.id].end_date)),
+                ).length
               }
             />
           ))
@@ -161,10 +192,25 @@ export const Quizzes = () => {
         <ModalQuizStudent
           show={showModalStudent}
           quiz={quiz}
-          students={students}
+          students={students
+            .filter(
+              (s) =>
+                s.quizzes[quiz.id] &&
+                (s.quizzes[quiz.id].submit ||
+                  moment.isAfter(s.quizzes[quiz.id].end_date)),
+            )
+            .map((s) => {
+              return {
+                student: s.name,
+                ...calculResult(
+                  quiz.questions,
+                  s.quizzes[quiz.id].responses,
+                  quiz.percentOfValidation,
+                ),
+              }
+            })}
           close={() => {
             setShowModalStudent(false)
-            setStudents(null)
             setQuiz(null)
           }}
         />

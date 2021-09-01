@@ -8,7 +8,7 @@ globalThis.addEventListener = () => {}
 await import('../api/server.js')
 import { rolesByKey, specialities } from '../data/discord.js'
 
-export const whoTest = 'student'
+export const whoTest = 'professor'
 export const avatar = ''
 export const login = 'tester'
 export const email =

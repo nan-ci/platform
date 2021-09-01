@@ -51,27 +51,6 @@ css(`
 `)
 
 export const ModalQuizStudent = ({ show, close, quiz, students }) => {
-  const Students = [
-    {
-      student: 'koffi rameaux',
-      questions_found: 6 + '/20',
-      percent: 50 + '%',
-      status: 'fail',
-    },
-    {
-      student: 'kouamé anges',
-      questions_found: 15 + '/20',
-      percent: 70 + '%',
-      status: 'pass',
-    },
-    {
-      student: 'kouassi marc',
-      questions_found: 10 + '/20',
-      percent: 60 + '%',
-      status: 'pass',
-    },
-  ]
-
   const columns = Object.entries({
     student: {
       size: '40%',
@@ -118,7 +97,7 @@ export const ModalQuizStudent = ({ show, close, quiz, students }) => {
       <h1>Results quiz ({quiz.name})</h1>
       <span>percent of validation : {quiz.percentOfValidation} %</span>
       <br />
-      <Table data={Students} columns={columns} />
+      <Table data={students} columns={columns} />
     </Div>
   )
 }

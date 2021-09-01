@@ -81,6 +81,7 @@ export const ProjectCard = ({
   data,
   setProjectToUpdate,
   showStudentsResults,
+  studentsLength,
 }) => {
   const { id, name, description, beginDate, endDate } = data
   let [projectStart, setProjectStart] = useState(
@@ -124,7 +125,7 @@ export const ProjectCard = ({
   }, [id, endDate, beginDate])
 
   const showStudents = () => {
-    showStudentsResults({ name, description }, [])
+    showStudentsResults({ id, name, description })
   }
 
   return (
@@ -160,8 +161,11 @@ export const ProjectCard = ({
               : 'flex-end',
         }}
       >
-        {projectStart && !projectClose && (
-          <span onClick={() => showStudents()}> 2 students have finished</span>
+        {projectStart && (
+          <span onClick={() => showStudents()}>
+            {' '}
+            {studentsLength} students have finished
+          </span>
         )}
         <Div>
           <button

@@ -142,13 +142,14 @@ GET.auth.discord = async ({ url }) => {
   user.role =
     roles.find((r) => resp.data.roles.includes(r.id))?.key || 'visitor'
   user.speciality =
-    user.role !== 'visitor'
+    user.role === 'professor'
       ? Object.values(specialities)
           .find((r) => resp.data.roles.includes(r.id))
           .name.toLowerCase()
       : user.speciality
 
-  if (user?.role === 'visitor' && !speciality) delete user.speciality
+  if ((user?.role === 'visitor' || user?.role === 'admin') && !speciality)
+    delete user.speciality
 
   !speciality
     ? await db.set(session.name, user)

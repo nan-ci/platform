@@ -1,9 +1,11 @@
 import { css } from '../../lib/dom'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
+import { API } from '../../lib/env'
 import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { StudentCard } from '../../component/professor/StudentCard.jsx'
 import { ModalStudent } from '../../component/professor/ModalStudent.jsx'
+
 css(`
     .prof-students-container header {
         display:flex;
@@ -26,10 +28,23 @@ css(`
 
 export const students = () => {
   const [showModal, setShowModal] = useState(false)
+  const [students, setStudents] = useState(null)
+  const [quizzes, setQuizzes] = useState(null)
+  const [projects, setProjects] = useState(null)
+
+  useEffect(async () => {
+    const resp = await (await fetch(`${API}/students`)).json()
+    if (resp.data) setStudents(resp.data)
+    const quizzes = await (await fetch(`${API}/quizzes`)).json()
+    if (quizzes.data) setQuizzes(quizzes.data)
+    const projects = await (await fetch(`${API}/projects`)).json()
+    if (projects.data) setProjects(projects.data)
+  }, [])
+
   const [data, setData] = useState({
     dataType: null,
     data: null,
-    student: null,
+    name: null,
   })
 
   const showUserInfo = (data) => {
@@ -37,48 +52,27 @@ export const students = () => {
     setShowModal(true)
   }
 
-  const students = [
-    {
-      name: 'Walter',
-      lastname: 'Bishop',
-      points: 246,
-      avatar:
-        'https://cdn.pixabay.com/photo/2015/08/05/04/25/people-875617_1280.jpg',
-    },
-    {
-      name: 'Olivia',
-      lastname: 'Donham',
-      points: 246,
-      avatar:
-        'https://cdn.pixabay.com/photo/2015/08/05/04/25/people-875617_1280.jpg',
-    },
-    {
-      name: 'Jhon',
-      lastname: 'Scott',
-      points: 246,
-      avatar:
-        'https://cdn.pixabay.com/photo/2015/08/05/04/25/people-875617_1280.jpg',
-      blocked: true,
-    },
-  ]
-
   return (
     <Layout>
       <Div class="prof-students-container">
         <header>
           <h1>Students</h1>
-          <span>({students.length})</span>
+          <span>({students && students.length})</span>
         </header>
         <section class="prof-students-section">
-          {students.map((student) => {
-            return (
-              <StudentCard
-                {...student}
-                speciality="javascript"
-                showUserInfo={(data) => showUserInfo(data)}
-              />
-            )
-          })}
+          {students &&
+            quizzes &&
+            projects &&
+            students.map((student) => {
+              return (
+                <StudentCard
+                  student={student}
+                  quizzes={quizzes}
+                  projects={projects}
+                  showUserInfo={(data) => showUserInfo(data)}
+                />
+              )
+            })}
         </section>
       </Div>
       {showModal && (

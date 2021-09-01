@@ -1,7 +1,7 @@
 import { Div, P } from '../../component/elements'
 import { css } from '../../lib/dom'
 import { API } from '../../lib/env'
-import { useState } from 'preact/hooks'
+import { useState, useEffect } from 'preact/hooks'
 import { ProjectCard } from '../../component/professor/ProjectCard.jsx'
 import { Modal } from '../../component/professor/modal.jsx'
 import { ModalProjectStudent } from '../../component/professor/ModalProjectStudent.jsx'
@@ -45,8 +45,12 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
   const [showStudentModal, setShowStudentModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [project, setProject] = useState(null)
-
   const [students, setStudents] = useState([])
+
+  useEffect(async () => {
+    const resp = await (await fetch(`${API}/students?filter=projects`)).json()
+    if (resp.data) setStudents(resp.data)
+  }, [])
 
   const setProjectToUpdate = (project, state) => {
     setProject({
@@ -56,10 +60,9 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
     state === 'delete' ? setShowDeleteModal(true) : setShowModal(true)
   }
 
-  const showStudentsResults = (project, students) => {
+  const showStudentsResults = (project) => {
     setShowStudentModal(true)
     setProject(project)
-    setStudents(students)
   }
 
   return (
@@ -82,8 +85,14 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
               setProjectToUpdate={(data, state) =>
                 setProjectToUpdate(data, state)
               }
-              showStudentsResults={(proj, stud) =>
-                showStudentsResults(proj, stud)
+              showStudentsResults={(proj) => showStudentsResults(proj)}
+              studentsLength={
+                students &&
+                students.filter((s) =>
+                  s.projects.find(
+                    (p) => p.submit && p.project_id === project.id,
+                  ),
+                ).length
               }
             />
           ))
@@ -155,7 +164,21 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
         <ModalProjectStudent
           show={showStudentModal}
           project={project}
-          students={students}
+          students={
+            project &&
+            students
+              .filter((s) =>
+                s.projects.find((p) => p.project_id === project.id),
+              )
+              .map((s) => {
+                return {
+                  id: s.id,
+                  student: s.name,
+                  ...s.projects.find((p) => p.project_id === project.id),
+                  projects: s.projects,
+                }
+              })
+          }
           close={() => {
             setShowStudentModal(false)
             setProject(null)

@@ -87,26 +87,11 @@ input::-webkit-inner-spin-button {
 `)
 
 export const ModalProjectStudent = ({ show, close, project, students }) => {
-  const [data, setData] = useState([
-    {
-      student: 'koffi rameaux',
-      project_link: 'https://www.googlecom',
-      note: null,
-      canShowInput: false,
-    },
-    {
-      student: 'kouamé anges',
-      project_link: 'https://www.googlecom',
-      note: null,
-      canShowInput: false,
-    },
-    {
-      student: 'kouassi marc',
-      project_link: 'https://www.googlecom',
-      note: null,
-      canShowInput: false,
-    },
-  ])
+  const [data, setData] = useState(
+    students.map((s) => {
+      return { ...s, canShowInput: false }
+    }),
+  )
 
   const columns = Object.entries({
     student: {
@@ -139,12 +124,24 @@ export const ModalProjectStudent = ({ show, close, project, students }) => {
     setData([...data])
   }
 
-  const updateNote = (e, index) => {
+  const updateNote = async (e, index) => {
     e.preventDefault()
     if (parseInt(e.target.value) > 20) e.target.value = ''
     if (e.keyCode === 13) {
-      data[index].note = parseInt(e.target.value)
-      setData([...data])
+      data[index].projects.find(
+        (p) => p.project_id === data[index].project_id,
+      ).note = parseInt(e.target.value)
+
+      console.log('projects', data[index].projects)
+      const resp = await fetch(`${API}/students?key=${data[index].id}`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ projects: data[index].projects }),
+      })
+      if (resp.statusText === 'OK') {
+        data[index].note = parseInt(e.target.value)
+        setData([...data])
+      }
     }
   }
 
