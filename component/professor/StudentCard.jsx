@@ -164,31 +164,34 @@ export const StudentCard = ({
           onClick={() =>
             show(
               'quizzes',
-              Object.keys(SQuizzes).map((q) => {
-                return {
-                  name: quizzes.find((qu) => qu.id === q).name,
-                  ...IfPassQuiz(
-                    quizzes.find((qu) => qu.id === q).questions,
-                    SQuizzes[q].responses,
-                    quizzes.find((qu) => qu.id === q).percentOfValidation,
-                    'data',
-                  ),
-                }
-              }),
+              SQuizes
+                ? Object.keys(SQuizzes).map((q) => {
+                    return {
+                      name: quizzes.find((qu) => qu.id === q).name,
+                      ...IfPassQuiz(
+                        quizzes.find((qu) => qu.id === q).questions,
+                        SQuizzes[q].responses,
+                        quizzes.find((qu) => qu.id === q).percentOfValidation,
+                        'data',
+                      ),
+                    }
+                  })
+                : [],
             )
           }
         >
           <strong>quizzes passed : </strong>
           <span>
-            {
-              Object.keys(SQuizzes).filter((q) =>
-                IfPassQuiz(
-                  quizzes.find((qu) => qu.id === q).questions,
-                  SQuizzes[q].responses,
-                  quizzes.find((qu) => qu.id === q).percentOfValidation,
-                ),
-              ).length
-            }
+            {SQuizzes
+              ? SQuizzes &&
+                Object.keys(SQuizzes).filter((q) =>
+                  IfPassQuiz(
+                    quizzes.find((qu) => qu.id === q).questions,
+                    SQuizzes[q].responses,
+                    quizzes.find((qu) => qu.id === q).percentOfValidation,
+                  ),
+                ).length
+              : 0}
             /{quizzes.length}
           </span>
         </P>
@@ -200,20 +203,24 @@ export const StudentCard = ({
           onClick={() =>
             show(
               'projects',
-              SProjects.map((p) => {
-                return {
-                  name: projects.find((r) => r.id === p.project_id).name,
-                  project_link: p.project_link,
-                  note: p.note ? p.note : 'en attente de notation',
-                }
-              }),
+              Sprojects
+                ? SProjects.map((p) => {
+                    return {
+                      name: projects.find((r) => r.id === p.project_id).name,
+                      project_link: p.project_link,
+                      note: p.note ? p.note : 'en attente de notation',
+                    }
+                  })
+                : [],
             )
           }
         >
           <strong>projects passed : </strong>
           <span>
-            {SProjects.filter((p) => p.note && p.note > 12).length}/
-            {projects.length}
+            {SProjects
+              ? SProjects.filter((p) => p.note && p.note > 12).length
+              : 0}
+            /{projects.length}
           </span>
         </P>
       </Div>

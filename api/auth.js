@@ -162,7 +162,7 @@ GET.auth.discord = async ({ url }) => {
         : '/student/dashboard'
       : `/${user.role}/dashboard`
   }?${new URLSearchParams(user)}`
-  return new Response(null, { headers: { location }, status: 301 })
+  return new Response(null, { headers: { location }, status: 302 })
 }
 
 GET.auth.github = async ({ url: { searchParams, hostname } }) => {
@@ -232,7 +232,7 @@ GET.auth.github = async ({ url: { searchParams, hostname } }) => {
     : 'login'
 
   return new Response(null, {
-    status: 301,
+    status: 302,
     headers: {
       location: `/${redirectUrl}?${new URLSearchParams(user)}`,
       'set-cookie': [
@@ -280,11 +280,10 @@ GET.link.github = async () => {
 GET.logout = async ({ url: { hostname } }) => {
   // Clear Session
   // session && (await db.del(session))
-
   // Clear cookie
   const cookie = `nan-session=; path=/; domain=${hostname}; max-age=-1`
   return new Response(null, {
-    status: 301,
+    status: 302,
     headers: { location: '/login', 'set-cookie': cookie },
   })
 }

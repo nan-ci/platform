@@ -102,7 +102,7 @@ o['GET /auth/github with a proper state'] = {
     const { status, headers } = res.options
 
     // expect a redirection
-    eq({ body: res.body, status }, { body: null, status: 301 })
+    eq({ body: res.body, status }, { body: null, status: 302 })
     eq(headers.location, `/login?${new URLSearchParams(user)}`)
     const [session, ...parts] = headers['set-cookie'].split('; ')
     eq(session.startsWith('nan-session=user:tester:'), true)
@@ -261,7 +261,7 @@ o['GET /auth/discord  with a proper state '] = {
     const res = await GET('/auth/discord?code=already&state=exists-state')
     const { status, headers } = res.options
     // // expect a redirect
-    eq({ body: res.body, status }, { body: null, status: 301 })
+    eq({ body: res.body, status }, { body: null, status: 302 })
 
     // location should include user own discordId
     const role = 'visitor'
@@ -293,7 +293,7 @@ o['GET /auth/discord  with a proper state '] = {
 o['GET /logout'] = {
   it: () => GET('/logout'),
   is: new Response(null, {
-    status: 301,
+    status: 302,
     headers: {
       'set-cookie': `nan-session=; path=/; domain=${hostname}; max-age=-1`,
       location: '/login',
