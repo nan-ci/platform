@@ -217,15 +217,7 @@ export const sendResponse = ({ body, options, res, root, host }) => {
   res.statusCode = options.status
   const entries = Object.entries(options.headers || {})
   for (const [k, v] of entries) res.setHeader(k, v)
-  console.log(
-    'options',
-    options,
-    'testing',
-    options.status !== 301 &&
-      (!options.headers ||
-        (options.headers && !options.headers.location.includes('https://'))) &&
-      options.status !== 302,
-  )
+
   // Default case, just return the body
   if (options.status < 300 || options.status > 399) return res.end(body)
 
