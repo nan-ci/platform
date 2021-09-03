@@ -24,6 +24,8 @@ const logToFile = (hash, content) => writeFileSync(`/tmp/nan-${hash}.log`, conte
 
 const handleRequest = async (req, res, again) => {
   const hash = req.url.split('/', 2)[1]
+  const url = req.url.slice(41)
+  if (/^log(\?|\/)/.test(url)) return createReadStream(`/tmp/nan-${hash}.log`).pipe(res)
   const { method, headers } = req
   const version = headers.referer?.match(
     /https:\/\/([a-z0-9]{8})\.platform-nan-dev-8sl\.pages\.dev/,
@@ -38,7 +40,6 @@ const handleRequest = async (req, res, again) => {
     'origin, x-requested-with, content-type, accept',
   )
 
-  const url = req.url.slice(41)
   console.log(method, url, { version, hash })
   again || logToFile(hash, `\n[${method}] ${url}\n`)
   const checkout = spawnSync('git', ['checkout', hash])
@@ -54,7 +55,6 @@ const handleRequest = async (req, res, again) => {
 
   const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
   const params = JSON.stringify({ url, hash, method, headers })
-  if (/^log(\?|\/)/.test(url)) return createReadStream(`/tmp/nan-${hash}.log`).pipe(res)
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
   const stdout = read(page.stdout)
