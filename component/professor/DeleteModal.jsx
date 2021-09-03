@@ -1,6 +1,6 @@
 import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
-import { API } from '../../lib/env.js'
+import { GET } from '../../lib/api.js'
 import { useEffect } from 'preact/hooks'
 css(`
    .prof-cours-deleteModal {
@@ -70,8 +70,8 @@ export const DeleteModal = ({
   }, [show])
 
   const Delete = async () => {
-    const resp = await fetch(`${API}/${type}?key=${id}&del=true`)
-    if (resp.statusText === 'OK') {
+    const resp = await GET(`${type}?key=${id}&del=true`)
+    if (resp.success) {
       data.splice(
         data.findIndex((d) => d.id === id),
         1,

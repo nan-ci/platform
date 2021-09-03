@@ -55,7 +55,7 @@ POST.user.quizzes = withBody(async ({ url, session, body }) => {
   }
   await db.update(session, { quizzes })
   return new Response(
-    JSON.stringify({ message: 'ok all is set', data: body, status: true }),
+    JSON.stringify({ message: 'ok all is set', data: body, success: true }),
     SUCCESS,
   )
 })
@@ -72,7 +72,7 @@ POST.user.projects = withBody(async ({ url, session, body }) => {
   }
   await db.update(session, { projects })
   return new Response(
-    JSON.stringify({ message: 'ok all is set', data: body, status: true }),
+    JSON.stringify({ message: 'ok all is set', data: body, success: true }),
     SUCCESS,
   )
 })

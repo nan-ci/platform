@@ -2,11 +2,10 @@ import { useState, useEffect } from 'preact/hooks'
 import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { Card } from '../../component/student/card.jsx'
-import { courses } from '../../data/courses.js'
 import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
 import { navigate } from '../../lib/router.js'
-import { API } from '../../lib/env.js'
+import { GET, POST } from '../../lib/api.js'
 import { EndDate } from '../../lib/quiz.js'
 import moment from 'moment'
 
@@ -128,16 +127,16 @@ export const Quizzes = () => {
   }
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/user/quizzes`)).json()
+    const resp = await GET('user/quizzes')
     if (resp.data) {
       setMyQuizzes(resp.data)
     }
-    const quizzes = await (await fetch(`${API}/quizzes`)).json()
+    const quizzes = await GET('quizzes')
     if (quizzes.data) setQuizzes(quizzes.data)
   }, [])
 
   const initQuiz = async ({ id, duration }) => {
-    const fetching = await fetch(`${API}/user/quizzes`, {
+    const resp = await POST(`user/quizzes`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -148,10 +147,8 @@ export const Quizzes = () => {
         submit: false,
       }),
     })
-
-    const resp = await fetching.json()
-    if (resp.status) {
-      localStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
+    if (resp.success) {
+      sessionStorage.setItem('quiz', JSON.stringify({ ...resp.data }))
       navigate('/student/quiz?key=' + resp.data.quizId)
     }
   }

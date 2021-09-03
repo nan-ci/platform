@@ -21,7 +21,7 @@ const getFunc = (type) =>
       return new Response('you are not  authorized', UNAUTHORIZED)
     if (key && del) {
       await db.del(key)
-      return new Response(null, SUCCESS)
+      return new Response(JSON.stringify({ success: true }), SUCCESS)
     }
     const data = key
       ? await db.get(key)
@@ -46,7 +46,7 @@ const postFunc = (type) =>
     if (!speciality) return Response('missing speciality', UNAUTHORIZED)
     if (url.searchParams.get('key')) await db.update(key, body)
     else await db.set(key, { id: key, ...body })
-    return new Response(null, SUCCESS)
+    return new Response(JSON.stringify({ success: true }), SUCCESS)
   })
 
 // modules

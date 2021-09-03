@@ -3,9 +3,8 @@ import { Div, P } from '../elements.jsx'
 import { useState, useEffect, useRef } from 'preact/hooks'
 import moment from 'moment'
 import { navigate } from '../../lib/router.js'
-import { format, getQuiz } from '../../lib/quiz.js'
-import { courses } from '../../data/courses.js'
-import { API } from '../../lib/env.js'
+import { format } from '../../lib/quiz.js'
+import { GET } from '../../lib/api.js'
 import { Chrono, Quiz, Done, NotDone, Lock, Stack } from '../icons.jsx'
 
 css(`
@@ -118,7 +117,7 @@ export const Card = ({
   }, [datas])
 
   const findData = async () => {
-    const resp = await (await fetch(`${API}/user/${type}?key=${id}`)).json()
+    const resp = await GET(`user/${type}?key=${id}`)
     if (
       type === 'quizzes' &&
       resp.data &&
@@ -136,13 +135,19 @@ export const Card = ({
     }
   }
 
-  const checkCondition = () => {
-    if (type === 'projects') {
+  const checkCondition = (hover = null) => {
+    if (
+      type === 'projects' &&
+      (!hover || (hover && moment().isAfter(beginDate)))
+    ) {
       return true
     } else if (
       type === 'quizzes' &&
       (!ifDone ||
-        (ifDone && !datas[id].submit && moment().isBefore(datas[id].end_date)))
+        (ifDone &&
+          !datas[id].submit &&
+          moment().isBefore(datas[id].end_date))) &&
+      (!hover || (hover && moment().isAfter(beginDate)))
     ) {
       return true
     } else {
@@ -153,7 +158,9 @@ export const Card = ({
   return (
     <Div
       key={id}
-      class={`quizz-container ${!close && checkCondition() && 'canHover'}`}
+      class={`quizz-container ${
+        !close && checkCondition('hover') && 'canHover'
+      }`}
       style={{
         background: !close && checkCondition() ? '#788bb061' : '#4f4f4f',
       }}
@@ -165,6 +172,7 @@ export const Card = ({
                 !datas[id].submit &&
                 moment().isBefore(datas[id].end_date)))) ||
             type === 'projects') &&
+          moment().isAfter(beginDate) &&
           findData()
       }}
     >

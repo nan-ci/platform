@@ -2,9 +2,7 @@ import { useState, useEffect } from 'preact/hooks'
 import { Div, divider, P } from '../../component/elements.jsx'
 import { Img } from '../../component/image.jsx'
 import { Layout } from '../../component/layout.jsx'
-import { API } from '../../lib/env.js'
 import { user } from '../../lib/auth.js'
-import { css } from '../../lib/dom.js'
 
 export const Profile = () => {
   return (

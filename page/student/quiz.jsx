@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'preact/hooks'
-import { courses } from '../../data/courses.js'
 import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import {
@@ -7,7 +6,6 @@ import {
   progressColor,
   getQuiz,
   time,
-  getUser,
 } from '../../lib/quiz.js'
 import { css } from '../../lib/dom.js'
 import {
@@ -17,7 +15,7 @@ import {
   Done,
   NotDone,
 } from '../../component/icons.jsx'
-import { API } from '../../lib/env.js'
+import { GET, POST } from '../../lib/api.js'
 import { navigate } from '../../lib/router.js'
 import { equals } from '../../lib/quiz.js'
 
@@ -369,7 +367,7 @@ export const Quiz = ({ params: { key, relecture } }) => {
   let progressInterval = null
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/quizzes?key=${key}`)).json()
+    const resp = await GET(`quizzes?key=${key}`)
     if (resp.data) {
       const question = Object.keys(resp.data.questions)[currentIndex]
       const responses = resp.data.questions[question]
@@ -384,15 +382,14 @@ export const Quiz = ({ params: { key, relecture } }) => {
   const submitQuiz = async () => {
     clearInterval(chronoInterval)
     clearInterval(progressInterval)
-    const fetching = await fetch(`${API}/user/quizzes?key=${key}`, {
+    const resp = await POST(`user/quizzes?key=${key}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ submit: true }),
     })
-    const resp = await fetching.json()
-    if (resp.status) {
+    if (resp.success) {
       localStorage.removeItem('quiz')
-      navigate('/quizzes')
+      navigate('/student/quizzes')
     }
   }
 
@@ -422,13 +419,11 @@ export const Quiz = ({ params: { key, relecture } }) => {
     setMyResponses((r) => {
       return { ...r, ...myResponses }
     })
-    await (
-      await fetch(`${API}/user/quizzes?key=${key}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ responses: { ...myResponses } }),
-      })
-    ).json()
+    await POST(`user/quizzes?key=${key}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ responses: { ...myResponses } }),
+    })
     sessionStorage.setItem(
       'quiz',
       JSON.stringify({ ...getQuiz(), responses: { ...myResponses } }),
@@ -509,6 +504,7 @@ export const Quiz = ({ params: { key, relecture } }) => {
       clearInterval(progressInterval)
     }
   }, [relecture, quiz])
+
   if (!QuiZ) return navigate('/student/quizzes')
 
   return (

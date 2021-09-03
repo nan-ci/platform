@@ -1,12 +1,9 @@
 import { Div, P } from '../../component/elements.jsx'
-import { API } from '../../lib/env.js'
-import { navigate } from '../../lib/router.js'
 import { Layout } from '../../component/layout.jsx'
 import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
 import { courses } from '../../data/courses.js'
 import { Roadmap } from '../../component/student/roadmap/index.jsx'
-import { get } from '../../api/db.js'
 css(`
 .container {
   display:flex;

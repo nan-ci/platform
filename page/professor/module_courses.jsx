@@ -1,7 +1,7 @@
-import { Div, P } from '../../component/elements'
+import { Div, P } from '../../component/elements.jsx'
 import { css } from '../../lib/dom'
-import { API } from '../../lib/env'
-import { useState, useEffect } from 'preact/hooks'
+import { POST } from '../../lib/api.js'
+import { useState } from 'preact/hooks'
 import { CourseCard } from '../../component/professor/CourseCard.jsx'
 import { Modal } from '../../component/professor/modal.jsx'
 import { DeleteModal } from '../../component/professor/DeleteModal.jsx'
@@ -98,15 +98,15 @@ export const ModuleCourses = ({ moduleId, courses, setCourses }) => {
             setCurrentCourse(null)
           }}
           setData={async (data, type) => {
-            const resp = await fetch(
-              `${API}/courses${type === 'add' ? '' : `?key=${data.id}`}`,
+            const resp = await POST(
+              `courses${type === 'add' ? '' : `?key=${data.id}`}`,
               {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(data),
               },
             )
-            if (resp.statusText === 'OK') {
+            if (resp.success) {
               document.querySelector('.prof-modal').style.transform = 'scale(0)'
               setTimeout(() => {
                 setShowModal(false)

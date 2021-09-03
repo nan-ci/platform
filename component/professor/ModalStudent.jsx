@@ -1,6 +1,5 @@
 import { Div, P } from '../elements.jsx'
 import { useEffect } from 'preact/hooks'
-import { API } from '../../lib/env.js'
 import { css } from '../../lib/dom.js'
 
 css(`
@@ -58,19 +57,6 @@ export const ModalStudent = ({ show, close, name, data, dataType }) => {
         'scale(1)'
     }
   }, [show])
-
-  // useEffect(async () => {
-  //   let resp = null
-  //   if (dataType === 'quizzes') {
-  //     resp = await fetch(`${API}/professor/quizzes`)
-  //   } else if (dataType === 'kata') {
-  //     resp = await fetch(`${API}/professor/quizzes`)
-  //   } else {
-  //     resp = await fetch(`${API}/professor/projects`)
-  //   }
-  //   resp = await resp.json()
-  //   console.log('data', resp)
-  // }, [student.name, dataType])
 
   return (
     <Div class="prof-student-modalStudent">

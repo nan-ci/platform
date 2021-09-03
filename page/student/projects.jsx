@@ -3,7 +3,7 @@ import { Div, P } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { Card } from '../../component/student/card.jsx'
 import { css } from '../../lib/dom.js'
-import { API } from '../../lib/env.js'
+import { POST, GET } from '../../lib/api.js'
 import moment from 'moment'
 
 css(`
@@ -88,42 +88,39 @@ export const Projects = () => {
   }
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/user/projects`)).json()
+    const resp = await GET('user/projects')
     if (resp.data) {
       setMyProjects(resp.data)
     }
-    const proj = await (await fetch(`${API}/projects`)).json()
+    const proj = await GET('projects')
     if (proj.data) setProjects(proj.data)
   }, [])
 
   const submitproject = async () => {
-    const resp = await (
-      await fetch(
-        `${API}/user/${
+    const resp = await POST(
+      `user/${
+        myProjects && myProjects.find((p) => p.project_id === currentProject.id)
+          ? `projects?key=${currentProject.id}`
+          : 'projects'
+      }`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(
           myProjects &&
-          myProjects.find((p) => p.project_id === currentProject.id)
-            ? `projects?key=${currentProject.id}`
-            : 'projects'
-        }`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(
-            myProjects &&
-              myProjects.find((p) => p.project_id === currentProject.id)
-              ? {
-                  project_link: input.current.value,
-                }
-              : {
-                  project_id: currentProject.id,
-                  project_link: input.current.value,
-                  submit: true,
-                },
-          ),
-        },
-      )
-    ).json()
-    if (resp.status) {
+            myProjects.find((p) => p.project_id === currentProject.id)
+            ? {
+                project_link: input.current.value,
+              }
+            : {
+                project_id: currentProject.id,
+                project_link: input.current.value,
+                submit: true,
+              },
+        ),
+      },
+    )
+    if (resp.success) {
       setShowModal(false)
       setCurrentProject(null)
       myProjects && myProjects.find((p) => p.project_id === currentProject.id)

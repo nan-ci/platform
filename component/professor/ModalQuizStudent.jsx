@@ -1,6 +1,5 @@
-import { Div, P } from '../elements.jsx'
+import { Div } from '../elements.jsx'
 import { useEffect } from 'preact/hooks'
-import { API } from '../../lib/env.js'
 import { css } from '../../lib/dom.js'
 import { Table } from '../table.jsx'
 

@@ -1,7 +1,7 @@
 import { Div, P } from '../../component/elements'
 import { Layout } from '../../component/layout.jsx'
 import { css } from '../../lib/dom'
-import { API } from '../../lib/env'
+import { GET, POST } from '../../lib/api.js'
 import { useState, useEffect } from 'preact/hooks'
 import { ModuleCard } from '../../component/professor/ModuleCard.jsx'
 import { Modal } from '../../component/professor/modal.jsx'
@@ -50,15 +50,15 @@ export const Modules = () => {
   const [module, setModule] = useState(null)
 
   useEffect(async () => {
-    const modules = await (await fetch(`${API}/modules`)).json()
+    const modules = await GET('modules')
     if (modules.data) {
       setModules(modules.data)
     }
-    const courses = await (await fetch(`${API}/courses`)).json()
+    const courses = await GET('courses')
     if (courses.data) {
       setCourses(courses.data)
     }
-    const projects = await (await fetch(`${API}/projects`)).json()
+    const projects = await await GET('projects')
     if (projects.data) {
       setProjects(projects.data)
     }
@@ -120,15 +120,15 @@ export const Modules = () => {
             setModule(null)
           }}
           setData={async (data, type) => {
-            const resp = await fetch(
-              `${API}/modules${type === 'add' ? '' : `?key=${data.id}`}`,
+            const resp = await POST(
+              `modules${type === 'add' ? '' : `?key=${data.id}`}`,
               {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify({ ...data }),
               },
             )
-            if (resp.statusText === 'OK') {
+            if (resp.success) {
               document.querySelector('.prof-modal').style.transform = 'scale(0)'
               setTimeout(() => {
                 setShowModal(false)

@@ -1,12 +1,10 @@
 import { Div, P } from '../../component/elements'
 import { Layout } from '../../component/layout.jsx'
 import { useState, useEffect } from 'preact/hooks'
-import { logo } from '../../data/ascii'
-import { css } from '../../lib/dom'
-import { API } from '../../lib/env'
+import { css } from '../../lib/dom.js'
+import { GET } from '../../lib/api.js'
 import { ModuleCourses } from './module_courses.jsx'
 import { ModuleProjects } from './module_projects.jsx'
-import { user } from '../../lib/auth.js'
 
 css(`
 
@@ -54,11 +52,11 @@ export const Module = ({ moduleId }) => {
   const [currentModule, setCurrentModule] = useState({})
 
   useEffect(async () => {
-    const courses = await (await fetch(`${API}/courses`)).json()
+    const courses = await GET('courses')
     if (courses.data) setCourses(courses.data)
-    const projects = await (await fetch(`${API}/projects`)).json()
+    const projects = await GET('projects')
     if (projects.data) setProjects(projects.data)
-    const module = await (await fetch(`${API}/modules?key=${moduleId}`)).json()
+    const module = await GET(`modules?key=${moduleId}`)
     if (module.data) setCurrentModule(module.data)
   }, [])
 

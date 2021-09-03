@@ -2,7 +2,7 @@ import { useState, useEffect } from 'preact/hooks'
 import { Div, divider, P } from '../../component/elements.jsx'
 import { Img } from '../../component/image.jsx'
 import { Layout } from '../../component/layout.jsx'
-import { API } from '../../lib/env.js'
+import { GET } from '../../lib/api.js'
 import { timeline } from '../../data/timeline.js'
 import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
@@ -215,13 +215,13 @@ export const Profile = () => {
 
   useEffect(async () => {
     if (!quizzes) {
-      const r = await (await fetch(`${API}/quizzes`)).json()
+      const r = await GET('quizzes')
       if (r.data) setQuizzes(r.data)
     } else if (!projects) {
-      const p = await (await fetch(`${API}/projects`)).json()
+      const p = await GET('projects')
       if (p.data) setProjects(p.data)
     } else if (!userQuizzes) {
-      const resp = await (await fetch(`${API}/user/quizzes`)).json()
+      const resp = await GET('user/quizzes')
       if (resp.data) {
         for (let k in resp.data) {
           if (moment().isBefore(resp.data[k].end_date) && !resp.data[k].submit)
@@ -230,7 +230,7 @@ export const Profile = () => {
         setUserQuizzes(resp.data)
       }
     } else if (!userProjects) {
-      const resp = await (await fetch(`${API}/user/projects`)).json()
+      const resp = await GET('user/projects')
       if (resp.data) {
         setUserProjects(resp.data.filter((p) => p.submit))
       }

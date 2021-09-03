@@ -1,13 +1,11 @@
 import { Div, P } from '../../component/elements'
 import { Layout } from '../../component/layout.jsx'
-import { logo } from '../../data/ascii'
 import { css } from '../../lib/dom'
-import { API } from '../../lib/env'
+import { GET } from '../../lib/api'
 import { user } from '../../lib/auth.js'
-import { navigate } from '../../lib/router'
 import moment from 'moment'
 import 'moment/locale/fr'
-import { useEffect, useState, useRef } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { CircelStep } from '../../component/icons.jsx'
 
 css(`
@@ -135,15 +133,13 @@ export const Home = () => {
   ]
 
   useEffect(async () => {
-    const p = await (
-      await fetch(`${API}/projects`, { headers: { cookie: document.cookie } })
-    ).json()
+    const p = await GET('projects')
     if (p.data) setProjectsLength(p.data.length)
-    const m = await (await fetch(`${API}/modules`)).json()
+    const m = await GET('modules')
     if (m.data) setModuleLength(m.data.length)
-    const c = await (await fetch(`${API}/courses`)).json()
+    const c = await GET('courses')
     if (c.data) setCoursesLength(c.data.length)
-    const q = await (await fetch(`${API}/quizzes`)).json()
+    const q = await GET('quizzes')
     if (q.data) setQuizzesLength(q.data.length)
   }, [])
 

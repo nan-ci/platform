@@ -1,7 +1,7 @@
 import { Div, P } from '../../component/elements'
 import { Layout } from '../../component/layout.jsx'
-import { css } from '../../lib/dom'
-import { API } from '../../lib/env'
+import { css } from '../../lib/dom.js'
+import { GET, POST } from '../../lib/api.js'
 import { useState, useEffect } from 'preact/hooks'
 import { QuizCard } from '../../component/professor/QuizCard.jsx'
 import { equals } from '../../lib/quiz.js'
@@ -53,9 +53,9 @@ export const Quizzes = () => {
   const [students, setStudents] = useState([])
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/quizzes`)).json()
+    const resp = await GET('quizzes')
     if (resp.data) setQuizzes(resp.data)
-    const st = await (await fetch(`${API}/students?filter=quizzes`)).json()
+    const st = await GET('students?filter=quizzes')
     if (st.data) setStudents(st.data)
   }, [])
 
@@ -151,15 +151,15 @@ export const Quizzes = () => {
             setQuiz(null)
           }}
           setData={async (data, type) => {
-            const resp = await fetch(
-              `${API}/quizzes${type === 'add' ? '' : `?key=${data.id}`}`,
+            const resp = await POST(
+              `quizzes${type === 'add' ? '' : `?key=${data.id}`}`,
               {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(data),
               },
             )
-            if (resp.statusText === 'OK') {
+            if (resp.success) {
               document.querySelector('.prof-modal').style.transform = 'scale(0)'
               setTimeout(() => {
                 setShowModal(false)

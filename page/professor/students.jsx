@@ -1,7 +1,7 @@
 import { css } from '../../lib/dom'
 import { useState, useEffect } from 'preact/hooks'
-import { API } from '../../lib/env'
-import { Div, P } from '../../component/elements.jsx'
+import { GET } from '../../lib/api.js'
+import { Div } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
 import { StudentCard } from '../../component/professor/StudentCard.jsx'
 import { ModalStudent } from '../../component/professor/ModalStudent.jsx'
@@ -33,11 +33,11 @@ export const students = () => {
   const [projects, setProjects] = useState(null)
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/students`)).json()
+    const resp = await GET('students')
     if (resp.data) setStudents(resp.data)
-    const quizzes = await (await fetch(`${API}/quizzes`)).json()
+    const quizzes = await GET('quizzes')
     if (quizzes.data) setQuizzes(quizzes.data)
-    const projects = await (await fetch(`${API}/projects`)).json()
+    const projects = await GET('projects')
     if (projects.data) setProjects(projects.data)
   }, [])
 

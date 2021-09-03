@@ -1,6 +1,6 @@
-import { Div, P } from '../../component/elements'
-import { css } from '../../lib/dom'
-import { API } from '../../lib/env'
+import { Div, P } from '../../component/elements.jsx'
+import { css } from '../../lib/dom.js'
+import { POST, GET } from '../../lib/api.js'
 import { useState, useEffect } from 'preact/hooks'
 import { ProjectCard } from '../../component/professor/ProjectCard.jsx'
 import { Modal } from '../../component/professor/modal.jsx'
@@ -48,7 +48,7 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
   const [students, setStudents] = useState([])
 
   useEffect(async () => {
-    const resp = await (await fetch(`${API}/students?filter=projects`)).json()
+    const resp = await GET('students?filter=projects')
     if (resp.data) setStudents(resp.data)
   }, [])
 
@@ -89,7 +89,7 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
               studentsLength={
                 students &&
                 students.filter((s) =>
-                  s.projects.find(
+                  s?.projects?.find(
                     (p) => p.submit && p.project_id === project.id,
                   ),
                 ).length
@@ -121,15 +121,15 @@ export const ModuleProjects = ({ moduleId, projects, setProjects }) => {
             setProject(null)
           }}
           setData={async (data, type) => {
-            const resp = await fetch(
-              `${API}/projects${type === 'add' ? '' : `?key=${data.id}`}`,
+            const resp = await POST(
+              `projects${type === 'add' ? '' : `?key=${data.id}`}`,
               {
                 method: 'POST',
                 headers: { 'content-type': 'application/json' },
                 body: JSON.stringify(data),
               },
             )
-            if (resp.statusText === 'OK') {
+            if (resp.success) {
               document.querySelector('.prof-modal').style.transform = 'scale(0)'
               setTimeout(() => {
                 setShowModal(false)

@@ -1,8 +1,7 @@
 import { Div, P } from '../elements.jsx'
 import { useEffect, useState } from 'preact/hooks'
-import { API } from '../../lib/env.js'
+import { POST } from '../../lib/api.js'
 import { css } from '../../lib/dom.js'
-import { Table } from '../table.jsx'
 
 css(`
 .prof-projects-modalProjectStudent {
@@ -133,12 +132,12 @@ export const ModalProjectStudent = ({ show, close, project, students }) => {
       ).note = parseInt(e.target.value)
 
       console.log('projects', data[index].projects)
-      const resp = await fetch(`${API}/students?key=${data[index].id}`, {
+      const resp = await POST(`students?key=${data[index].id}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ projects: data[index].projects }),
       })
-      if (resp.statusText === 'OK') {
+      if (resp.success) {
         data[index].note = parseInt(e.target.value)
         setData([...data])
       }

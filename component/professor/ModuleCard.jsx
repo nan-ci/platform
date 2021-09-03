@@ -1,6 +1,6 @@
 import { Div, P } from '../elements.jsx'
 import { css } from '../../lib/dom.js'
-import { Module } from '../icons'
+import { Module } from '../icons.jsx'
 import { navigate } from '../../lib/router.js'
 
 css(`
