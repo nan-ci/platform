@@ -1,5 +1,5 @@
 import { createServer } from 'https'
-import { readFileSync } from 'fs'
+import { readFileSync, writeFileSync, createReadStream } from 'fs'
 import { spawn, spawnSync } from 'child_process'
 import { once } from 'events'
 
@@ -19,9 +19,13 @@ const read = async (stream) => {
   return chunks.join('')
 }
 
+const logToFile = (hash, content) => writeFileSync(`/tmp/nan-${hash}.log`, content, { flag: 'a' })
+  || content
+
 const handleRequest = async (req, res, again) => {
   const hash = req.url.split('/', 2)[1]
-  const version = req.headers.referer?.match(
+  const { method, headers } = req
+  const version = headers.referer?.match(
     /https:\/\/([a-z0-9]{8})\.platform-nan-dev-8sl\.pages\.dev/,
   )?.[1]
   if (!version || !hash || hash.length !== 40) {
@@ -35,8 +39,8 @@ const handleRequest = async (req, res, again) => {
   )
 
   const url = req.url.slice(41)
-  const { method, headers } = req
   console.log(method, url, { version, hash })
+  again || logToFile(hash, `\n[${method}] ${url}\n`)
   const checkout = spawnSync('git', ['checkout', hash])
   if (checkout.status) {
     if (again) {
@@ -50,20 +54,22 @@ const handleRequest = async (req, res, again) => {
 
   const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
   const params = JSON.stringify({ url, hash, method, headers })
+  if (/^log(\?|\/)/.test(url)) return createReadStream(`/tmp/nan-${hash}.log`).pipe(res)
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
   const stdout = read(page.stdout)
   const [code] = await once(page, 'close')
+  const logs = logToFile(hash, await stderr)
   if (code) {
     res.statusCode = 500
-    return res.end(await stderr)
+    return res.end(logs)
   }
 
   const root = `https://${headers.host}/${hash}/`
   const host = env.DOMAIN
-  const result = JSON.parse(await stdout)
+  const result = JSON.parse(logToFile(hash, await stdout))
   console.log('->', result)
-  console.error(await stderr)
+  console.error(logs)
   sendResponse({ ...result, res, root, host })
 }
 
