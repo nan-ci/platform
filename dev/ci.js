@@ -34,7 +34,8 @@ const handleRequest = async (req, res, again) => {
     res.statusCode = 403
     return res.end()
   }
-  res.setHeader('access-control-allow-origin', '*')
+  const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
+  res.setHeader('access-control-allow-origin', version ? env.DOMAIN :'*')
   res.setHeader(
     'access-control-allow-headers',
     'origin, x-requested-with, content-type, accept',
@@ -53,7 +54,6 @@ const handleRequest = async (req, res, again) => {
     return handleRequest(req, res, true)
   }
 
-  const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
   const params = JSON.stringify({ url, hash, method, headers })
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
