@@ -162,14 +162,16 @@ export const sendResponse = ({ body, options, res, root, host }) => {
   if (options.status < 300 || options.status > 399) return res.end(body)
 
   // Make cookies insecure for http support
+  let session = ''
   if (options.headers['set-cookie']) {
-    const cookie = options.headers['set-cookie'].split('; ', 3).join('; ')
-    res.setHeader('set-cookie', cookie)
+    const parts = options.headers['set-cookie'].split('; ', 3)
+    session = `&${parts[0]}`
+    res.setHeader('set-cookie', parts.join('; '))
   }
 
   // If it's a local redirection, we stop here
   if (options.headers.location[0] === '/') {
-    res.setHeader('location', `${host || ''}${options.headers.location}`)
+    res.setHeader('location', `${host || ''}${options.headers.location}${session}`)
     return res.end(body)
   }
 
