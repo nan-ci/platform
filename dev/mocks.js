@@ -159,7 +159,7 @@ export const sendResponse = ({ body, options, res, root, host }) => {
   for (const [k, v] of entries) res.setHeader(k, v)
 
   // Default case, just return the body
-  if (options.status !== 301) return res.end(body)
+  if (options.status < 300 || options.status > 399) return res.end(body)
 
   // Make cookies insecure for http support
   if (options.headers['set-cookie']) {
