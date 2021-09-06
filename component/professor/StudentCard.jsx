@@ -203,7 +203,7 @@ export const StudentCard = ({
           onClick={() =>
             show(
               'projects',
-              Sprojects
+              SProjects
                 ? SProjects.map((p) => {
                     return {
                       name: projects.find((r) => r.id === p.project_id).name,
