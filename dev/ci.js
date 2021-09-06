@@ -19,8 +19,8 @@ const read = async (stream) => {
   return chunks.join('')
 }
 
-const logToFile = (hash, content) => writeFileSync(`/tmp/nan-${hash}.log`, content, { flag: 'a' })
-  || content
+const logToFile = (hash, content) =>
+  writeFileSync(`/tmp/nan-${hash}.log`, content, { flag: 'a' }) || content
 
 const allowedHeaders = [
   'x-nan-cookie',
@@ -33,23 +33,30 @@ const allowedHeaders = [
 const handleRequest = async (req, res, again) => {
   const hash = req.url.split('/', 2)[1]
   const url = req.url.slice(41)
-  if (/^\/log(\?|\/)?/.test(url)) return createReadStream(`/tmp/nan-${hash}.log`).pipe(res)
+  if (/^\/log(\?|\/)?/.test(url)) {
+    return createReadStream(`/tmp/nan-${hash}.log`).pipe(res)
+  }
   const { method, headers } = req
   const version = headers.referer?.match(
     /https:\/\/([a-z0-9]{8})\.platform-nan-dev-8sl\.pages\.dev/,
   )?.[1]
-  if (!version || !hash || hash.length !== 40) {
-    res.statusCode = 403
-    return res.end()
-  }
   const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
   res.setHeader('access-control-allow-origin', version ? env.DOMAIN :'*')
   res.setHeader('access-control-allow-credentials', 'true')
   res.setHeader('access-control-allow-headers', allowedHeaders)
+  res.setHeader(
+    'access-control-allow-methods',
+    'POST, GET, OPTIONS, DELETE, PATCH, PUT',
+  )
 
-  if (method === 'options') {
-    res.setHeader('allow', 'HEAD,GET,PUT,POST,PATCH,DELETE,OPTIONS')
-    return res.end('OK')
+  if (method === 'OPTIONS') {
+    res.statusCode = 204
+    return res.end()
+  }
+
+  if (!version || !hash || hash.length !== 40) {
+    res.statusCode = 403
+    return res.end()
   }
 
   console.log(method, url, { version, hash, headers })
