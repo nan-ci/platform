@@ -47,6 +47,11 @@ const handleRequest = async (req, res, again) => {
   res.setHeader('access-control-allow-credentials', 'true')
   res.setHeader('access-control-allow-headers', allowedHeaders)
 
+  if (method === 'options') {
+    res.setHeader('allow', 'HEAD,GET,PUT,POST,PATCH,DELETE,OPTIONS')
+    return res.end('OK')
+  }
+
   console.log(method, url, { version, hash, headers })
   again || logToFile(hash, `\n[${method}] ${url}, ${JSON.stringify(headers)}\n`)
   const checkout = spawnSync('git', ['checkout', hash])
