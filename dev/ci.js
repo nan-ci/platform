@@ -36,6 +36,7 @@ const handleRequest = async (req, res, again) => {
   }
   const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
   res.setHeader('access-control-allow-origin', version ? env.DOMAIN :'*')
+  res.setHeader('access-control-allow-credentials', 'true')
   res.setHeader(
     'access-control-allow-headers',
     'origin, x-requested-with, content-type, accept',
