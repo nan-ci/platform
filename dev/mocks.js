@@ -181,7 +181,7 @@ export const sendResponse = ({ body, options, res, root, host }) => {
   const provider = redirect[location.hostname.replace('.', '_')]
   const state = location.searchParams.get('state')
   const path = `${root || '/'}api/auth/${provider}`
-  res.setHeader('location', `${path}?code=wesh&state=${state}`)
+  res.setHeader('location', `${path}?code=wesh&state=${state}${session}`)
   res.end(body)
 }
 
