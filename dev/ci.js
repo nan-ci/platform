@@ -22,6 +22,14 @@ const read = async (stream) => {
 const logToFile = (hash, content) => writeFileSync(`/tmp/nan-${hash}.log`, content, { flag: 'a' })
   || content
 
+const allowedHeaders = [
+  'x-nan-cookie',
+  'x-requested-with',
+  'content-type',
+  'origin',
+  'accept',
+].join(', ')
+
 const handleRequest = async (req, res, again) => {
   const hash = req.url.split('/', 2)[1]
   const url = req.url.slice(41)
@@ -37,13 +45,10 @@ const handleRequest = async (req, res, again) => {
   const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
   res.setHeader('access-control-allow-origin', version ? env.DOMAIN :'*')
   res.setHeader('access-control-allow-credentials', 'true')
-  res.setHeader(
-    'access-control-allow-headers',
-    'origin, x-requested-with, content-type, accept',
-  )
+  res.setHeader('access-control-allow-headers', allowedHeaders)
 
-  console.log(method, url, { version, hash })
-  again || logToFile(hash, `\n[${method}] ${url}\n`)
+  console.log(method, url, { version, hash, headers })
+  again || logToFile(hash, `\n[${method}] ${url}, ${JSON.stringify(headers)}\n`)
   const checkout = spawnSync('git', ['checkout', hash])
   if (checkout.status) {
     if (again) {
@@ -55,7 +60,12 @@ const handleRequest = async (req, res, again) => {
     return handleRequest(req, res, true)
   }
 
-  const params = JSON.stringify({ url, hash, method, headers })
+  const params = JSON.stringify({
+    url,
+    hash,
+    method,
+    headers: { ...headers, cookie: headers.cookie || headers['x-nan-cookie'] },
+  })
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
   const stdout = read(page.stdout)
