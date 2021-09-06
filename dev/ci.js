@@ -41,7 +41,7 @@ const handleRequest = async (req, res, again) => {
     /https:\/\/([a-z0-9]{8})\.platform-nan-dev-8sl\.pages\.dev/,
   )?.[1]
   const env = { DOMAIN: `https://${version}.platform-nan-dev-8sl.pages.dev` }
-  res.setHeader('access-control-allow-origin', version ? env.DOMAIN :'*')
+  res.setHeader('access-control-allow-origin', version ? env.DOMAIN : '*')
   res.setHeader('access-control-allow-credentials', 'true')
   res.setHeader('access-control-allow-headers', allowedHeaders)
   res.setHeader(
@@ -72,11 +72,17 @@ const handleRequest = async (req, res, again) => {
     return handleRequest(req, res, true)
   }
 
+  const session = headers['x-nan-cookie']
   const params = JSON.stringify({
     url,
     hash,
     method,
-    headers: { ...headers, cookie: headers.cookie || headers['x-nan-cookie'] },
+    headers: {
+      cookie:
+        session &&
+        `nan-session=${session}; max-age=31536000; path=/; domain=${version}.platform-nan-dev-8sl.pages.dev; httponly; samesite=strict; secure`,
+      ...headers,
+    },
   })
   const page = spawn('node', ['dev/request-runner.js', params], { env })
   const stderr = read(page.stderr)
