@@ -1,19 +1,13 @@
-import {
-  TYPE_JSON,
-  SUCCESS,
-  rand,
-  BAD_REQUEST,
-  UNAUTHORIZED,
-  NOT_FOUND,
-} from './defs.js'
+import { SUCCESS, rand, BAD_REQUEST, UNAUTHORIZED } from './defs.js'
 import { GET, POST, withBody, withUser } from './router.js'
 import * as db from './db.js'
-import { specialities } from '../data/discord.js'
 
 const getFunc = (type) =>
   withUser(async ({ session, url }) => {
-    let { speciality, role } = await db.get(session)
-    speciality = speciality || url.searchParams.get('speciality')
+    let {
+      speciality = url.searchParams.get('speciality'),
+      role,
+    } = await db.get(session)
     const key = url.searchParams.get('key')
     const del = url.searchParams.get('del')
     if (!speciality) return new Response('missing speciality', BAD_REQUEST)
@@ -36,17 +30,22 @@ const getFunc = (type) =>
 
 const postFunc = (type) =>
   withBody(async ({ url, session, body }) => {
-    let { speciality, role } = await db.get(session)
-    const key = !url.searchParams.get('key')
-      ? `${type}:${speciality}:${rand()}`
-      : url.searchParams.get('key')
-    speciality = speciality || url.searchParams('speciality')
-    if (role === 'student')
-      return Response('you are not authorized', UNAUTHORIZED)
+    const {
+      speciality = url.searchParams.get('speciality'),
+      role,
+    } = await db.get(session)
+
     if (!speciality) return Response('missing speciality', UNAUTHORIZED)
-    if (url.searchParams.get('key')) await db.update(key, body)
-    else await db.set(key, { id: key, ...body })
-    return new Response(JSON.stringify({ success: true }), SUCCESS)
+    if (role === 'student') {
+      return Response('you are not authorized', UNAUTHORIZED)
+    }
+
+    const key = url.searchParams.get('key') || `${type}:${speciality}:${rand()}`
+    await (url.searchParams.has('key')
+      ? db.update(key, body)
+      : db.set(key, { id: key, ...body }))
+
+    return new Response(JSON.stringify({ success: true, key }), SUCCESS)
   })
 
 // modules

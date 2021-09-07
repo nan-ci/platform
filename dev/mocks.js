@@ -231,7 +231,10 @@ export const sendResponse = ({ body, options, res, root, host }) => {
 
   // If it's a local redirection, we stop here
   if (options.headers.location[0] === '/') {
-    res.setHeader('location', `${host || ''}${options.headers.location}${session}`)
+    res.setHeader(
+      'location',
+      `${host || ''}${options.headers.location}${session}`,
+    )
     return res.end(body)
   }
 
