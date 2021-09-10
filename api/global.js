@@ -65,50 +65,48 @@ GET.quizzes = getFunc('quiz')
 POST.quizzes = postFunc('quiz')
 
 // student
+const unfilterableKeys = new Set(['id', 'name', 'login', 'username'])
+const validFilters = new Set(['projects', 'quizzes', 'challenges'])
 GET.students = withUser(async ({ session, url }) => {
-  let { role, speciality } = await db.get(session)
-  speciality = speciality ? speciality : url.searchParams.get('speciality')
-  const filters = ['projects', 'quizzes', 'challenges']
-  const filter = url.searchParams.get('filter')
+  const {
+    role,
+    speciality = url.searchParams.get('speciality'),
+  } = await db.get(session)
+
   if (role === 'student' || role === 'visitor')
     return new Response('you are not authorized', UNAUTHORIZED)
+
   if (role === 'admin' && !speciality)
-    return new Response('missing speciality', UNAUTHORIZED)
-  if (filter && !filters.includes(filter))
-    return new Response('please give a valid filter', UNAUTHORIZED)
+    return new Response('missing speciality', BAD_REQUEST)
+
+  const filter = url.searchParams.get('filter')
+  if (filter && !validFilters.has(filter))
+    return new Response('please give a valid filter', BAD_REQUEST)
 
   console.log('testing')
   const allUsers = await db.filter('user:')
 
-  let students =
-    allUsers &&
-    allUsers.map(
-      (u) =>
-        (u.metadata.role === 'student' || u.metadata.role === 'visitor') && {
-          id: u.name,
-          ...u.metadata,
-        },
+  let data = (allUsers || [])
+    .filter(
+      ({ metadata: { role } }) => role === 'student' || role === 'visitor',
     )
+    .map((u) => ({ id: u.name, ...u.metadata }))
 
-  students =
-    role === 'admin' && !speciality
-      ? students
-      : students.filter((s) => s.speciality === speciality)
-
-  if (filter) {
-    students.map((s) => {
-      for (let v in s) {
-        if (!['id', 'name', 'login', 'username'].includes(v) && v !== filter)
-          delete s[v]
-      }
-      return s
-    })
+  if (role !== 'admin' && speciality) {
+    data = data.filter((s) => s.speciality === speciality)
   }
 
-  return new Response(
-    JSON.stringify({ data: students ? students : [] }),
-    SUCCESS,
-  )
+  if (filter) {
+    data = data.map((s) =>
+      Object.fromEntries(
+        Object.entries(s).filter(
+          ([k, v]) => unfilterableKeys.has(k) || k !== filter,
+        ),
+      ),
+    )
+  }
+
+  return new Response(JSON.stringify({ data }), SUCCESS)
 })
 
 POST.students = withBody(async ({ session, url, body }) => {

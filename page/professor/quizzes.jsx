@@ -120,6 +120,7 @@ export const Quizzes = () => {
               studentsLength={
                 students.filter(
                   (s) =>
+                    s.quizzes &&
                     s.quizzes[quiz.id] &&
                     (s.quizzes[quiz.id].submit ||
                       moment.isAfter(s.quizzes[quiz.id].end_date)),

@@ -1,0 +1,111 @@
+{
+  "main": {
+    "id": "f3d4586dc4580bd6",
+    "type": "split",
+    "children": [
+      {
+        "id": "d6a97157e2ec51d6",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "cours.md",
+            "mode": "source"
+          }
+        }
+      },
+      {
+        "id": "bc494206186b1f58",
+        "type": "leaf",
+        "state": {
+          "type": "markdown",
+          "state": {
+            "file": "quiz.md",
+            "mode": "preview"
+          }
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "8ae5ce991b592fe2",
+    "type": "split",
+    "children": [
+      {
+        "id": "e302f72ed288b2f8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7e6f7be5d9acb89d",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "f5821e0c6cd72af0",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "fa41b6494111856a",
+    "type": "split",
+    "children": [
+      {
+        "id": "a13a69a89935b102",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3e3665b90998c236",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "quiz.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "bc494206186b1f58",
+  "lastOpenFiles": [
+    "quiz.md",
+    "project.md",
+    "module.md",
+    "cours.md",
+    "challenge.md",
+    "subjectifs_informations.md",
+    "Sans titre.md",
+    "got to module.md"
+  ]
+}

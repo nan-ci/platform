@@ -53,6 +53,7 @@ const config = {
 }
 
 const serve = () => esbuild.serve({ servedir }, config)
+
 const generate = async (file = 'index') => {
   const content = await readdir(templateDir)
   const entries = await Promise.all(content.map(parse).map(readEntry))
