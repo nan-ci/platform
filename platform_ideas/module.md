@@ -21,10 +21,10 @@ Le dossier inclura un fichier ``metadata.json`` qui sera un peu comme le ``confi
 - ### configuration du metadata.json
 	```json
 		{
-			language:"javascript",
-			cours:["01_cours.md", "02_cours.md", "03_cours.md"],
-			projects:["01_project.md","03_project.md"],
-			challenges:["challenge1","challenge2","challenge3"],
-			quizzes:["01_quiz.json","02_quiz.json","03_quiz.json"]
+			"language""javascript",
+			"cours":["01_cours.md", "02_cours.md", "03_cours.md"],
+			"projects":["01_project.md","03_project.md"],
+			"challenge"s:["challenge1","challenge2","challenge3"],
+			"quizzes":["01_quiz.json","02_quiz.json","03_quiz.json"]
 		}
 	```
