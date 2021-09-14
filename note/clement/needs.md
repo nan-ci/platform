@@ -9,7 +9,7 @@ In this document I will talk about the needs we try to answer with the platform
 ### Playfulness
 
 The school must be a place the student want's to be, learning should be fun and looked forward to, not dreaded.
-Lecture and subjects should be relatable and fun, diverse enough so anyone can find it's cup of tea.
+Lecture and subjects should be relatable and fun, diverse enough so anyone can find it's cup of tea. 
 
 
 ### Social
