@@ -110,7 +110,7 @@ const connect = failCount => {
     setTimeout(connect, nextTryIn, failCount + 1)
   }
   // reset fail count once ready
-  discord.once.READY.then(() => failCount = 0)
+  discord.once.READY().then(() => failCount = 0)
   const heartbeat = () => {
     console.log('heartbeat')
     heartbeatAc = setTimeout(() => {
