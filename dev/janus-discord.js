@@ -117,14 +117,20 @@ const connect = failCount => {
       console.log('the client was ZOMBIFED')
       console.log('TODO: try too reconnect+resume!')
       ws.close()
-      setTimeout(connect,
+      reconnect()
     }, 1000)
     ws.send(JSON.stringify({ op: 1, d: s }))
   }
 
   ws.addEventListener('close', (event) => {
-    console.log(event)
-    connect()
+    console.log('close socket', JSON.stringify({
+      timeStamp: event.timeStamp,
+      type: event.type,
+      wasClean: event.wasClean,
+      code: event.code,
+      reason: event.reason,
+    }))
+    reconnect()
   })
 
   ws.addEventListener('message', (event) => {
