@@ -1,74 +1,5 @@
-const ws = new WebSocket(`wss://gateway.discord.gg/?v=8&encoding=json`)
-
 const ONCE = {}
 const ON = {}
-let s = null
-let intents = 0
-let heartbeatAc
-const heartbeat = () => {
-  console.log('heartbeat')
-  heartbeatAc = setTimeout(() => {
-    console.log('the client was ZOMBIFED')
-    console.log('TODO: try too reconnect+resume!')
-    Deno.exit(1)
-  }, 1000)
-  ws.send(JSON.stringify({ op: 1, d: s }))
-}
-
-ws.addEventListener('close', (event) => {
-  console.log(event)
-  Deno.exit(1)
-})
-
-ws.addEventListener('message', (event) => {
-  const { t, s, op, d } = JSON.parse(event.data)
-  switch (op) {
-    case 0: // DISPATCH
-      const on = ON[t]
-      const once = ONCE[t]
-      if (!on) return
-      for (const fn of on) fn(d)
-      for (const fn of once) fn(d)
-      once.clear()
-      return
-    case 1: // HEARTBEAT
-      return heartbeat()
-    case 2: // IDENTIFY
-      return console.log('IDENTIFY', d)
-    case 3: // STATUSUPDATE
-      return console.log('STATUSUPDATE', d)
-    case 4: // VOICESTATEUPDATE
-      return console.log('VOICESTATEUPDATE', d)
-    case 6: // RESUME
-      return console.log('RESUME', d)
-    case 7: // RECONNECT
-      return console.log('RECONNECT', d)
-    case 8: // REQUESTGUILDMEMBERS
-      return console.log('REQUESTGUILDMEMBERS', d)
-    case 9: {
-      // INVALIDSESSION
-      console.log('Invalid Session, verify your token')
-      Deno.exit(1)
-    }
-    case 10: // HELLO
-      ws.send(
-        JSON.stringify({
-          op: 2, // IDENTIFY
-          d: {
-            token: Deno.env.get('BOT_TOKEN'),
-            intents,
-            properties: { $os: 'linux', $browser: 'janus', $device: 'janus' },
-          },
-        }),
-      )
-      setInterval(heartbeat, d.heartbeat_interval)
-      return
-    case 11: // HEARTBEATAC
-      return clearTimeout(heartbeatAc)
-    default:
-      console.log(`OP_${op}`, d)
-  }
-})
 
 const eventTypes = {
   GUILDS: [
@@ -162,3 +93,90 @@ Object.values(eventTypes).forEach((types, index) => {
 })
 
 registerEvent('READY')
+
+const log = (type, d) => console.log(type, d ? JSON.stringify(d) : null)
+const connect = failCount => {
+  console.log('connecting to gateway...')
+  const start = Date.now()
+  const ws = new WebSocket(`wss://gateway.discord.gg/?v=8&encoding=json`)
+  let s = null
+  let intents = 0
+  let heartbeatAc
+  let reconnecting
+  const reconnect = () => {
+    if (reconnecting) return
+    // limit reconnection attemps rate exponentially
+    const nextTryIn = Math.max(0, (start + 1000*(2**failCount - 1) - Date.now()))
+    setTimeout(connect, nextTryIn, failCount + 1)
+  }
+  // reset fail count once ready
+  discord.once.READY.then(() => failCount = 0)
+  const heartbeat = () => {
+    console.log('heartbeat')
+    heartbeatAc = setTimeout(() => {
+      console.log('the client was ZOMBIFED')
+      console.log('TODO: try too reconnect+resume!')
+      ws.close()
+      setTimeout(connect,
+    }, 1000)
+    ws.send(JSON.stringify({ op: 1, d: s }))
+  }
+
+  ws.addEventListener('close', (event) => {
+    console.log(event)
+    connect()
+  })
+
+  ws.addEventListener('message', (event) => {
+    const { t, s, op, d } = JSON.parse(event.data)
+    switch (op) {
+      case 0: // DISPATCH
+        log(`DISPATCH [${t}]`, d)
+        const on = ON[t]
+        const once = ONCE[t]
+        if (!on) return
+        for (const fn of on) fn(d)
+        for (const fn of once) fn(d)
+        once.clear()
+        return
+      case 1: // HEARTBEAT
+        return heartbeat()
+      case 2: // IDENTIFY
+        return log('IDENTIFY', d)
+      case 3: // STATUSUPDATE
+        return log('STATUSUPDATE', d)
+      case 4: // VOICESTATEUPDATE
+        return log('VOICESTATEUPDATE', d)
+      case 6: // RESUME
+        return log('RESUME', d)
+      case 7: // RECONNECT
+        return log('RECONNECT', d)
+      case 8: // REQUESTGUILDMEMBERS
+        return log('REQUESTGUILDMEMBERS', d)
+      case 9: {
+        // INVALIDSESSION
+        console.log('Invalid Session, verify your token')
+        Deno.exit(1)
+      }
+      case 10: // HELLO
+        ws.send(
+          JSON.stringify({
+            op: 2, // IDENTIFY
+            d: {
+              token: Deno.env.get('BOT_TOKEN'),
+              intents,
+              properties: { $os: 'linux', $browser: 'janus', $device: 'janus' },
+            },
+          }),
+        )
+        setInterval(heartbeat, d.heartbeat_interval)
+        return
+      case 11: // HEARTBEATAC
+        return clearTimeout(heartbeatAc)
+      default:
+        log(`OP_${op}`, d)
+    }
+  })
+}
+
+connect(0)
