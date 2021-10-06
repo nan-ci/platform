@@ -19,8 +19,8 @@ const read = async (stream) => {
   return chunks.join('')
 }
 
-const logToFile = (hash, content) =>
-  writeFileSync(`/var/log/nan/ci_${hash}.log`, content, { flag: 'a' }) || content
+const logToFile = (version, content) =>
+  writeFileSync(`/var/log/nan/ci_${version}.log`, content, { flag: 'a' }) || content
 
 const allowedHeaders = [
   'x-nan-cookie',
@@ -56,15 +56,17 @@ const handleRequest = async (req, res, again) => {
     return res.end()
   }
 
-  console.log(method, url, { version, hash, headers })
-  again || logToFile(hash, `\n[${method}] ${url}, ${JSON.stringify(headers)}\n`)
+  console.log('running git checkout', hash, 'for version', version)
   const checkout = spawnSync('git', ['checkout', hash])
+  again || logToFile(version, `\n[${method}] ${url}, ${JSON.stringify(headers)}\n`)
   if (checkout.status) {
     if (again) {
       res.statusCode = 404
+      console.log(hash, 'not found')
       return res.end(`git checkout ${hash}: not found`)
     }
 
+    console.log('running git fetch...')
     const fetch = spawnSync('git', ['fetch'])
     return handleRequest(req, res, true)
   }
@@ -85,7 +87,7 @@ const handleRequest = async (req, res, again) => {
   const stderr = read(page.stderr)
   const stdout = read(page.stdout)
   const [code] = await once(page, 'close')
-  const logs = logToFile(hash, await stderr)
+  const logs = logToFile(version, await stderr)
   if (code) {
     res.statusCode = 500
     return res.end(logs)
@@ -93,10 +95,9 @@ const handleRequest = async (req, res, again) => {
 
   const root = `https://${headers.host}/${hash}/`
   const host = env.DOMAIN
-  const result = JSON.parse(logToFile(hash, await stdout))
-  console.log('->', result)
-  console.error(logs)
+  const result = JSON.parse(logToFile(version, await stdout))
   sendResponse({ ...result, res, root, host })
+  console.log(`response sent (hash: ${hash}, version: ${version}}`)
 }
 
 const servOpts = {
