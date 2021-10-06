@@ -87,6 +87,7 @@ const registerEvent = (type) => {
   discord.once[type] = () => new Promise(next)
 }
 
+let intents = 0
 Object.values(eventTypes).forEach((types, index) => {
   types.length && (intents |= 1 << index)
   types.forEach(registerEvent)
@@ -100,7 +101,6 @@ const connect = failCount => {
   const start = Date.now()
   const ws = new WebSocket(`wss://gateway.discord.gg/?v=8&encoding=json`)
   let s = null
-  let intents = 0
   let heartbeatAc
   let reconnecting
   const reconnect = () => {
