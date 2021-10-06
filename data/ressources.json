@@ -1,0 +1,14 @@
+{
+  "loop":{
+    "speciality":"javascript",
+    "description":"lorem ipsum",
+    "videos":[{"title":"Video One","href":"https://51.210.54.74/index.php/s/P59VfUm6TjnKC2Y/download"}],
+    "links":[{"title":"link pdf","href":"https://google.com/pdf"},{"title":"link pdf2","href":"https://google.com/pdf2"}]
+  },
+  "variables":{
+    "speciality":"javascript",
+    "description":"lorem ipsum",
+    "videos":[{"title":"Video One","href":"https://51.210.54.74/index.php/s/P59VfUm6TjnKC2Y/download"}],
+    "links":[{"title":"link pdf","href":"https://google.com/pdf"},{"title":"link pdf2","href":"https://google.com/pdf2"}]
+  }
+}

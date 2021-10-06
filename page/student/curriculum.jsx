@@ -5,6 +5,7 @@ import { Layout } from '../../component/layout.jsx'
 import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
 import { Lecteur } from '../../component/student/lecteur.jsx'
+import { Fetch } from '../../lib/fetch'
 
 css(`
 .username-curriculum{
@@ -29,6 +30,11 @@ export const Curriculum = () => {
     if (m.data) setModules(m.data)
     const c = await (await fetch(`${API}/courses`)).json()
     if (c.data) setCourses(c.data)
+  }, [])
+
+  useEffect(() => {
+    const resp = Fetch('notions', { name: 'loop', speciality: 'javascript' })
+    console.log('resp', resp)
   }, [])
 
   const config = (link, res, desc) => {

@@ -4,6 +4,9 @@ import { user } from '../../lib/auth.js'
 import { css } from '../../lib/dom.js'
 import { courses } from '../../data/courses.js'
 import { Roadmap } from '../../component/student/roadmap/index.jsx'
+import { useEffect } from 'preact/hooks'
+import { CinetPayCard } from '../../component/CinetPayCard.jsx'
+
 css(`
 .container {
   display:flex;
@@ -92,11 +95,13 @@ const getStudentStatus = async () => {
 
 export const Home = () => {
   const course = user && courses.find((c) => c.name === user.speciality)
+
   return (
     <Layout>
       <br />
       <P class="username-curriculum">Welcome back 👋, {user && user.name}</P>
       <br />
+      <CinetPayCard />
       {user && (
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           {user.role === 'visitor' ? (
