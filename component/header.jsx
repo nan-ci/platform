@@ -74,14 +74,18 @@ const Nav = ({ path }) => (
           Home
         </LinkMatch>
         {' - '}
-        <LinkMatch path={path} href="/student/curriculum">
-          Curriculum
+        <LinkMatch path={path} href="/student/modules">
+          Modules
+        </LinkMatch>
+        {' - '}
+        <LinkMatch path={path} href="/student/notions">
+          Notions
         </LinkMatch>
         {user && user.role === 'student' && (
           <>
             {' - '}
-            <LinkMatch path={path} href="/student/challenges">
-              Challenges
+            <LinkMatch path={path} href="/student/exercices">
+              Exercices
             </LinkMatch>
             {' - '}
             <LinkMatch path={path} href="/student/quizzes">

@@ -7,6 +7,7 @@ import { Login } from './page/login.jsx'
 import { LearningChoice } from './page/learningchoice.jsx'
 import { Challenges } from './page/student/challenges.jsx'
 import { Curriculum } from './page/student/curriculum.jsx'
+import { Notions } from './page/student/notions.jsx'
 import { Cours } from './page/student/cours.jsx'
 import { Quizzes } from './page/student/quizzes.jsx'
 import { Projects } from './page/student/projects.jsx'
@@ -67,10 +68,11 @@ const App = () => {
       <Home path="/student/dashboard" />
       <Profile path="/student/profile" />
       <Settings path="/student/settings" />
-      <Challenges path="/student/challenges" />
+      <Challenges path="/student/exercices" />
       <Quizzes path="/student/quizzes" />
       <Quiz path="/student/quiz" />
-      <Curriculum path="/student/curriculum" />
+      <Notions path="/student/notions" />
+      <Curriculum path="/student/modules" />
       <Cours path="/student/cours" />
       <Projects path="/student/projects" />
 
