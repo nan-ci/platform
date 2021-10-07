@@ -12,6 +12,9 @@ import { Cours } from './page/student/cours.jsx'
 import { Quizzes } from './page/student/quizzes.jsx'
 import { Projects } from './page/student/projects.jsx'
 import { Quiz } from './page/student/quiz.jsx'
+import { Module } from './page/student/module.jsx'
+import { Exercise } from './page/student/exercise.jsx'
+
 import { user } from './lib/auth.js'
 import { navigate, useURL } from './lib/router.js'
 
@@ -75,7 +78,8 @@ const App = () => {
       <Curriculum path="/student/modules" />
       <Cours path="/student/cours" />
       <Projects path="/student/projects" />
-
+      <Module path="/student/module" />
+      <Exercise path="/student/exercise" />
       {/** professor routes */}
       <HomeProf path="/professor/dashboard" />
       <ModulesProf path="/professor/modules" />
