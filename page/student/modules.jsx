@@ -1,4 +1,4 @@
-import { CurriculumCard } from '../../component/student/curriculum-card.jsx'
+import { ModuleCard } from '../../component/student/module-card.jsx'
 import { useState, useEffect } from 'preact/hooks'
 import { API } from '../../lib/env.js'
 import { Layout } from '../../component/layout.jsx'
@@ -14,7 +14,7 @@ css(`
 }
 `)
 
-export const Curriculum = () => {
+export const Modules = () => {
   const [showLecteur, setShowLecteur] = useState(false)
   const [currentCours, setCurrentCours] = useState({
     link: null,
@@ -38,8 +38,8 @@ export const Curriculum = () => {
 
   return (
     <Layout>
-      {modules.map((props) => (
-        <CurriculumCard
+      {[{name:"JS-INTRO",exercises:12,solved:4,remain:8},{name:"JS-BEGINNERS",exercises:10,solved:6,remain:4}].map((props) => (
+        <ModuleCard
           {...props}
           key={props.id}
           userLevel={user.level}

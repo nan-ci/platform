@@ -3,6 +3,7 @@ import { css } from '../../lib/dom.js'
 import { Div, P, Span } from '../../component/elements.jsx'
 import { Input } from '../../component/form.jsx'
 import { Layout } from '../../component/layout.jsx'
+import { navigate } from '../../lib/router.js'
 
 css(`
     ._module {
@@ -167,6 +168,7 @@ export const Module = () => {
         <Div class="exercises_content">
           {mockExercice.map((mock) => (
             <Div
+              onClick={() => navigate('/student/exercise')}
               class={`exercise_card ${
                 isValidate(mock) ? 'done' : isNext(mock) ? 'next' : 'lock'
               }`}

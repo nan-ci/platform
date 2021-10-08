@@ -2,44 +2,52 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { css } from '../../lib/dom.js'
 import { Div, P, Span } from '../../component/elements.jsx'
 import { Layout } from '../../component/layout.jsx'
-import { Input } from '../../component/form.jsx'
-import CodeMirror from 'codemirror'
-import '../../lib/codemirror.css'
+import { Editor } from '../../component/editor.jsx'
+
 css(`
       ._exercise h1 {
         color:white;
         font-size: 1.8rem;
-        border-bottom:1px solid grey;
       }
 
+      ._exercise h4 {
+        font-size: 1.6rem;
+        font-weight:bolder;
+        margin-top: 20px;
+      }
       ._exercise>p {
         display:block;
         margin-top: 18px;
       }
+
+      ._exercise .instructions ul {
+        list-style: square !important;
+        list-style-type:circle;
+        margin-left: 20px;
+      }
+      ._exercise .instructions ul li {
+        display:inherit;
+        font-weight:bolder;
+        font-size: 1.2rem;
+        margin: 20px auto;
+        display:block;
+        flex-direction:column;
+        align-items:flex-start;
+        justify-content: flex-start;
+      }
+
+      ._exercise .instructions ul li:before {
+        content: "";
+        display:inline-block;
+        width:15px;
+        height:15px;
+        background-color: white;
+        border-radius: 25rem;
+      }
+
 `)
 
 export const Exercise = () => {
-  const [err, setErr] = useState({})
-  const editorRef = useRef(null)
-  const textAreaRef = useRef(null)
-
-  useEffect(() => {
-    const Code = CodeMirror.fromTextArea(
-      document.querySelector('textarea[name="code"]'),
-      {
-        mode: 'javascript',
-        theme: 'neo',
-        keyMap: 'sublime',
-        tabSize: 2,
-        lineNumbers: true,
-        indentWithTabs: false,
-        scrollbarStyle: 'null',
-        // extraKeys: { 'Ctrl-S': run, 'Cmd-S': run, 'Ctrl-Enter': run }
-      },
-    )
-    console.log('ref', Code)
-  }, [])
-
   return (
     <Layout>
       <Div class="_exercise">
@@ -50,18 +58,42 @@ export const Exercise = () => {
           est sem. Pellentesque a iaculis mi. Praesent a sem pharetra tellus
           sodales consectetur. Proin id felis at arcu commodo accumsan et vel
         </P>
-        <Div class="instructions"></Div>
-        <br />
-        <br />
-        <Input
-          ref={textAreaRef}
-          inputType="textarea"
-          name="code"
-          value="function code() {}"
-          errors={err}
-          updateErrors={setErr}
-        />
-        <Div class="editor" ref={editorRef} />
+        <h4>Instructions</h4>
+        <Div class="instructions">
+          <ul>
+            <li>
+              <span> lorem ipsum</span>
+            </li>
+            <li>
+              <span> lorem ipsum</span>
+              <Editor
+                randomId={`editor${Math.floor(Math.random() * 99999 + 7)}`}
+                readOnly
+                value={"const Arrays = ['cool', 'drive']"}
+                mode="javascript"
+              />
+            </li>
+            <li>
+              <span> lorem ipsum</span>
+            </li>
+            <li>
+              <span> lorem ipsum</span>
+              <Editor
+                randomId={`editor${Math.floor(Math.random() * 99999 + 7)}`}
+                readOnly
+                value={"const Arrays = ['cool', 'drive']"}
+                mode="javascript"
+              />
+            </li>
+          </ul>
+        </Div>
+        <Div class="editor_content">
+          <Editor
+            randomId={`editor${Math.floor(Math.random() * 99999 + 7)}`}
+            value="function(){console.log('testing')}"
+            mode="javascript"
+          />
+        </Div>
       </Div>
     </Layout>
   )

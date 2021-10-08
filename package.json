@@ -11,7 +11,6 @@
     "format": "./script/format.sh"
   },
   "dependencies": {
-    "codemirror": "^5.63.1",
     "esbuild": "^0.11.2",
     "fast-toml": "^0.5.4",
     "moment": "^2.29.1",
