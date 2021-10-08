@@ -1,9 +1,10 @@
-import { useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { css } from '../../lib/dom.js'
 import { Div, P, Span } from '../../component/elements.jsx'
-import { Input } from '../../component/form.jsx'
 import { Layout } from '../../component/layout.jsx'
-
+import { Input } from '../../component/form.jsx'
+import CodeMirror from 'codemirror'
+import '../../lib/codemirror.css'
 css(`
       ._exercise h1 {
         color:white;
@@ -19,6 +20,25 @@ css(`
 
 export const Exercise = () => {
   const [err, setErr] = useState({})
+  const editorRef = useRef(null)
+  const textAreaRef = useRef(null)
+
+  useEffect(() => {
+    const Code = CodeMirror.fromTextArea(
+      document.querySelector('textarea[name="code"]'),
+      {
+        mode: 'javascript',
+        theme: 'neo',
+        keyMap: 'sublime',
+        tabSize: 2,
+        lineNumbers: true,
+        indentWithTabs: false,
+        scrollbarStyle: 'null',
+        // extraKeys: { 'Ctrl-S': run, 'Cmd-S': run, 'Ctrl-Enter': run }
+      },
+    )
+    console.log('ref', Code)
+  }, [])
 
   return (
     <Layout>
@@ -33,7 +53,15 @@ export const Exercise = () => {
         <Div class="instructions"></Div>
         <br />
         <br />
-        <p>```js console.log("amen"); ```</p>
+        <Input
+          ref={textAreaRef}
+          inputType="textarea"
+          name="code"
+          value="function code() {}"
+          errors={err}
+          updateErrors={setErr}
+        />
+        <Div class="editor" ref={editorRef} />
       </Div>
     </Layout>
   )
