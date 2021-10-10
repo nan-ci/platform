@@ -50,3 +50,6 @@ let smooth = 27
 // Your code
 equal(ultraSmooth, 729)
 ```
+## Notions
+
+- basic programming
