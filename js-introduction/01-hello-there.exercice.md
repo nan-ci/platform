@@ -54,6 +54,5 @@ if (!loggedValues.includes('Hello There !')) {
 
 ## Notions
 
-- language-js
 - basic-programing
 - variable
