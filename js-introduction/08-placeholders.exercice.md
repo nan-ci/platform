@@ -12,7 +12,7 @@ placeholders.
 
 ## Tests
 
-`presentation` value includes `age` and `name`.
+### `presentation` value includes `age` and `name`.
 
 ```js
 let name = 'Patrick'
@@ -21,7 +21,7 @@ let age = 48
 equal(presentation, `Hello, my name is Patrick and I'm 48 years old`)
 ```
 
-`presentation` value still includes `age` and `name`.
+### `presentation` value still includes `age` and `name`.
 
 ```js
 let name = 'Jeremy'
