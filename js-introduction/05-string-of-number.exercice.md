@@ -12,19 +12,19 @@ Declare two variables:
 
 ## Tests
 
-As a number, `seven` value is `7`
+### As a number, `seven` value is `7`
 
 ```js
 equal(Number(seven), 7)
 ```
 
-As a number, `seventySeven` value is `77`
+### As a number, `seventySeven` value is `77`
 
 ```js
 equal(Number(seventySeven), 77)
 ```
 
-Somehow, the type of `seven` and `seventySeven` value must be strings
+### Somehow, the type of `seven` and `seventySeven` value must be strings
 
 ```js
 equal(typeof seven, 'string')
