@@ -11,7 +11,7 @@ Because after all, we don't know what your future holds !
 
 ## Tests
 
-`myFuture` must be declared but its value `undefined`
+### `myFuture` must be declared but its value `undefined`
 
 ```js
 equal(myFuture, undefined)
