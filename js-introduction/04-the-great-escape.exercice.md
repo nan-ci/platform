@@ -14,7 +14,7 @@ escapes, you are going to escape some strings:
 
 ## Tests
 
-`escapeFromDelimiters` is declared and includes a double-quote
+### `escapeFromDelimiters` is declared and includes a double-quote
 
 ```js
 if (typeof escapeFromDelimiters === 'undefined') {
@@ -28,7 +28,7 @@ if (!escapeFromDelimiters.includes('"')) {
 }
 ```
 
-`escapeFromDelimiters` includes a single-quote
+#### `escapeFromDelimiters` includes a single-quote
 
 ```js
 if (!escapeFromDelimiters.includes("'")) {
@@ -36,7 +36,7 @@ if (!escapeFromDelimiters.includes("'")) {
 }
 ```
 
-`escapeFromDelimiters` includes a backtick
+#### `escapeFromDelimiters` includes a backtick
 
 ```js
 if (!escapeFromDelimiters.includes('`')) {
@@ -44,7 +44,7 @@ if (!escapeFromDelimiters.includes('`')) {
 }
 ```
 
-`escapeTheEscape` includes a backslash
+### `escapeTheEscape` includes a backslash
 
 ```js
 if (!new TextEncoder().encode(escapeTheEscape).includes(92)) {
