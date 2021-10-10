@@ -28,7 +28,7 @@ if (!escapeFromDelimiters.includes('"')) {
 }
 ```
 
-#### `escapeFromDelimiters` includes a single-quote
+### `escapeFromDelimiters` includes a single-quote
 
 ```js
 if (!escapeFromDelimiters.includes("'")) {
@@ -36,7 +36,7 @@ if (!escapeFromDelimiters.includes("'")) {
 }
 ```
 
-#### `escapeFromDelimiters` includes a backtick
+### `escapeFromDelimiters` includes a backtick
 
 ```js
 if (!escapeFromDelimiters.includes('`')) {
