@@ -7,7 +7,7 @@ separated by a `,` and add an `!` at the end.
 
 ## Tests
 
-`duplicate` value should repeat `'I told you so'`
+### `duplicate` value should repeat `'I told you so'`
 
 ```js
 let sentence = 'I told you so'
@@ -15,7 +15,7 @@ let sentence = 'I told you so'
 equal(duplicate, 'I told you so, I told you so !')
 ```
 
-`duplicate` value should repeat `'Not again'`
+### `duplicate` value should repeat `'Not again'`
 
 ```js
 let sentence = 'Not again'
@@ -23,7 +23,7 @@ let sentence = 'Not again'
 equal(duplicate, 'Not again, Not again !')
 ```
 
-`duplicate` value should repeat `'I knew it'`
+### `duplicate` value should repeat `'I knew it'`
 
 ```js
 let sentence = 'I knew it'
