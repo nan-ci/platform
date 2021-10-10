@@ -18,7 +18,7 @@ You must try to re-assign the `love` variable to the string value
 
 ## Tests
 
-The value of `love` must have changed
+### The value of `love` must have changed
 
 ```js
 let love = 'You used to love me !!'
