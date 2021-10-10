@@ -8,7 +8,7 @@ Write a program that displays the exact text Hello There !, any `Number` and a `
 > you don't need to understand them.\
 > Once you start understanding code a bit, they may clarify what the subject is about.
 
-Log a number in the console
+### Log a number in the console
 
 ```js
 const args = saveArguments(console, 'log')
@@ -19,7 +19,7 @@ if (!typeOfLoggedValues.includes('number')) {
 }
 ```
 
-Log a boolean in the console
+### Log a boolean in the console
 
 ```js
 const args = saveArguments(console, 'log')
@@ -30,7 +30,7 @@ if (!typeOfLoggedValues.includes('boolean')) {
 }
 ```
 
-Log a string in the console
+### Log a string in the console
 
 ```js
 const args = saveArguments(console, 'log')
