@@ -15,7 +15,7 @@ You will declare a few variables:
 
 ## Tests
 
-values of the variable are a result of the operations on the variable smooth (`10`)
+### values of the variable are a result of the operations on the variable smooth (`10`)
 
 ```js
 let smooth = 10
@@ -25,7 +25,7 @@ equal(semiSmooth, 5)
 equal(plus11, 21)
 ```
 
-values of the variable are a result of the operations on the variable smooth (`27`)
+### values of the variable are a result of the operations on the variable smooth (`27`)
 
 ```js
 let smooth = 27
@@ -35,7 +35,7 @@ equal(semiSmooth, 13.5)
 equal(plus11, 38)
 ```
 
-ultraSmooth should be the square of the value of smooth (`10`)
+### ultraSmooth should be the square of the value of smooth (`10`)
 
 ```js
 let smooth = 10
@@ -43,7 +43,7 @@ let smooth = 10
 equal(ultraSmooth, 100)
 ```
 
-ultraSmooth should be the square of the value of smooth (`27`)
+### ultraSmooth should be the square of the value of smooth (`27`)
 
 ```js
 let smooth = 27
