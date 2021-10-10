@@ -12,25 +12,25 @@ more about yourself using **variables** !
 
 ## Tests
 
-Create an `age` variable of your age as a number
+### Create an `age` variable of your age as a number
 
 ```js
 equal(typeof age, 'number')
 ```
 
-Create a `name` variable of your name as a string
+### Create a `name` variable of your name as a string
 
 ```js
 equal(typeof name, 'string')
 ```
 
-Create a `secureLuggage` variable of a boolean
+### Create a `secureLuggage` variable of a boolean
 
 ```js
 equal(typeof secureLuggage, 'boolean')
 ```
 
-Values must be reasonable
+### Values must be reasonable
 
 ```js
 if (age <= 3) {
