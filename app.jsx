@@ -6,6 +6,7 @@ import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
+import { Module } from './page/module.jsx'
 
 const App = () => (
   <>
@@ -13,6 +14,7 @@ const App = () => (
     <Router>
       <Profile path="/profile" />
       <Home path="*" />
+      <Module path="/module" />
     </Router>
     <footer>
       {divider}
