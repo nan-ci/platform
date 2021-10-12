@@ -1,0 +1,14 @@
+{
+  "name":"koffi",
+  "lastname":"kouamé Rameaux",
+   "level":"M1-S05",
+   "exercises":{
+     "01 - Hello There":{"attempts":19,"seconds":29,"pass":true},
+     "02 - Anything To Declare":{"attempts":19,"seconds":29,"pass":true},
+     "03 - An Undefined Future":{"attempts":19,"seconds":29,"pass":true},
+     "05 - The Great Escape":{"attempts":10,"pass":false}
+   },
+   "quizzes":{
+     "04 - Look For variable":{"percent":"60%", "pass":true}
+   }
+}

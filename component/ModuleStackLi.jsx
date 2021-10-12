@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'preact/hooks'
 import { css } from '../lib/dom.js'
-import { Div } from './elements'
+import { Div, Span } from './elements'
 
 css(`
-   ._module ._exercise-card {
+   .module .stack-li {
         padding:0.7rem;
         width: 96%;
        margin: 7px  auto;
@@ -16,116 +16,113 @@ css(`
        cursor:not-allowed;
       }
 
-      ._module ._exercise-card.pass {
+      .module .stack-li.pass {
           border-color: white;
           background: white;
           cursor:pointer;
       }
 
-    ._module ._exercise-card.pass .check {
+    .module .stack-li.pass .check {
         background: var(--comment-darker);
         border-color: var(--comment-darker);
     }
 
-    ._module ._exercise-card.pass h4 {
+    .module .stack-li.pass span.title {
       color: var(--comment-darker);
     }
 
-    ._module ._exercise-card.pass .second_block h3{
+    .module .stack-li.pass .second_block span{
       color: var(--comment-darker);
     }
 
 
-      ._module ._exercise-card.next {
+      .module .stack-li.next {
         border:2px solid white;
         cursor:pointer;
       }
 
-      ._module ._exercise-card.next .check {
+      .module .stack-li.next .check {
         border-color: white;
         color: white;
     }
 
-    ._module ._exercise-card.next h4 {
+    .module .stack-li.next span.title {
       color: white;
     }
 
-    ._module ._exercise-card.next .second_block h3{
+    .module .stack-li.next .second_block span{
       color: white;
     }
 
 
 
-      ._module ._exercise-card .first_block{
+      .module .stack-li .first_block{
         display:flex;
         flex-direction:row;
         align-items:center;
         justify-content: flex-start;
       }
 
-      ._module ._exercise-card .check {
+      .module .stack-li .first_block .emoji{
+            font-size: 1.5rem;
+            margin-right:5px;
+      }
+
+      .module .stack-li .check {
              height: 20px;
              width: 20px;
              border:1px solid darkgrey;
              border-radius: 0.4rem;
       }
 
-      ._module ._exercise-card h4 {
+      .module .stack-li span.title {
         font-size: 1.2rem;
         margin-left: 10px;
         color: darkgrey;
+        font-weight:bolder;
       }
 
 
-      ._module ._exercise-card .second_block{
+      .module .stack-li .second_block{
         display:flex;
         flex-direction:row;
         align-items:center;
         justify-content: flex-start;
       }
 
-      ._module ._exercise-card .second_block h3 {
+      .module .stack-li .second_block span {
         color: darkgrey;
         font-weight:bolder;
       }
 
-      ._module ._exercise-card .second_block h3:nth-child(1){
+      .module .stack-li .second_block span:nth-child(1){
            margin-right: 15px;
       }
 
 
 `)
 
-export const ExerciseCard = ({ exo, prev, data }) => {
-  const [info, setInfo] = useState(null)
-  useEffect(() => {
-    if (data[exo]) {
-      setInfo({ ...data[exo] })
-    } else setInfo(null)
-  }, [exo])
-
-  const isNext = () => {
-    const val = Object.keys(data)
-    const last = val[val.length - 1]
-    return exo === last || (exo !== last && data[last].seconds && last === prev)
-  }
-
-  const isValidate = () => {
-    return data[exo] && data[exo].seconds
-  }
-
+export const StackLi = ({ name, dataType, isNext, isPassed, info }) => {
   return (
-    <Div
-      class={`_exercise-card ${isValidate() ? 'pass' : isNext() ? 'next' : ''}`}
-    >
+    <Div class={`stack-li ${isPassed ? 'pass' : isNext ? 'next' : ''}`}>
       <Div class="first_block">
-        <Div class="check" />
-        <h4>{exo}</h4>
+        {dataType === 'quiz' ? (
+          <span class="emoji">&#x1F4DA;</span>
+        ) : (
+          <span class="emoji">&#x270D;</span>
+        )}
+        <Span class="title">{name}</Span>
       </Div>
       {info && (
         <Div class="second_block">
-          {info.seconds && <h3> {info.seconds}s</h3>}
-          <h3>{info.attempts} attempts</h3>
+          {dataType === 'exercise' ? (
+            <>
+              {info.seconds && <Span class="seconds"> {info.seconds}s</Span>}
+              <Span class="attempts">{info.attempts} attempts</Span>{' '}
+            </>
+          ) : (
+            <></>
+          )}
         </Div>
       )}
     </Div>

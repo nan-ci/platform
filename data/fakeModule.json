@@ -1,0 +1,21 @@
+{
+  "name": "01- JS Intro",
+  "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet dolor sit amet lectus consequat condimentum. Morbi ultrices vitae nulla a mollis. Suspendisse arcu leo, finibus in accumsan ut, ultrices dictum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut accumsan vitae nisi vel porttitor. Nullam hendrerit nibh a sapien sagittis dignissim. Fusce suscipit nisl vel eros volutpat venenatis. Duis nec vehicula magna. Sed varius dictum quam, ac tempus augue rhoncus ac.",
+  "notions":["variable", "conditions", "iteraction","data types"],
+  "exercises": [
+    "01 - Hello There",
+    "02 - Anything To Declare",
+    "03 - An Undefined Future",
+    "05 - The Great Escape",
+    "06 - A String Of Number",
+    "07 - Redeclaration Of Love",
+    "09 - Smooth Operator",
+    "10 - Placeholders",
+    "11 - Duplicate"
+  ],
+  "quizzes": [
+    "04 - Look For variable",
+    "08 - in DOM  world ?",
+    "12 - Are you an Object"
+  ]
+}
