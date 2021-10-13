@@ -6,6 +6,7 @@ import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
+import { Exercise } from './page/exercise.jsx'
 
 const App = () => (
   <>
@@ -13,6 +14,7 @@ const App = () => (
     <Router>
       <Profile path="/profile" />
       <Home path="*" />
+      <Exercise path="/exercise" />
     </Router>
     <footer>
       {divider}
