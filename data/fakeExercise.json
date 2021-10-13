@@ -1,0 +1,6 @@
+{
+  "name":"01 - Hello There",
+  "description":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet dolor sit amet lectus consequat condimentum. Morbi ultrices vitae nulla a mollis. Suspendisse arcu leo, finibus in accumsan ut, ultrices dictum metus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut accumsan vitae nisi vel porttitor. Nullam hendrerit nibh a sapien sagittis dignissim. Fusce suscipit nisl vel eros volutpat venenatis. Duis nec vehicula magna. Sed varius dictum quam, ac tempus augue rhoncus ac.",
+  "instructions":["create a variable", "create a constante", "create a condition"],
+  "notions": ["Basics Programming","Loop","Iteraction"]
+}
