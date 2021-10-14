@@ -10,6 +10,7 @@
     "deploy": "./script/deploy.sh"
   },
   "dependencies": {
+    "codemirror": "^5.63.3",
     "esbuild": "^0.11.2",
     "fast-toml": "^0.5.4",
     "preact": "^10.5.13"

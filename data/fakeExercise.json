@@ -1,0 +1,14 @@
+{
+  "name":"01 - Let us make some addition",
+  "description":"Either the AddNumbers function",
+   "defaultContent":"const AddNumbers = (numberA,numberB) => { // writing your code her }",
+  "instructions":["the second parameter must be greater than the first, return -1 if not","the parameters must be of type String, return -1 if not","the function must return the addition of two numbers passing in parameters"],
+   "tests":[
+     {"name":"test parameter","args":["3","2"],"expected":"-1","type":"test","lang":"javascript"},
+     {"name":"test type","args":["merci","cool"],"expected":"-1","type":"test","lang":"javascript"},
+      {"name":"test function","args":["3","4"],"expected":"7","lang":"javascript"},
+     {"name":"test function","args":["-2","-125"],"expected":"-127","lang":"javascript"},
+    {"name":"test function","args":["-29","27"],"expected":"-2","lang":"javascript"}
+    ],
+   "notions":["condition","function"]
+}
