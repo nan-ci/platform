@@ -10,7 +10,6 @@ css(`
       align-items: center;
       justify-content: space-between;
       border: 2px solid grey;
-      margin: 10px auto;
       cursor: not-allowed;
   }
 
@@ -45,40 +44,35 @@ css(`
     justify-content: flex-start
   }
 
-  .module .stackli span.emoji {
-    margin-right: 15px;
-  }
-
  .module .stackli span.name  {
    font-weight: bolder;
  }
 
- .module .stackli span.attempts {
-   margin-right: 10px;
- }
 `)
 
 export const StackLi = ({ name, type, result, isActive }) => {
-  
   const iconType = {
     quiz: '📚',
     exercise: '🖊',
   }
 
   return (
-    <li class={`stackli ${isActive ? 'next' : result ? 'pass' : ''}`}>
-      <Div class="first_block">
-        <Span class="emoji">{iconType[type]}</Span>
-        <Span class="name">{name}</Span>
-      </Div>
-      {result && (
-        <Div class="second_block">
-          <Span class="attempts">{result.attempts}-attempts</Span>
-          {result.seconds && (
-            <Span class="seconds">{result.seconds}-seconds</Span>
-          )}
+    <>
+      {'  '}
+      <li class={`stackli ${isActive ? 'next' : result ? 'pass' : ''}`}>
+        <Div class="first_block">
+          <Span class="emoji">{iconType[type]}</Span>&nbsp;
+          <Span class="name">{name}</Span>
         </Div>
-      )}
-    </li>
+        {result && (
+          <Div class="second_block">
+            <Span class="attempts">{result.attempts}-attempts</Span> &nbsp;
+            {result.seconds && (
+              <Span class="seconds">{result.seconds}-seconds</Span>
+            )}
+          </Div>
+        )}
+      </li>{' '}
+    </>
   )
 }

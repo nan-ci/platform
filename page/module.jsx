@@ -6,26 +6,21 @@ import userInfo from '../data/fakeUserData.json'
 
 css(`
    .module h1 {
-     font-size: 2rem;
      font-weight: bolder;
     }
 
     .module>hr {
       width: 100%;
       height: 2px;
-      margin: 7px auto;
       background: grey;
     }
 
    .module p.description {
      white-space: normal !important;
-     font-size: 1.2rem;
      padding: 0.5rem;
-     margin: 10px auto;
   }
 
   .module p.title{
-    font-size: 1.2rem;
     font-weight: bolder;
   }
 
@@ -33,18 +28,13 @@ css(`
     display: block;
   }
 
-  .module ul.notions {
-    margin-left: 20px;
-  }
-
   .module ul.notions li{
     margin: 8px auto;
   }
 
   .module ul.notions li:before {
-     content:  "👉";
+     content:  "👉 ";
      font-size: 1.1rem;
-     margin-right: 10px;
   }
 
   .module .stack-content {
@@ -52,7 +42,6 @@ css(`
   }
 
   .module .stack-content h3 {
-    font-size: 2.5rem;
     font-weight: bolder;
   }
 
@@ -82,7 +71,9 @@ export const Module = () => {
     <Div class="module">
       <h1> {fakeModule.name}</h1>
       <hr />
+      {'\n'}
       <P class="description">{fakeModule.description}</P>
+      {'\n'}
       <P class="title"> In this module you will learn : </P>
       <ul class="notions">
         {fakeModule.notions.map((n) => (
