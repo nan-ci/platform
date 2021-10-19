@@ -46,12 +46,10 @@ css(`
   }
 
   .module .stackli span.emoji {
-   font-size: 1.2rem;
     margin-right: 15px;
   }
 
  .module .stackli span.name  {
-   font-size: 1.2rem;
    font-weight: bolder;
  }
 
@@ -60,23 +58,24 @@ css(`
  }
 `)
 
-export const StackLi = ({ data: { type, name }, isPassed, isNext, infos }) => {
+export const StackLi = ({ name, type, result, isActive }) => {
+  
   const iconType = {
     quiz: '📚',
     exercise: '🖊',
   }
 
   return (
-    <li class={`stackli ${isPassed ? 'pass' : isNext ? 'next' : ''}`}>
+    <li class={`stackli ${isActive ? 'next' : result ? 'pass' : ''}`}>
       <Div class="first_block">
         <Span class="emoji">{iconType[type]}</Span>
         <Span class="name">{name}</Span>
       </Div>
-      {infos && (
+      {result && (
         <Div class="second_block">
-          <Span class="attempts">{infos.attempts}-attempts</Span>
-          {infos.seconds && (
-            <Span class="seconds">{infos.seconds}-seconds</Span>
+          <Span class="attempts">{result.attempts}-attempts</Span>
+          {result.seconds && (
+            <Span class="seconds">{result.seconds}-seconds</Span>
           )}
         </Div>
       )}

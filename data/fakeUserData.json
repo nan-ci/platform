@@ -1,9 +1,8 @@
 {
   "name":"Koffi",
   "lastname":"Kouamé Rameaux",
-  "level":"M01-S03",
   "results":{
-    "01-hello There":{"percent":0.6,"attempts":4,"seconds":60,"pass":true},
+    "01-Hello There":{"percent":0.6,"attempts":4,"seconds":60,"pass":true},
     "02-Anything To Declare":{"percent":0.7,"seconds":125,"attempts":15,"pass":true},
     "03-Good Search":{"attempts": 14,"pass":false }
   }

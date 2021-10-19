@@ -4,20 +4,20 @@
     "this  module talk about the basics  programmation in javascript",
   "notions": ["variables", "data types", "operators", "condition", "iteraction"],
   "children": [
-    { "name": "01-hello There", "type": "exercise", "key": "01-Hello There" },
+    { "name": "Hello There", "type": "exercise", "key": "01-Hello There.exercise.md"},
     {
-      "name": "02-Anything To Declare",
+      "name": "Anything To Declare",
       "type": "exercise",
-      "key": "02-Anything To Declare"
+      "key": "02-Anything To Declare.exercise.md"
     },
-    { "name": "03-Good Search", "type": "exercise", "key": "03-Good Search" },
-    { "name": "04-World of DOM", "type": "quiz", "key": "04-World of DOM" },
+    { "name": "Good Search", "type": "exercise", "key": "03-Good Search.exercise.md"},
+    { "name": "World of DOM", "type": "quiz", "key": "04-World of DOM.quiz.md"},
     {
-      "name": "05-Redeclaration Love",
+      "name": "Redeclaration Love",
       "type": "exercise",
       "key": "05-Redeclaration of Love"
     },
-    { "name": "06-Duplicate", "type": "exercise", "key": "06-Duplicate" },
-    { "name": "07-cool", "type": "quiz", "key": "07-cool" }
+    { "name": "Duplicate", "type": "exercise", "key": "06-Duplicate.exercise.md"},
+    { "name": "cool", "type": "quiz", "key": "07-cool.quiz.md"}
   ]
 }

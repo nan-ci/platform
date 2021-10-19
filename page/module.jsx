@@ -64,51 +64,18 @@ css(`
 `)
 
 export const Module = () => {
-  const getExoNumber = (name) => parseInt(name.split('-')[0])
+  const getExoNumber = (name) => Number(name.split('-', 1).join(''))
+  const getName = (name) => name.split('.', 1).join('')
 
-  const getInfos = (name) => {
-    const userProgress = Object.entries(userInfo.results)
-    return userProgress.find(
-      (r) => getExoNumber(r[0]) === getExoNumber(name),
-    )[1]
-  }
-
-  const isPassed = (name) => {
-    const [module, step] = userInfo.level
-      .split('-')
-      .map((r) => parseInt(r.slice(1)))
-    const userProgress = Object.entries(userInfo.results)
-    const moduleNumber = getExoNumber(fakeModule.name)
-    const exoNumber = getExoNumber(name)
-    if (
-      module > moduleNumber ||
-      (module === moduleNumber &&
-        step >= exoNumber &&
-        userProgress.find((r) => getExoNumber(r[0]) === exoNumber)[1].pass)
-    ) {
+  const isActive = (name) => {
+    const keys = Object.keys(userInfo.results)
+    const last = keys[keys.length - 1]
+    const find = keys.findIndex((n) => n === getName(name))
+    if (find && find === keys.length - 1 && !userInfo[getName(name)]?.pass)
       return true
-    } else return false
-  }
-
-  const isNext = (name) => {
-    const [module, step] = userInfo.level
-      .split('-')
-      .map((r) => parseInt(r.slice(1)))
-    const userProgress = Object.entries(userInfo.results)
-    const exoNumber = getExoNumber(name)
-    if (module === getExoNumber(fakeModule.name)) {
-      if (
-        step === exoNumber &&
-        !userProgress.find((r) => getExoNumber(r[0]) === exoNumber)[1]?.pass
-      ) {
-        return { info: true }
-      } else if (
-        exoNumber === step + 1 &&
-        userProgress.find((r) => getExoNumber(r[0]) === step)[1]?.pass
-      ) {
-        return true
-      }
-    } else return false
+    if (getExoNumber(name) === getExoNumber(last) + 1 && userInfo[last]?.pass)
+      return true
+    return false
   }
 
   return (
@@ -125,17 +92,11 @@ export const Module = () => {
       <Div class="stack-content">
         <h3> Exercises </h3>
         <ul class="stack">
-          {fakeModule.children.map(({ key, ...rest }) => (
+          {fakeModule.children.map((child) => (
             <StackLi
-              key={key}
-              data={rest}
-              isPassed={isPassed(rest.name)}
-              isNext={isNext(rest.name)}
-              infos={
-                isPassed(rest.name) || isNext(rest.name)?.info
-                  ? getInfos(rest.name)
-                  : null
-              }
+              {...child}
+              result={userInfo.results[getName(child.key)]}
+              isActive={isActive(child.key)}
             />
           ))}
         </ul>
