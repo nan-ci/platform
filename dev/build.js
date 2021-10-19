@@ -4,6 +4,7 @@ import { parse, join } from 'path'
 import * as esbuild from 'esbuild'
 
 import { rootDir, DEV, time } from './utils.js'
+import { generateExoFile } from './exo-parser.js'
 
 const getHash = async head => {
   if (!head.startsWith('ref:')) return { hash: head.trim(), branch: 'detached' }
@@ -12,7 +13,7 @@ const getHash = async head => {
   const hash = await readFile(join(rootDir, '.git', ...parts), 'utf8')
   return { hash: hash.trim(), branch }
 }
-  
+
 try {
   const head = await readFile(join(rootDir, '.git/HEAD'), 'utf8')
   const { hash, branch } = await getHash(head)
@@ -61,6 +62,8 @@ const generate = async (file = 'index') => {
     (cache[key] =
       templates[key]?.replace(/<!-- ([a-zA-Z0-9]+) -->/gm, replace) ||
       `<!-- missing template ${key} -->`)
+
+  await generateExoFile()
 
   return readTemplate(file)
 }
