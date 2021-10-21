@@ -5,7 +5,7 @@ import { fromMarkdown } from 'mdast-util-from-markdown'
 import * as esbuild from 'esbuild'
 
 import { rootDir, DEV, time } from './utils.js'
-import { parseContent } from './exo-parser.js'
+import { parseContent, generateJSONExo } from './exo-parser.js'
 
 const getHash = async head => {
   if (!head.startsWith('ref:')) return { hash: head.trim(), branch: 'detached' }
@@ -68,6 +68,7 @@ const config = {
 
 const serve = () => esbuild.serve({ servedir }, config)
 const generate = async (file = 'index') => {
+  await generateJSONExo()
   const content = await readdir(templateDir)
   const entries = await Promise.all(content.map(parse).map(readEntry))
   const templates = Object.fromEntries(entries)

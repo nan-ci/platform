@@ -8,7 +8,7 @@ const children = (n) =>
   n.children ? [n, ...n.children.flatMap(children)] : [n]
 
 const moveFile = async (file) =>
-  await rename(join(rootDir, file), join(rootDir, 'exoBundle', file))
+  await rename(join(rootDir, file), join(rootDir, 'exobundle', file))
 
 const getTrimValue = (n) => n.value?.trim()
 const textContent = (n) =>
@@ -21,6 +21,8 @@ const isP = (node) => node.type === 'paragraph' || node.type === 'text'
 const isCODE = (node) => node.type === 'code' || node.type === 'inlineCode'
 const isBLOCK = (node) => node.type === 'blockquote'
 const isLI = (node) => node.type === 'list'
+
+const contentRootDir = await readdir(rootDir)
 
 export const parseContent = (nodeList) => {
   const content = { description: '' }
@@ -38,10 +40,11 @@ export const parseContent = (nodeList) => {
       }
     } else if (mode === 'instructions') {
       if (isP(node) || isLI(node)) {
-        content.instructions =
-          children(node).map(getTrimValue).filter(Boolean).join(' ')
+        content.instructions = children(node)
+          .map(getTrimValue)
+          .filter(Boolean)
+          .join(' ')
       }
-
     } else if (mode === 'tests') {
       if (isH3(node)) {
         test = { name: textContent(node) }
@@ -63,7 +66,7 @@ export const parseContent = (nodeList) => {
   return content
 }
 
-export const getJsonExoFile = async () => {
+export const generateJSONExo = async () => {
   const dirList = await exoJsDir()
   const entries = await readJSExo()
   dirList.map(async (filename) => {
@@ -71,12 +74,14 @@ export const getJsonExoFile = async () => {
     await Promise.all([
       // Create each exercise json file from a markdown file
       writeFile(`${filename.split('.md')[0]}.json`, JSON.stringify(data)),
-      mkdir(join(rootDir, 'exoBundle'), { recursive: true }),
+      mkdir(join(rootDir, 'exobundle'), { recursive: true }),
     ])
   })
 
   // read root directory and move each exo json file into exoBundle directory
-  await (await readdir(rootDir))
-    .filter((file) => file.includes('exercise.json'))
-    .map(moveFile)
+  return await Promise.all(
+    contentRootDir
+      .filter((file) => file.includes('exercise.json'))
+      .map(moveFile),
+  )
 }
