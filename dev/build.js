@@ -1,10 +1,11 @@
 import { readFile, readdir, writeFile, mkdir } from 'fs/promises'
 import { parse, join } from 'path'
+import { fromMarkdown } from 'mdast-util-from-markdown'
 
 import * as esbuild from 'esbuild'
 
 import { rootDir, DEV, time } from './utils.js'
-import { generateExoFile } from './exo-parser.js'
+import { parseContent } from './exo-parser.js'
 
 const getHash = async head => {
   if (!head.startsWith('ref:')) return { hash: head.trim(), branch: 'detached' }
@@ -22,6 +23,21 @@ try {
   console.warn('Unable to load git commit version, fallback to time based hash', err)
   const now = Math.floor((Date.now() - 16e11) / 1000)
   process.env.HASH = `unk@${now.toString(36)}`
+}
+
+export const exoJsDir = async () =>
+  await readdir(join(rootDir, 'js-introduction'))
+
+export const readJSExo = async () => {
+  const dirList = await exoJsDir()
+  const entries = await Promise.all(
+    dirList.map(async (name) => {
+      const file = await readFile(join(rootDir, 'js-introduction', name))
+      const root = fromMarkdown(file)
+      return [name, parseContent(root.children)]
+    }),
+  )
+  return entries
 }
 
 const templateDir = join(rootDir, 'template')
@@ -62,9 +78,6 @@ const generate = async (file = 'index') => {
     (cache[key] =
       templates[key]?.replace(/<!-- ([a-zA-Z0-9]+) -->/gm, replace) ||
       `<!-- missing template ${key} -->`)
-
-  await generateExoFile()
-
   return readTemplate(file)
 }
 

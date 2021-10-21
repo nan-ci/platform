@@ -3,7 +3,7 @@ import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 
 import { rootDir } from './utils.js'
-import { generateExoFile } from './exo-parser.js'
+import { getJsonExoFile } from './exo-parser.js'
 
 // Start esbuild's server on a random local port
 const { generate, serve } = await import('./build.js')
@@ -12,6 +12,9 @@ const { host: hostname, port } = await serve()
 // Set domain before we run the tests
 const PORT = process.env.PORT || port + 1
 process.env.DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`
+
+// generate bundle for js-introduction exercise
+await getJsonExoFile()
 
 // run tests
 await (await import('./test-runner.js')).run()
@@ -54,7 +57,6 @@ createServer(async (req, res) => {
 
   // Apply headers from the worker
   sendResponse({ body, options, res })
-}).listen(PORT, async () => {
-  await generateExoFile()
+}).listen(PORT, () => {
   console.log(`Dev server ready on ${process.env.DOMAIN}`)
 })
