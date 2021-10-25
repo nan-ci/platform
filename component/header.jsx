@@ -78,6 +78,11 @@ export const Header = ({ page, title, children }) => {
   return (
     <header>
       <Nav path={path} />
+      {'\n'}
+      <Title>Page</Title>
+      {'\n'}
+      <h1>{`  ${path}`} </h1>
+      {'\n'}
       {children}
     </header>
   )
