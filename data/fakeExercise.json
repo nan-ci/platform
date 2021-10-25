@@ -2,5 +2,5 @@
   "name":"01-Hello There",
   "description":"lorem ipsum",
   "instructions":["do this", "do that","do like thaht"],
-  "notions":["loop","variable","functions"]
+  "notions":[{"name":"Loop","link":"/notions/js-loop"},{"name":"Variables","link":"/notions/js-variables"},{"name":"Conditions","link":"/notions/js-conditions"}]
 }
