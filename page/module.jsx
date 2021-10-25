@@ -1,5 +1,6 @@
 import { css } from '../lib/dom.js'
 import { Div, P } from '../component/elements.jsx'
+import { MTitle, MItalicWorld, MLi } from '../component/markdown.jsx'
 import { StackLi } from '../component/stackLi.jsx'
 import fakeModule from '../data/fakeModule.json'
 import userInfo from '../data/fakeUserData.json'
@@ -9,12 +10,6 @@ css(`
      font-weight: bolder;
     }
 
-    .module>hr {
-      width: 100%;
-      height: 2px;
-      background: grey;
-    }
-
    .module p.description {
      white-space: normal !important;
      padding: 0.5rem;
@@ -22,23 +17,6 @@ css(`
 
   .module p.title{
     font-weight: bolder;
-  }
-
-  .module ul li {
-    display: block;
-  }
-
-  .module ul.notions li{
-    margin: 8px auto;
-  }
-
-  .module ul.notions li:before {
-     content:  "👉 ";
-     font-size: 1.1rem;
-  }
-
-  .module .stack-content {
-    margin-top: 25px;
   }
 
   .module .stack-content h3 {
@@ -69,19 +47,25 @@ export const Module = () => {
 
   return (
     <Div class="module">
-      <h1> {fakeModule.name}</h1>
-      <hr />
+      <MTitle.h2>{fakeModule.name}</MTitle.h2>
       {'\n'}
       <P class="description">{fakeModule.description}</P>
       {'\n'}
-      <P class="title"> In this module you will learn : </P>
-      <ul class="notions">
-        {fakeModule.notions.map((n) => (
-          <li>{n}</li>
-        ))}
-      </ul>
+      <Div class="notions">
+        <MTitle.h3>Notions</MTitle.h3>
+        {'\n'}
+        <MItalicWorld>In this modue you wil learn :</MItalicWorld>
+        {'\n'}
+        <ul class="notions">
+          {fakeModule.notions.map((n) => (
+            <MLi>{n}</MLi>
+          ))}
+        </ul>
+      </Div>
+      {'\n'}
       <Div class="stack-content">
-        <h3> Exercises </h3>
+        <MTitle.h3>Exercises</MTitle.h3>
+        {'\n'}
         <ul class="stack">
           {fakeModule.children.map((child) => (
             <StackLi

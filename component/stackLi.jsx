@@ -3,24 +3,19 @@ import { Div, Span } from '../component/elements.jsx'
 
 css(`
   .module .stackli {
-      padding: 0.5rem;
-      border-radius: 0.5rem;
       display: flex;
       flex-direction: row;
       align-items: center;
-      justify-content: space-between;
-      border: 2px solid grey;
+      justify-content: flex-start;
       cursor: not-allowed;
   }
 
   .module .stackli span {
     color: grey;
-    font-weight: bolder;
   }
 
   .module .stackli.pass {
-    border-color: white;
-    background: white;
+    color: white;
     cursor: pointer;
   }
 
@@ -30,7 +25,7 @@ css(`
   }
 
   .module .stackli.pass span {
-    color: var(--comment-darker);
+    color: white;
   }
 
   .module .stackli.next span {
@@ -44,9 +39,7 @@ css(`
     justify-content: flex-start
   }
 
- .module .stackli span.name  {
-   font-weight: bolder;
- }
+
 
 `)
 
@@ -58,21 +51,20 @@ export const StackLi = ({ name, type, result, isActive }) => {
 
   return (
     <>
-      {'  '}
       <li class={`stackli ${isActive ? 'next' : result ? 'pass' : ''}`}>
         <Div class="first_block">
-          <Span class="emoji">{iconType[type]}</Span>&nbsp;
-          <Span class="name">{name}</Span>
+          <Span class="emoji">{iconType[type]}</Span>-&nbsp;<Span class="name">{name}</Span>
         </Div>
-        {result && (
-          <Div class="second_block">
-            <Span class="attempts">{result.attempts}-attempts</Span> &nbsp;
-            {result.seconds && (
+        {result && <> &nbsp;<Div class="second_block">
+            {' '}
+            (<Span class="attempts">{result.attempts}-attempts</Span>
+            {result.seconds && <>&nbsp;
               <Span class="seconds">{result.seconds}-seconds</Span>
-            )}
+            </>}
+            )
           </Div>
-        )}
-      </li>{' '}
+        </>}
+      </li>
     </>
   )
 }
