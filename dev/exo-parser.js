@@ -1,14 +1,11 @@
-import { readdir, writeFile, mkdir, rename } from 'fs/promises'
+import { readdir, writeFile, rename } from 'fs/promises'
 import { join } from 'path'
-import { readJSExo, exoJsDir } from './build.js'
+import { readJSExo, exoJsDir, bundleJSONDir } from './build.js'
 import { rootDir } from './utils.js'
 
 // returns a flatten array of all the children
 const children = (n) =>
   n.children ? [n, ...n.children.flatMap(children)] : [n]
-
-const moveFile = async (file) =>
-  await rename(join(rootDir, file), join(rootDir, 'exobundle', file))
 
 const getTrimValue = (n) => n.value?.trim()
 const textContent = (n) =>
@@ -19,10 +16,7 @@ const isH2 = (node) => node.type === 'heading' && node.depth === 2
 const isH3 = (node) => node.type === 'heading' && node.depth === 3
 const isP = (node) => node.type === 'paragraph' || node.type === 'text'
 const isCODE = (node) => node.type === 'code' || node.type === 'inlineCode'
-const isBLOCK = (node) => node.type === 'blockquote'
 const isLI = (node) => node.type === 'list'
-
-const contentRootDir = await readdir(rootDir)
 
 export const parseContent = (nodeList) => {
   const content = { description: '' }
@@ -69,19 +63,13 @@ export const parseContent = (nodeList) => {
 export const generateJSONExo = async () => {
   const dirList = await exoJsDir()
   const entries = await readJSExo()
-  dirList.map(async (filename) => {
-    const data = Object.fromEntries(entries)[filename]
-    await Promise.all([
-      // Create each exercise json file from a markdown file
-      writeFile(`${filename.split('.md')[0]}.json`, JSON.stringify(data)),
-      mkdir(join(rootDir, 'exobundle'), { recursive: true }),
-    ])
+  const exobundle = await bundleJSONDir('exobundle')
+  dirList.map(async (file) => {
+    const data = Object.fromEntries(entries)[file]
+    await writeFile(`${file.split('.md')[0]}.json`, JSON.stringify(data))
   })
 
-  // read root directory and move each exo json file into exoBundle directory
-  return await Promise.all(
-    contentRootDir
-      .filter((file) => file.includes('exercise.json'))
-      .map(moveFile),
-  )
+  await (await readdir(rootDir))
+    .filter((filename) => filename.includes('exercise.json'))
+    .map((e) => rename(join(rootDir, e), join(exobundle, e)))
 }

@@ -28,6 +28,9 @@ try {
 export const exoJsDir = async () =>
   await readdir(join(rootDir, 'js-introduction'))
 
+export const bundleJSONDir = async (dirName) =>
+  await mkdir(join(rootDir, dirName), { recursive: true })
+
 export const readJSExo = async () => {
   const dirList = await exoJsDir()
   const entries = await Promise.all(

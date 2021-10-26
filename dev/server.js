@@ -3,7 +3,6 @@ import { readFile, writeFile } from 'fs/promises'
 import { join } from 'path'
 
 import { rootDir } from './utils.js'
-import { generateJSONExo } from './exo-parser.js'
 
 // Start esbuild's server on a random local port
 const { generate, serve } = await import('./build.js')
@@ -12,9 +11,6 @@ const { host: hostname, port } = await serve()
 // Set domain before we run the tests
 const PORT = process.env.PORT || port + 1
 process.env.DOMAIN = process.env.DOMAIN || `http://localhost:${PORT}`
-
-// generate bundle for js-introduction exercise
-await generateJSONExo()
 
 // run tests
 await (await import('./test-runner.js')).run()
