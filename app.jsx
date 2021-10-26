@@ -6,15 +6,15 @@ import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
-import { Exercise } from './page/exercise.jsx'
+import { Notions } from './page/notions.jsx'
 
 const App = () => (
   <>
     <Header />
     <Router>
       <Profile path="/profile" />
+      <Notions path="/notions" />
       <Home path="*" />
-      <Exercise path="/exercise" />
     </Router>
     <footer>
       {divider}
