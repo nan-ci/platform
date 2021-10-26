@@ -39,8 +39,13 @@ css(`
     justify-content: flex-start
   }
 
+  .module .stackli div.second_block {
+    margin-left: 1ch;
+  }
 
-
+  .module .stackli div.second_block .seconds {
+    margin-left: 1ch;
+  }
 `)
 
 export const StackLi = ({ name, type, result, isActive }) => {
@@ -53,17 +58,18 @@ export const StackLi = ({ name, type, result, isActive }) => {
     <>
       <li class={`stackli ${isActive ? 'next' : result ? 'pass' : ''}`}>
         <Div class="first_block">
-          <Span class="emoji">{iconType[type]}</Span>-&nbsp;<Span class="name">{name}</Span>
+          <Span class="emoji">{iconType[type]}</Span>-&nbsp;
+          <Span class="name">{name}</Span>
         </Div>
-        {result && <> &nbsp;<Div class="second_block">
-            {' '}
+        {result && (
+          <Div class="second_block">
             (<Span class="attempts">{result.attempts}-attempts</Span>
-            {result.seconds && <>&nbsp;
+            {result.seconds && (
               <Span class="seconds">{result.seconds}-seconds</Span>
-            </>}
+            )}
             )
           </Div>
-        </>}
+        )}
       </li>
     </>
   )
