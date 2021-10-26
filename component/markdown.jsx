@@ -16,9 +16,9 @@ export const MTitle = Object.fromEntries(
       h(
         el,
         props,
-        <>
-          <Span fg="red">{'#'.repeat(Number(el.slice(1)))}</Span>&nbsp;
-        </>,
+        <Color.Red style={{ marginRight: '1ch' }}>
+          {'#'.repeat(Number(el.slice(1)))}
+        </Color.Red>,
         children,
       ),
   ]),
