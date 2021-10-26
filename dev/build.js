@@ -25,11 +25,10 @@ try {
   process.env.HASH = `unk@${now.toString(36)}`
 }
 
-export const exoJsDir = async () =>
-  await readdir(join(rootDir, 'js-introduction'))
+export const exoJsDir = () => readdir(join(rootDir, 'js-introduction'))
 
-export const bundleJSONDir = async (dirName) =>
-  await mkdir(join(rootDir, dirName), { recursive: true })
+export const bundleJSONDir = (dirName) =>
+  mkdir(join(rootDir, dirName), { recursive: true })
 
 export const readJSExo = async () => {
   const dirList = await exoJsDir()
