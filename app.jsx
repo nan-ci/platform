@@ -16,7 +16,7 @@ const App = () => (
     <Header />
     <Router>
       <Profile path="/profile" />
-      <Quiz path="/quiz" />
+      <Quiz path="/quizzes" />
       <Home path="*" />
     </Router>
     <footer>
