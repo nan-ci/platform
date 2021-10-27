@@ -1,0 +1,22 @@
+{
+  "name":"let and const in javascript",
+   "description":"this is an description of the let and const in javascript",
+   "videos":[
+     {
+     "name":"video1",
+     "link":"https://googgle.com/5"
+   },{
+    "name":"video2",
+    "link":"https://googgle.com/2"
+   }
+  ],
+  "links":[
+    {
+      "name":"link1",
+      "link":"https://google.com/pdf"
+    },{
+      "name":"link2",
+      "link":"https://googe.com/pdf2"
+    }
+  ]
+}

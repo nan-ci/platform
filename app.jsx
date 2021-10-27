@@ -6,12 +6,14 @@ import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
+import { Notion } from './page/notion.jsx'
 
 const App = () => (
   <>
     <Header />
     <Router>
       <Profile path="/profile" />
+      <Notion path="/notion" />
       <Home path="*" />
     </Router>
     <footer>
