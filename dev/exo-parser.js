@@ -73,5 +73,3 @@ export const generateJSONExo = async () => {
     .filter((filename) => filename.includes('exercise.json'))
     .map((e) => rename(join(rootDir, e), join(exobundle, e)))
 }
-
-await generateJSONExo()
