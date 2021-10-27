@@ -6,6 +6,7 @@ import { P, divider } from './component/elements.jsx'
 import { Router } from './lib/router.js'
 import { Profile } from './page/profile.jsx'
 import { Home } from './page/home.jsx'
+import { ModuleHome } from './page/module_home.jsx'
 
 const App = () => (
   <>

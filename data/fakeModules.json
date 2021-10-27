@@ -1,0 +1,46 @@
+{
+    "01-JS Basics":{
+      "description":
+        "this  module talk about the basics  programmation in javascript",
+      "notions": ["variables", "data types", "operators", "condition", "iteraction"],
+      "children": [
+        { "name": "Hello There", "type": "exercise", "key": "01-Hello There.exercise.md"},
+        {
+          "name": "Anything To Declare",
+          "type": "exercise",
+          "key": "02-Anything To Declare.exercise.md"
+        },
+        { "name": "Good Search", "type": "exercise", "key": "03-Good Search.exercise.md"},
+        { "name": "World of DOM", "type": "quiz", "key": "04-World of DOM.quiz.md"},
+        {
+          "name": "Redeclaration Love",
+          "type": "exercise",
+          "key": "05-Redeclaration of Love"
+        },
+        { "name": "Duplicate", "type": "exercise", "key": "06-Duplicate.exercise.md"},
+        { "name": "cool", "type": "quiz", "key": "07-cool.quiz.md"}
+      ]
+    },
+    "02-JS Conditions":{
+      "description":
+        "this  module talk about the basics  programmation in javascript",
+      "notions": ["variables", "data types", "operators", "condition", "iteraction"],
+      "children": [
+        { "name": "Hello There", "type": "exercise", "key": "01-Hello There.exercise.md"},
+        {
+          "name": "Anything To Declare",
+          "type": "exercise",
+          "key": "02-Anything To Declare.exercise.md"
+        },
+        { "name": "Good Search", "type": "exercise", "key": "03-Good Search.exercise.md"},
+        { "name": "World of DOM", "type": "quiz", "key": "04-World of DOM.quiz.md"},
+        {
+          "name": "Redeclaration Love",
+          "type": "exercise",
+          "key": "05-Redeclaration of Love"
+        },
+        { "name": "Duplicate", "type": "exercise", "key": "06-Duplicate.exercise.md"},
+        { "name": "cool", "type": "quiz", "key": "07-cool.quiz.md"}
+      ]
+    }
+}

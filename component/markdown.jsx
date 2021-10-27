@@ -1,6 +1,5 @@
 import { Span, Color, P, Div } from './elements.jsx'
 import { css } from '../lib/dom.js'
-import { NavLink } from '../component/header.jsx'
 import { NavLink } from './header.jsx'
 
 css(`

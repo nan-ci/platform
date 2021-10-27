@@ -1,0 +1,11 @@
+{
+  "name":"Koffi",
+  "lastname":"Kouamé Rameaux",
+  "results":{
+    "01-JS Basics":{
+        "01-Hello There":{"type": "exercise","percent":0.6,"attempts":4,"seconds":60,"pass":true},
+      "02-Anything To Declare":{"type" : "exercise" , "percent":0.7,"seconds":125,"attempts":15,"pass":true},
+      "03-Good Search":{"type":"exercise","attempts": 14,"pass":false }
+    }
+  }
+}
