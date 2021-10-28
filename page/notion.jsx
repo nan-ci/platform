@@ -10,6 +10,11 @@ css(`
     margin: 1ch;
     cursor:pointer;
   }
+
+  .notion ul li a {
+    text-decoration:none;
+    outline:none;
+  }
 `)
 
 export const Notion = () => {
@@ -27,8 +32,10 @@ export const Notion = () => {
       <MTitle.h3> Videos </MTitle.h3>
       <ul class="videos">
         {notion.videos.map((val) => (
-          <li key={val.name} onClick={(e) => navigate(val.link)}>
+          <li key={val.name}>
+            <a href={val.link}  target="_blank" >
             📹-<Span fg="cyan">[{val.name}]</Span>
+            </a>
           </li>
         ))}
       </ul>
@@ -36,8 +43,10 @@ export const Notion = () => {
       <MTitle.h3> Links </MTitle.h3>
       <ul class="links">
         {notion.links.map((val) => (
-          <li key={val.name} onClick={(e) => navigate(val.link)}>
-            🔗-<Span fg="cyan">[{val.name}]</Span>
+          <li key={val.name}>
+            <a href={val.link}  target="_blank">
+              🔗-<Span fg="cyan">[{val.name}]</Span>
+            </a>
           </li>
         ))}
       </ul>
