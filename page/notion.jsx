@@ -3,6 +3,8 @@ import { css } from '../lib/dom.js'
 import { MTitle, MLi } from '../component/markdown.jsx'
 import notion from '../data/fakeNotion.json'
 import { navigate } from '../lib/router.js'
+import { useState } from 'preact/hooks'
+import { VideoReader } from '../component/videoReader.jsx'
 
 css(`
   .notion ul li {
@@ -11,7 +13,11 @@ css(`
   }
 `)
 export const Notion = () => {
+  const [showLecteur, setShowLecteur] = useState(false)
+  const [link, setLink] = useState(null)
+
   return (
+    <>
     <Div class="notion">
       <MTitle.h2>{notion.name}</MTitle.h2>
       {'\n'}
@@ -40,5 +46,11 @@ export const Notion = () => {
         ))}
       </ul>
     </Div>
+    <VideoReader
+        showLecteur={showLecteur}
+        closeLecteur={() => setShowLecteur(false)}
+        link={link}
+    />
+  </>
   )
 }
