@@ -1,9 +1,9 @@
 import { readFile, readdir, writeFile, mkdir } from 'fs/promises'
 import { parse, join } from 'path'
-
 import * as esbuild from 'esbuild'
-
+import { fromMarkdown } from 'mdast-util-from-markdown'
 import { rootDir, DEV, time } from './utils.js'
+import { generateModJSON, parseContent } from './module-parser.js'
 
 const getHash = async head => {
   if (!head.startsWith('ref:')) return { hash: head.trim(), branch: 'detached' }
@@ -12,7 +12,7 @@ const getHash = async head => {
   const hash = await readFile(join(rootDir, '.git', ...parts), 'utf8')
   return { hash: hash.trim(), branch }
 }
-  
+
 try {
   const head = await readFile(join(rootDir, '.git/HEAD'), 'utf8')
   const { hash, branch } = await getHash(head)
@@ -21,6 +21,23 @@ try {
   console.warn('Unable to load git commit version, fallback to time based hash', err)
   const now = Math.floor((Date.now() - 16e11) / 1000)
   process.env.HASH = `unk@${now.toString(36)}`
+}
+
+export const modJsDir = () => readdir(join(rootDir, 'js-module'))
+
+export const bundleJSONDir = (dirName) =>
+  mkdir(join(rootDir, dirName), { recursive: true })
+
+export const readJSMod = async () => {
+  const dirList = await modJsDir()
+  const entries = await Promise.all(
+    dirList.map(async (name) => {
+      const file = await readFile(join(rootDir, 'js-module', name))
+      const root = fromMarkdown(file)
+      return [name, parseContent(root.children)]
+    }),
+  )
+  return entries
 }
 
 const templateDir = join(rootDir, 'template')
@@ -51,6 +68,7 @@ const config = {
 
 const serve = () => esbuild.serve({ servedir }, config)
 const generate = async (file = 'index') => {
+  await generateModJSON()
   const content = await readdir(templateDir)
   const entries = await Promise.all(content.map(parse).map(readEntry))
   const templates = Object.fromEntries(entries)
