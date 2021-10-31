@@ -53,4 +53,6 @@ createServer(async (req, res) => {
 
   // Apply headers from the worker
   sendResponse({ body, options, res })
-}).listen(PORT, () => console.log(`Dev server ready on ${process.env.DOMAIN}`))
+}).listen(PORT, () => {
+  console.log(`Dev server ready on ${process.env.DOMAIN}`)
+})
