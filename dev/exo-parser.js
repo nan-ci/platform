@@ -1,6 +1,8 @@
-import { readdir, writeFile, rename } from 'fs/promises'
-import { join } from 'path'
-import { readJSExo, exoJsDir, bundleJSONDir } from './build.js'
+import { readdir, writeFile, readFile, mkdir } from 'fs/promises'
+import { join, parse as pathParse } from 'path'
+
+import { fromMarkdown } from 'mdast-util-from-markdown'
+
 import { rootDir } from './utils.js'
 
 // returns a flatten array of all the children
@@ -18,7 +20,7 @@ const isP = (node) => node.type === 'paragraph' || node.type === 'text'
 const isCODE = (node) => node.type === 'code' || node.type === 'inlineCode'
 const isLI = (node) => node.type === 'list'
 
-export const parseContent = (nodeList) => {
+const parseContent = (nodeList) => {
   const content = { description: '' }
   let mode,
     test = isP
@@ -60,16 +62,20 @@ export const parseContent = (nodeList) => {
   return content
 }
 
-export const generateJSONExo = async () => {
-  const dirList = await exoJsDir()
-  const entries = await readJSExo()
-  const exobundle = await bundleJSONDir('exobundle')
-  dirList.map(async (file) => {
-    const data = Object.fromEntries(entries)[file]
-    await writeFile(`${file.split('.md')[0]}.json`, JSON.stringify(data))
+const readdirParse = async (path) =>
+  (await readdir(join(path))).map((file) => pathParse(join(path, file)))
+
+export const generateContentJSON = async (input, ouput) => {
+  const dirList = await readdirParse(join(rootDir, input))
+  const contentProcessing = dirList.map(async ({ dir, base, name }) => {
+    const content = await readFile(join(dir, base))
+    const root = fromMarkdown(content)
+    const parsed = parseContent(root.children)
+    const outDir = join(rootDir, ouput, dir.slice(rootDir.length))
+    await mkdir(outDir, { recursive: true })
+    await writeFile(join(outDir, `${name}.json`), JSON.stringify(parsed))
+    return [name, parsed]
   })
 
-  await (await readdir(rootDir))
-    .filter((filename) => filename.includes('exercise.json'))
-    .map((e) => rename(join(rootDir, e), join(exobundle, e)))
+  return Object.fromEntries(await Promise.all(contentProcessing))
 }
