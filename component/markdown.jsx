@@ -8,6 +8,11 @@ css(`
       display:block;
     }
 
+    .warn{
+      outline:1px dashed red;
+      padding:0.8rem;
+    }
+
 `)
 
 export const MTitle = Object.fromEntries(
@@ -42,30 +47,24 @@ export const MItalicWord = ({ children, color, type }) => {
 export const MLi = ({ children, link }) => {
   let ColorIze = link ? Color.CyanDarker : Color.CommentLighter
   return (
-    <li class={`mli`}>
-      <NavLink href={link ? link : null}>
-        <Span fg="orange"> - </Span>
-        <Span
-          style={{
-            padding: '0.1rem',
-            background: !link && 'rgba(75, 75, 75, 0.63)',
-            textDecoration: link && 'underline',
-          }}
-          fg={link ? 'cyan-darker' : 'white'}
-        >
-          <ColorIze>{link ? '[' : '`'}</ColorIze>
-          {children}
-          <ColorIze>{link ? ']' : '`'}</ColorIze>
-        </Span>
-      </NavLink>
-    </li>
+    <NavLink class={`mli`} href={link ? link : null}>
+      <Span fg="orange"> - </Span>
+      <Span
+        style={{
+          padding: '0.1rem',
+          background: !link && 'rgba(75, 75, 75, 0.63)',
+          textDecoration: link && 'underline',
+        }}
+        fg={link ? 'cyan-darker' : 'white'}
+      >
+        <ColorIze>{link ? '[' : '`'}</ColorIze>
+        {children}
+        <ColorIze>{link ? ']' : '`'}</ColorIze>
+      </Span>
+    </NavLink>
   )
 }
 
 export const Warning = ({ children }) => {
-  return (
-    <Div style={{ outline: '1px dashed red', padding: '0.8rem' }}>
-      {children}
-    </Div>
-  )
+  return <Div class="warn">{children}</Div>
 }
