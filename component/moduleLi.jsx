@@ -1,6 +1,7 @@
 import { css } from '../lib/dom'
 import { navigate } from '../lib/router'
-import { Color, Div, P, Span } from './elements'
+import { P, Span } from './elements'
+import { NavLink } from './header.jsx'
 
 css(`
   .module-li {
@@ -52,9 +53,14 @@ export const ModuleLi = ({
   results,
 }) => {
   return (
-    <li
+    <NavLink
       class={`module-li ${isPassed || isActive ? 'pass' : ''}`}
-      onClick={() => (isPassed || isActive) && navigate('/module/' + name)}
+      href={(isPassed || isActive) && '/module/' + name}
+      style={{
+        outline: !isPassed && !isActive && 'none',
+        textDecoration: 'none',
+      }}
+      removeTiret
     >
       <P>📕 - {name}</P>
       <Span>
@@ -67,6 +73,6 @@ export const ModuleLi = ({
           [{results ? results.quizzes : 0}/{quizzes} quizzes done]
         </Span>
       </Span>
-    </li>
+    </NavLink>
   )
 }

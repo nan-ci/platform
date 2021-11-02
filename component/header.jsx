@@ -20,7 +20,7 @@ const LinkMatch = ({ match, children, path, ...props }) => (
 const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
-export const NavLink = (props) => <li> - <Link {...props} /></li>
+export const NavLink = (props) => <li>{!props.removeTiret && ' - '}<Link {...props} /></li>
 const LogAction = () => {
   if (!user) {
     return (

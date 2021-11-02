@@ -13,6 +13,7 @@ const App = () => (
     <Header />
     <Router>
       <Profile path="/profile" />
+      <ModuleHome path="/modules" />
       <Home path="*" />
     </Router>
     <footer>
