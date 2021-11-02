@@ -4,19 +4,11 @@ import { MTitle, MItalicWord, MLi, Warning } from '../component/markdown.jsx'
 import exercise from '../data/fakeExercise.json'
 
 css(`
-    .exercise h1 {
+    .exercise h1,.exercise h3 {
       font-weight: bolder;
     }
 
-    .exercise h3 {
-      font-weight: bolder;
-    }
-
-    .exercise .instructions .description {
-      padding: 0.3rem;
-    }
-
-    .exercise .notions p {
+    .exercise .instructions .description,.exercise .notions p{
       padding: 0.3rem;
     }
 `)

@@ -7,6 +7,11 @@ css(`
       display:block;
     }
 
+    .warn {
+      outline: 1px dashed red;
+      padding: 0.8rem;
+    }
+
 `)
 
 export const MTitle = Object.fromEntries(
@@ -42,8 +47,7 @@ export const MLi = ({ children, link }) => {
   let ColorIze = link ? Color.CyanDarker : Color.CommentLighter
   return (
     <li class={`mli`}>
-      <NavLink href={link ? link : null}>
-        <Span fg="orange"> - </Span>
+      <NavLink href={link ? link : null} style={{ outline: !link && 'none' }}>
         <Span
           style={{
             padding: '0.1rem',
@@ -62,9 +66,5 @@ export const MLi = ({ children, link }) => {
 }
 
 export const Warning = ({ children }) => {
-  return (
-    <Div style={{ outline: '1px dashed red', padding: '0.8rem' }}>
-      {children}
-    </Div>
-  )
+  return <Div class="warn">{children}</Div>
 }
