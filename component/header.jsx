@@ -20,7 +20,7 @@ const LinkMatch = ({ match, children, path, ...props }) => (
 const clearStorage = () => localStorage.clear()
 
 // prettier-ignore
-const NavLink = (props) => <li> - <Link {...props} /></li>
+export const NavLink = (props) => <li>{!props.removeTiret && ' - '}<Link {...props} /></li>
 const LogAction = () => {
   if (!user) {
     return (
@@ -78,6 +78,11 @@ export const Header = ({ page, title, children }) => {
   return (
     <header>
       <Nav path={path} />
+      {'\n'}
+      <Title>Page</Title>
+      {'\n'}
+      <h1>{`  ${path}`} </h1>
+      {'\n'}
       {children}
     </header>
   )
