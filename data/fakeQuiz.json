@@ -1,0 +1,33 @@
+{
+   "name":"07-cool",
+   "time":"04:00",
+   "questions":{
+        "what' s javascript":{
+          "a framework" : false,
+          "a language" : true,
+          "a librairie" : false
+        },
+        "What's mean DOM in javascript":{
+          "Document Object Manual" : false,
+          "Document Object Monitor" : false,
+          "Docuemnt Object Model" : true
+        },
+        "Who create javascript":{
+          "Ryan Dal":false,
+          "Brenda Eich":true,
+          "Bill Gates":false
+        },
+        "What is the tag using in html to do javascript":{
+          "script":true,
+          "code": false,
+          "meta":false
+        },
+        "Among these frameworks, what are they made with javascript ":{
+           "meteor":true,
+           "PyQt":false,
+           "Tkinter":false,
+           "React":true,
+           "Vue":true
+        }
+   }
+}

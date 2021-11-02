@@ -14,7 +14,7 @@ const colorize = (tag) => (props) => {
   const style = getStyle(props)
   props.bg && (style.backgroundColor = colors[props.bg])
   props.fg && (style.color = colors[props.fg])
-  props.bg && console.log({ style, props })
+ // props.bg && console.log({ style, props })
   return h(tag, props)
 }
 

@@ -90,9 +90,13 @@ export const Text = ({ name, value, comment, errors, children, ...props }) => {
 
 export const Form = ({ title, children, submit, ...props }) => (
   <form {...props}>
-    {'\n'}
-    <Title>{title}</Title>
-    {'\n'}
+    {title && (
+      <>
+        <Title>{title}</Title>
+        {'\n'}
+      </>
+    )}
+
     {children}
     {submit && (
       <>
