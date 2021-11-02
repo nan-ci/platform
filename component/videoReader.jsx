@@ -14,10 +14,11 @@ css(`
       right:50%;
       z-index:1;
       border-radius:0.3rem;
-      transform:translate(-50%,-50%) ;
+      transform:translate(-30%,-30%) ;
       transition:all 0.5s ease-in-out;
-      border:2px dashed var(--comment-darker);
+      outline:2px dashed var(--comment-darker);
     }
+
     .lecteur.fullscreen {
       width:100%;
       height:100%;
@@ -25,12 +26,13 @@ css(`
       left:0;
       border:none;
     }
+
     .lecteur.fullscreen button.close {
       display:none;
     }
+
     .lecteur button.close {
       background:transparent;
-      outline:none;
       z-index:3;
       padding: 0.3rem 0.7rem;
       font-size: 1.6rem;
@@ -39,7 +41,7 @@ css(`
       top:-20px;
       cursor:pointer;
       right: -15px;
-      border:2px dashed var(--comment-darker);
+      outline:2px dashed var(--comment-darker);
       color:var(--purple-lighter);
     }
     .lecteur video {
@@ -87,10 +89,18 @@ css(`
     }
     .lecteur .mbre .controls {
       width:100%;
+      display:flex;
+      flex-direction:row;
+      align-items:center;
       position:relative;
       background: transparent;
       border-radius: 0 0 0.3rem 0.3rem;
     }
+
+    .lecteur.fullscreen .mbre .controls {
+        outline:2px dashed  var(--comment-darker);
+   }
+
     .lecteur .mbre .controls .sub-group {
       display:flex;
       flex-direction:row;
@@ -113,7 +123,7 @@ css(`
       color: var(--comment-lighter);
     }
     .lecteur .mbre .controls .sub-group input {
-      width: 400px;
+      width: 370px;
       height:3px;
       cursor:pointer;
     }
@@ -139,19 +149,17 @@ css(`
       width:100% !important;
     }
 
-    .lecteur .controls .play {
-      width: 50px;
-      height: 50px;
-      position:absolute;
-      z-index:2;
-      right:2%;
-      bottom:-7px;
+    .lecteur  .controls .control{
+       display:flex;
+       flex-direction:row;
+       align-items:center;
+       justify-content:center;
     }
-    .lecteur .controls .play i {
+
+    .lecteur .controls .control span {
       font-size: 1.5rem;
-      margin-left: 2px;
-      margin-top:-1px;
-      transform: rotateZ(-45deg)
+      margin: 0 10px;
+      cursor:pointer;
     }
 `)
 
@@ -347,12 +355,12 @@ export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
                 )}
               </Div>
             </Div>
-            <Div class="play" onClick={() => togglePlay()}>
-              {play ? (
-                <Pause size={30} color="var(--comment-darker)" />
-              ) : (
-                <Play size={30} color="var(--comment-darker)" />
-              )}
+            <Div class="control">
+              <span>⏮</span>
+              <span onClick={() => togglePlay()}>
+                {!play ? <>⏯</> : <>⏸</>}
+              </span>
+              <span>⏭</span>
             </Div>
           </Div>
         </Div>

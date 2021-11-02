@@ -3,10 +3,6 @@ import { css } from '../lib/dom.js'
 import { NavLink } from './header.jsx'
 
 css(`
-    li.mli {
-      display:block;
-    }
-
     .warn{
       outline:1px dashed red;
       padding:0.8rem;
@@ -45,8 +41,9 @@ export const MItalicWord = ({ children, color, type }) => {
 
 export const MLi = ({ children, link, ...props }) => {
   let ColorIze = link ? Color.CyanDarker : Color.CommentLighter
+  console.log('props', props)
   return (
-    <NavLink class={`mli`} href={link ? link : null} {...props}>
+    <NavLink class={`mli`} href={link ? link : '#'} {...props}>
       <Span
         style={{
           padding: '0.1rem',
