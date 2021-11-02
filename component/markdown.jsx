@@ -1,6 +1,5 @@
 import { Span, Color, P, Div } from './elements.jsx'
 import { css } from '../lib/dom.js'
-import { NavLink } from '../component/header.jsx'
 import { NavLink } from './header.jsx'
 
 css(`
@@ -23,6 +22,10 @@ export const MTitle = Object.fromEntries(
       ),
   ]),
 )
+
+export const Check = ({ val }) => {
+  return <Color.Comment bg="white">[{val}]</Color.Comment>
+}
 
 export const MItalicWord = ({ children, color, type }) => {
   return (

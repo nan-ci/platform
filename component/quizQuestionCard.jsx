@@ -6,8 +6,8 @@ import { Check } from './markdown.jsx'
 css(`
     .question_card {
       padding: 2ch;
-      border: 2px dashed var(--comment-darker);
-      margin: 1ch;
+      outline: 2px dashed var(--comment-darker);
+      margin: 2ch;
     }
 
     .question_card p {
@@ -16,7 +16,6 @@ css(`
       align-items:center;
       justify-content:flex-start;
       margin: 1ch auto;
-      cursor:pointer;
       width: auto;
     }
 
@@ -33,7 +32,6 @@ css(`
     width:100%;
     height: 100%;
     top:0;
-    cursor:pointer;
     position: absolute;
     z-index: 1;
  }
@@ -50,7 +48,7 @@ css(`
 
 `)
 
-const CheckCard = ({ isManyResponse, question, resp }) => {
+const CheckCard = ({ isManyResponse, question, resp, setAnswer }) => {
   const [isChecked, setIsChecked] = useState(false)
   let inter = null
   let input = useRef(null)
@@ -71,10 +69,11 @@ const CheckCard = ({ isManyResponse, question, resp }) => {
       <input
         ref={input}
         type={isManyResponse ? 'checkbox' : 'radio'}
-        name={'input-' + question}
+        name={'input-' + question.slice(0, 5)}
         value={resp}
         onChange={(e) => {
           setIsChecked(e.target.checked)
+          setAnswer(question, resp, isManyResponse)
         }}
       />
       <Check val={isChecked ? 'X' : ' '} />
@@ -82,7 +81,7 @@ const CheckCard = ({ isManyResponse, question, resp }) => {
   )
 }
 
-export const QuestionCard = ({ question, responses }) => {
+export const QuestionCard = ({ question, responses, ...rest }) => {
   let isManyResponse = Object.entries(responses).filter((r) => r[1]).length > 1
   return (
     <Div class="question_card">
@@ -102,7 +101,8 @@ export const QuestionCard = ({ question, responses }) => {
               <CheckCard
                 isManyResponse={isManyResponse}
                 resp={resp}
-                question={question.slice(0, 5)}
+                question={question}
+                {...rest}
               />
               <Span>{resp}</Span>
             </P>

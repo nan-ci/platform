@@ -1,5 +1,6 @@
 {
    "name":"07-cool",
+   "time":"04:00",
    "questions":{
         "what' s javascript":{
           "a framework" : false,
