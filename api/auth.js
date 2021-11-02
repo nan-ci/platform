@@ -68,6 +68,7 @@ GET.auth.discord = async ({ url }) => {
       roles: [rolesByKey.student.id, specialities[speciality].id],
     },
   })
+  
 
   join.reply.ok || console.error('Unable to join discord:', join.reply)
   user.role = roles.find((r) => join.roles.includes(r.id))?.key || 'student'
