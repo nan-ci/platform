@@ -12,9 +12,9 @@ const App = () => (
   <>
     <Header />
     <Router>
+      <Exercise path="/exercise" />
       <Profile path="/profile" />
       <Home path="*" />
-      <Exercise path="/exercise" />
     </Router>
     <footer>
       {divider}
