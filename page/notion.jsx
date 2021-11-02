@@ -1,22 +1,15 @@
 import { Div, P, Span } from '../component/elements.jsx'
 import { css } from '../lib/dom.js'
-import { MTitle } from '../component/markdown.jsx'
+import { MTitle, MLi } from '../component/markdown.jsx'
 import notion from '../data/fakeNotion.json'
 import { navigate } from '../lib/router.js'
 
 css(`
   .notion ul li {
     display:block;
-    margin: 1ch;
-    cursor:pointer;
-  }
-
-  .notion ul li a {
-    text-decoration:none;
-    outline:none;
+    margin:1ch;
   }
 `)
-
 export const Notion = () => {
   return (
     <Div class="notion">
@@ -32,22 +25,18 @@ export const Notion = () => {
       <MTitle.h3> Videos </MTitle.h3>
       <ul class="videos">
         {notion.videos.map((val) => (
-          <li key={val.name}>
-            <a href={val.link}  target="_blank" >
+          <MLi key={val.name} link={val.link}>
             📹-<Span fg="cyan">[{val.name}]</Span>
-            </a>
-          </li>
+          </MLi>
         ))}
       </ul>
       {'\n'}
       <MTitle.h3> Links </MTitle.h3>
       <ul class="links">
         {notion.links.map((val) => (
-          <li key={val.name}>
-            <a href={val.link}  target="_blank">
-              🔗-<Span fg="cyan">[{val.name}]</Span>
-            </a>
-          </li>
+          <MLi key={val.name} link={val.link}>
+            🔗-<Span fg="cyan">[{val.name}]</Span>
+          </MLi>
         ))}
       </ul>
     </Div>

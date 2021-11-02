@@ -43,11 +43,10 @@ export const MItalicWord = ({ children, color, type }) => {
   )
 }
 
-export const MLi = ({ children, link }) => {
+export const MLi = ({ children, link, ...props }) => {
   let ColorIze = link ? Color.CyanDarker : Color.CommentLighter
   return (
-    <NavLink class={`mli`} href={link ? link : null}>
-      <Span fg="orange"> - </Span>
+    <NavLink class={`mli`} href={link ? link : null} {...props}>
       <Span
         style={{
           padding: '0.1rem',
