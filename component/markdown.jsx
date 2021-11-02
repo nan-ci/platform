@@ -3,8 +3,9 @@ import { css } from '../lib/dom.js'
 import { NavLink } from './header.jsx'
 
 css(`
-    li.mli {
-      display:block;
+    .warn {
+      outline:1px dashed red;
+      padding:0.8rem;
     }
 
 `)
@@ -38,33 +39,25 @@ export const MItalicWord = ({ children, color, type }) => {
   )
 }
 
-export const MLi = ({ children, link }) => {
+export const MLi = ({ children, link, ...props }) => {
   let ColorIze = link ? Color.CyanDarker : Color.CommentLighter
   return (
-    <li class={`mli`}>
-      <NavLink href={link ? link : null}>
-        <Span fg="orange"> - </Span>
-        <Span
-          style={{
-            padding: '0.1rem',
-            background: !link && 'rgba(75, 75, 75, 0.63)',
-            textDecoration: link && 'underline',
-          }}
-          fg={link ? 'cyan-darker' : 'white'}
-        >
-          <ColorIze>{link ? '[' : '`'}</ColorIze>
-          {children}
-          <ColorIze>{link ? ']' : '`'}</ColorIze>
-        </Span>
-      </NavLink>
-    </li>
+    <NavLink href={link ? link : null} {...props}>
+      <Span
+        style={{
+          padding: '0.1rem',
+          background: !link && 'rgba(75, 75, 75, 0.63)',
+        }}
+        fg={link ? 'cyan-darker' : 'white'}
+      >
+        <ColorIze>{link ? '[' : '`'}</ColorIze>
+        {children}
+        <ColorIze>{link ? ']' : '`'}</ColorIze>
+      </Span>
+    </NavLink>
   )
 }
 
 export const Warning = ({ children }) => {
-  return (
-    <Div style={{ outline: '1px dashed red', padding: '0.8rem' }}>
-      {children}
-    </Div>
-  )
+  return <Div class="warn">{children}</Div>
 }
