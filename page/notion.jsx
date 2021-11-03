@@ -3,7 +3,7 @@ import { css } from '../lib/dom.js'
 import { MTitle, MLi } from '../component/markdown.jsx'
 import notion from '../data/fakeNotion.json'
 import { useState } from 'preact/hooks'
-import { VideoReader } from '../component/videoReader.jsx'
+import { Reader } from '../component/reader.jsx'
 
 css(`
   .notion ul li {
@@ -11,10 +11,12 @@ css(`
     margin:1ch;
     cursor:pointer;
   }
+   
 `)
 export const Notion = () => {
-  const [showLecteur, setShowLecteur] = useState(false)
-  const [link, setLink] = useState(null)
+  const [show, setShow] = useState(false);
+  const [readerData, setReaderData] = useState(null)
+  const [isVideo,setIsVideo] = useState(null);
 
   return (
     <>
@@ -36,8 +38,9 @@ export const Notion = () => {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                setShowLecteur(true)
-                setLink(val.link)
+                setShow(true)
+                setReaderData(val)
+                setIsVideo(true);
               }}
             >
               - [📹-<Span fg="cyan-darker">{val.name}</Span>]
@@ -53,6 +56,9 @@ export const Notion = () => {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
+                 setShow(true)
+                setReaderData(val)
+                setIsVideo(false);
               }}
             >
               - [🔗-<Span fg="cyan">{val.name}</Span>]
@@ -60,10 +66,12 @@ export const Notion = () => {
           ))}
         </ul>
       </Div>
-      <VideoReader
-        showLecteur={showLecteur}
-        closeLecteur={() => setShowLecteur(false)}
-        link={link}
+      <Reader
+        show={show}
+        close={() => setShow(false)}
+        {...readerData}
+        list={notion.videos}
+        isVideo={isVideo}
       />
     </>
   )

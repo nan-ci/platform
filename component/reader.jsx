@@ -2,7 +2,7 @@ import { css } from '../lib/dom.js'
 import { Div, P } from './elements.jsx'
 import { NaN } from './icons.jsx'
 import { Play, Pause, Expand, Reduce, Volume } from './icons.jsx'
-import { useState, useRef } from 'preact/hooks'
+import { useState, useRef, useEffect } from 'preact/hooks'
 
 css(`
     .lecteur {
@@ -16,6 +16,7 @@ css(`
       border-radius:0.3rem;
       transform:translate(-30%,-30%) ;
       transition:all 0.5s ease-in-out;
+      background: #505f8b7d;
       outline:2px dashed var(--comment-darker);
     }
 
@@ -41,7 +42,7 @@ css(`
       top:-20px;
       cursor:pointer;
       right: -15px;
-      outline:2px dashed var(--comment-darker);
+      outline:2px dashed var(--comment-lighter);
       color:var(--purple-lighter);
     }
     .lecteur video {
@@ -54,16 +55,26 @@ css(`
       z-index:0 !important;
     }
     .lecteur header {
-      width:100%;
+      width: 100%;
       position:absolute;
       z-index:2;
-      top:0;
       left:0;
       padding:1rem;
       display:flex;
+      font-weight:bolder;
       flex-direction:row;
       align-items:center;
-      justify-content:flex-start;
+      justify-content:space-between;
+    }
+    .lecteur header .logo {
+      margin-left: 10px;
+    }
+    .lecteur header h3{
+      margin-right: 10px;
+      color:white;
+      font-size: 1.2rem;
+      font-weight:bolder;
+      transition:all 0.5s ease-in-out;
     }
     .lecteur .mbre {
       width:100%;
@@ -116,11 +127,11 @@ css(`
     }
     .lecteur .mbre .controls .sub-group .time-decompt {
       margin-right: 10px;
-      color: var(--comment-lighter);
+      color: white;
     }
     .lecteur .mbre .controls .sub-group .completed-time {
       margin-left: 10px;
-      color: var(--comment-lighter);
+      color: white;
     }
     .lecteur .mbre .controls .sub-group input {
       width: 370px;
@@ -163,12 +174,15 @@ css(`
     }
 `)
 
-export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
+export const Reader = ({ show, close,name,link,list, isVideo }) => {
   const [play, setPlay] = useState(false)
   const video = useRef(null)
+  const embed = useRef(null);
   const [showControl, setShowControl] = useState(true)
   const [showVolume, setShowVolume] = useState(false)
   const [fullScreen, setFullScreen] = useState(false)
+  const [currentVideo,setCurrentVideo] = useState(null);
+
 
   const [data, setData] = useState({
     minutes: '00',
@@ -182,6 +196,20 @@ export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
 
   const tt = useRef(null)
   const ss = useRef(null)
+
+ const change = (type) => {
+   video.current.pause();
+   setPlay(false);
+   video.current.currentTime = 0;
+   let index = list.findIndex(v => v.link === currentVideo.link);
+   let newVideo = type === "next" ? list[index+1] : list[index-1] 
+   video.current.src = newVideo.link;
+   video.current.play();
+   setCurrentVideo(newVideo);
+   setPlay(true);
+   decompt();
+ }
+
 
   const check = () => {
     clearTimeout(ss.current)
@@ -225,7 +253,6 @@ export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
 
   const decompt = () => {
     tt.current = setInterval(() => {
-      console.log('mac', Math.ceil(video.current.currentTime))
       setData({
         minutes: minutes('d') < 10 ? '0' + minutes('d') : minutes('d'),
         seconds: seconds('d') < 10 ? '0' + seconds('d') : seconds('d'),
@@ -265,41 +292,58 @@ export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
     })
   }
 
+  useEffect(() => {
+    if (link && isVideo) {
+      video.current.src = link;
+      video.current.play();
+      setPlay(true)
+      decompt()
+    }else if(link && !isVideo){
+       embed.src = link;
+    }
+    setCurrentVideo({name,link});
+  }, [link,isVideo])
+
   return (
     <>
       <Div
         class={`lecteur ${fullScreen && 'fullscreen'}`}
-        style={{ transform: showLecteur ? 'scale(1)' : 'scale(0)' }}
+        style={{ transform: show ? 'scale(1)' : 'scale(0)' }}
       >
         <button
           class="close"
           onClick={() => {
-            closeLecteur()
-            video.current.pause()
-            video.current.currentTime = 0
-            setPlay(false)
-            setData({
-              minutes: '00',
-              seconds: '00',
-              min: '00',
-              sec: '00',
-              currentTime: 0,
-              duration: 0,
-            })
+            if(isVideo){
+               video.current.pause()
+              video.current.currentTime = 0
+              setPlay(false)
+              setData({
+                minutes: '00',
+                seconds: '00',
+                min: '00',
+                sec: '00',
+                currentTime: 0,
+                duration: 0,
+              })
+            } 
+            close()
           }}
         >
           &times;
         </button>
-        <header>
-          <NaN size={20} />
-          &nbsp;<span>NaN-courses</span>
+        <header style={{top: isVideo ? '0' : null,bottom: !isVideo ? '0' : null}}>
+          <div class="logo">
+               <NaN size={20} />
+                &nbsp;<span style={{color:isVideo ? 'white' : 'black'}}>NaN-courses</span>
+          </div>
+          <h3 style={{ opacity: showControl ? '1' : '0',color:isVideo ? 'white': 'black' }}>{currentVideo.name}</h3>
         </header>
-        <video ref={video} preload="true" width="100%" height="100%">
-          <source
-            src={'https://vjs.zencdn.net/v/oceans.mp4'}
-            type="video/mp4"
-          />
-        </video>
+        {isVideo ? <>
+                {link && (
+          <video ref={video} autoplay preload="true" width="100%" height="100%">
+            <source src={link} type="video/mp4" />
+          </video>
+        )}
         <Div
           class="mbre"
           style={{ opacity: showControl ? '1' : '0' }}
@@ -326,7 +370,7 @@ export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
                 onChange={(e) => goToTime(e.target.value)}
               />
               <p class="completed-time">
-                {data.min}:{data.sec}
+                {data.min ? data.min : '00'}:{data.sec ? data.sec : '00'}
               </p>
               <Div class="volume" style={{ marginLeft: '20px' }}>
                 <Div style={{ display: showVolume ? 'block' : 'none' }}>
@@ -340,7 +384,7 @@ export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
                 </Div>
                 <Volume
                   size={20}
-                  color="var(--comment-darker)"
+                  color="white"
                   onClick={() => setShowVolume((v) => !v)}
                 />
               </Div>
@@ -349,21 +393,23 @@ export const VideoReader = ({ showLecteur, closeLecteur, link }) => {
                 style={{ cursor: 'pointer', marginLeft: '20px' }}
               >
                 {fullScreen ? (
-                  <Reduce size={18} color="var(--comment-darker)" />
+                  <Reduce size={18} color="white" />
                 ) : (
-                  <Expand size={18} color="var(--comment-darker)" />
+                  <Expand size={18} color="white" />
                 )}
               </Div>
             </Div>
             <Div class="control">
-              <span>⏮</span>
+              <span onClick={() => list.findIndex(v => v.link === currentVideo.link) !== 0  && change("prev")}>⏮</span>
               <span onClick={() => togglePlay()}>
                 {!play ? <>⏯</> : <>⏸</>}
               </span>
-              <span>⏭</span>
+              <span onClick={() => list.findIndex(v => v.link === currentVideo.link) < list.length-1 && change("next")} >⏭</span>
             </Div>
           </Div>
         </Div>
+        </> : <embed ref={embed} src={link} width="100%" height="100%">
+        </embed>}
       </Div>
     </>
   )
