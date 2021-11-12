@@ -1,14 +1,12 @@
-import { Span, Color, P, Div } from './elements.jsx'
+import { Span, Color, P, Div, Link } from './elements.jsx'
 import { css } from '../lib/dom.js'
-import { NavLink } from '../component/header.jsx'
-import { NavLink } from './header.jsx'
 
 css(`
     li.mli {
       display:block;
     }
 
-    .warn{
+    div.warn{
       outline:1px dashed red;
       padding:0.8rem;
     }
@@ -30,6 +28,13 @@ export const MTitle = Object.fromEntries(
   ]),
 )
 
+const NavLink = (props) => (
+  <li>
+    {' '}
+    - <Link {...props} />
+  </li>
+)
+
 export const MItalicWord = ({ children, color, type }) => {
   return (
     <P>
@@ -44,23 +49,31 @@ export const MItalicWord = ({ children, color, type }) => {
   )
 }
 
-export const MLi = ({ children, link }) => {
-  let ColorIze = link ? Color.CyanDarker : Color.CommentLighter
+const Text = ({ text, link, ...props }) => {
+  const Colorize = link ? Color.CyanDarker : Color.CommentLighter
+  return <Colorize {...props}>{link ? `[${text}]` : `\`${text}\``}</Colorize>
+}
+
+export const MLi = ({ children }) => {
   return (
-    <NavLink class={`mli`} href={link ? link : null}>
+    <li>
       <Span fg="orange"> - </Span>
-      <Span
+      <Text
+        text={children}
         style={{
           padding: '0.1rem',
-          background: !link && 'rgba(75, 75, 75, 0.63)',
-          textDecoration: link && 'underline',
+          background: 'rgba(75, 75, 75, 0.63)',
         }}
-        fg={link ? 'cyan-darker' : 'white'}
-      >
-        <ColorIze>{link ? '[' : '`'}</ColorIze>
-        {children}
-        <ColorIze>{link ? ']' : '`'}</ColorIze>
-      </Span>
+      />
+    </li>
+  )
+}
+
+export const MLink = ({ children, link }) => {
+  return (
+    <NavLink class="mli" href={link}>
+      <Span fg="orange"> - </Span>
+      <Text text={children} link style={{ padding: '0.1rem' }} />
     </NavLink>
   )
 }
