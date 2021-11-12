@@ -1,0 +1,37 @@
+h1.mark:before {
+  display:"inine-block";
+  color: red;
+  content:"#"
+}
+
+h2.mark:before {
+  display:"inine-block";
+  color: red;
+  content:"##"
+}
+
+
+h3.mark:before {
+  display:"inine-block";
+  color: red;
+  content:"###"
+}
+
+h4.mark:before {
+  display:"inine-block";
+  color: red;
+  content:"####"
+}
+
+
+h5.mark:before {
+  display:"inine-block";
+  color: red;
+  content:"#####"
+}
+
+h6.mark:before {
+  display:"inine-block";
+  color: red;
+  content:"######"
+}
